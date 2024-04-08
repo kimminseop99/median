@@ -1,13 +1,9 @@
 package org.example.container;
 
 import org.example.controller.Session;
-import org.example.dao.ArticleDao;
-import org.example.dao.MemberDao;
-import org.example.dao.ReservationDao;
+import org.example.dao.*;
 import org.example.db.DBConnection;
-import org.example.service.ArticleService;
-import org.example.service.MemberService;
-import org.example.service.ReservationService;
+import org.example.service.*;
 
 import java.util.Scanner;
 
@@ -22,6 +18,11 @@ public class Container {
     public static MemberService memberService;
     public static ReservationDao reservationDao;
     public static ReservationService reservaitonService;
+    public static DoctorDao doctorDao;
+
+    public static DoctorService doctorService;
+    public static DptDao dptDao;
+    public static DptService dptService;
 
 
     static {
@@ -30,6 +31,9 @@ public class Container {
         articleService = new ArticleService();
         memberService = new MemberService();
         reservationDao = new ReservationDao();
+        reservaitonService = new ReservationService();
+        doctorDao = new DoctorDao();
+        doctorService = new DoctorService();
     }
 
     public static Scanner getScanner(){

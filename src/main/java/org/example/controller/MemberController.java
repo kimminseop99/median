@@ -95,8 +95,6 @@ public class MemberController extends Controller {
         System.out.printf("기저질환 : ");
         String ud = sc.nextLine();
 
-        int doctor_id = 0;
-
         System.out.printf("이름 : ");
         String name = sc.nextLine();
 

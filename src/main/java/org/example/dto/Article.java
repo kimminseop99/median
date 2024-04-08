@@ -13,12 +13,12 @@ public class Article extends Dto {
     public String title;
     public String body;
     public int hit;
-    public int memberId;
-    public int boardId;
+    public int patient_id;
+    public int doctor_id;
 
-    public Article(int memberId, int boardId, String title, String body, int hit) {
-        this.memberId = memberId;
-        this.boardId = boardId;
+    public Article(int patient_id, int doctor_id, String title, String body, int hit) {
+        this.patient_id = patient_id;
+        this.doctor_id = doctor_id;
         this.title = title;
         this.body = body;
         this.hit = hit;
@@ -33,8 +33,8 @@ public class Article extends Dto {
         super(row);
         this.title = (String) row.get("title");
         this.body = (String) row.get("body");
-        this.memberId = (int) row.get("memberId");
-        this.boardId = (int) row.get("boardId");
+        this.patient_id = (int) row.get("patient_id");
+        this.doctor_id = (int) row.get("doctor_id");
         this.hit = (int) row.get("hit");
     }
 

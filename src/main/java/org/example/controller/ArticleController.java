@@ -98,7 +98,7 @@ public class ArticleController extends Controller{
 
         List<Article> forPrintArticles = articleService.getForPrintArticles(boardCode, searchKeyword);
 
-        if ( forPrintArticles.size() == 0 ) {
+        if (forPrintArticles.isEmpty()) {
             System.out.println("검색결과가 존재하지 않습니다.");
             return;
         }
@@ -109,9 +109,9 @@ public class ArticleController extends Controller{
         System.out.println("번호 |   작성자 | 조회 | 제목 ");
         for ( int i = forPrintArticles.size() - 1; i >= 0 ; i-- ) {
             Article article = forPrintArticles.get(i);
-            Member member = memberService.getMember(article.memberId);
+            Member member = memberService.getMember(article.patient_id);
 
-            System.out.printf("%4d | %5s | %4d | %s\n", article.id, member.name, article.hit, article.title);
+            System.out.printf("%4d | %5s | %4d | %s\n", article.patient_id, member.name, article.hit, article.title);
         }
     }
 
@@ -150,7 +150,7 @@ public class ArticleController extends Controller{
 
         foundArticle.increaseHit();
 
-        Member member = memberService.getMember(foundArticle.memberId);
+        Member member = memberService.getMember(foundArticle.patient_id);
 
         System.out.printf("번호 : %d\n", foundArticle.id);
         System.out.printf("날짜 : %s\n", foundArticle.regDate);
@@ -213,7 +213,7 @@ public class ArticleController extends Controller{
 
         Member loginedMember = session.getLoginedMember();
 
-        if ( foundArticle.memberId != loginedMember.id ) {
+        if ( foundArticle.patient_id != loginedMember.id ) {
             System.out.printf("권한이 없습니다.\n");
             return;
         }
@@ -246,7 +246,7 @@ public class ArticleController extends Controller{
 
         Member loginedMember = session.getLoginedMember();
 
-        if ( foundArticle.memberId != loginedMember.id ) {
+        if ( foundArticle.patient_id != loginedMember.id ) {
             System.out.printf("권한이 없습니다.\n");
             return;
         }
