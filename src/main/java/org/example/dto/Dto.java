@@ -35,6 +35,6 @@ public class Dto {
 
     public Dto(int id, Date regDate) {
         this.id = id;
-        this.regDate = regDate.toLocalDateTime();
+        this.regDate = regDate.toLocalDate().atStartOfDay();
     }
 }

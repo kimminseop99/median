@@ -31,7 +31,7 @@ public class DoctorDao extends Dao {
 
         for (Map<String, Object> row : rows) {
             // Doctor 객체 생성자를 통해 ID 값을 설정하여 객체 생성
-            Doctor doctor = new Doctor((int) row.get("id"), (String) row.get("name"), (int) row.get("dpt_id"), (String) row.get("loginPw"));
+            Doctor doctor = new Doctor((int) row.get("id"), (String) row.get("name"), (int) row.get("dpt_id"), (String) row.get("loginPw"), (int) row.get("time"));
             doctors.add(doctor);
         }
 
@@ -62,8 +62,8 @@ public class DoctorDao extends Dao {
             String name = (String) row.get("name");
             int dptId = (int) row.get("dpt_id");
             String loginPw = (String) row.get("loginPw");
-
-            Doctor doctor = new Doctor(id, name, dptId, loginPw);
+            int time = (int) row.get("time");
+            Doctor doctor = new Doctor(id, name, dptId, loginPw, time);
             doctors.add(doctor);
         }
 

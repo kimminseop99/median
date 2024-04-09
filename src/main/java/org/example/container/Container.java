@@ -34,6 +34,7 @@ public class Container {
         reservaitonService = new ReservationService();
         doctorDao = new DoctorDao();
         doctorService = new DoctorService();
+        dptService = new DptService();
     }
 
     public static Scanner getScanner(){

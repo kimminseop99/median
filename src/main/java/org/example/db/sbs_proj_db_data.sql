@@ -92,15 +92,9 @@ CREATE TABLE `case` (
   KEY `patient_id` (`patient_id`),
   CONSTRAINT `case_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE,
   CONSTRAINT `case_ibfk_2` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `case` */
-
-insert  into `case`(`id`,`regDate`,`doctor_id`,`patient_id`,`medicalHistory`) values 
-(1,'0000-00-00',1,1,'운동 열심히 하세요!!'),
-(2,'0000-00-00',2,2,'운동 열심히 하세요!!'),
-(3,'0000-00-00',2,3,'식단 관리가 필요합니다.'),
-(5,'0000-00-00',5,4,'조심히 다니세요');
 
 /*Table structure for table `doctor` */
 
@@ -111,6 +105,7 @@ CREATE TABLE `doctor` (
   `name` char(100) NOT NULL,
   `dpt_id` int(10) unsigned NOT NULL,
   `loginPw` char(100) NOT NULL,
+  `time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `dpt_id` (`dpt_id`),
   CONSTRAINT `doctor_ibfk_1` FOREIGN KEY (`dpt_id`) REFERENCES `dpt` (`id`)
@@ -118,18 +113,18 @@ CREATE TABLE `doctor` (
 
 /*Data for the table `doctor` */
 
-insert  into `doctor`(`id`,`name`,`dpt_id`,`loginPw`) values 
-(0,'공용',0,'admin'),
-(1,'이익준',1,'jo'),
-(2,'채송화',2,'chae'),
-(3,'양석형',3,'yang'),
-(4,'김준완',4,'kim'),
-(5,'안정원',5,'ahn'),
-(6,'장겨울',1,'jang'),
-(7,'용석민',2,'yong'),
-(8,'추민하',3,'choo'),
-(9,'도재학',4,'do'),
-(10,'한현희',5,'han');
+insert  into `doctor`(`id`,`name`,`dpt_id`,`loginPw`,`time`) values 
+(0,'공용',0,'admin',0),
+(1,'이익준',1,'jo',0),
+(2,'채송화',2,'chae',0),
+(3,'양석형',3,'yang',0),
+(4,'김준완',4,'kim',0),
+(5,'안정원',5,'ahn',0),
+(6,'장겨울',1,'jang',0),
+(7,'용석민',2,'yong',0),
+(8,'추민하',3,'choo',0),
+(9,'도재학',4,'do',0),
+(10,'한현희',5,'han',0);
 
 /*Table structure for table `dpt` */
 
@@ -196,7 +191,7 @@ CREATE TABLE `patient` (
   UNIQUE KEY `loginId` (`loginId`),
   KEY `doctor_id` (`doctor_id`),
   CONSTRAINT `patient_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `patient` */
 
@@ -205,7 +200,7 @@ insert  into `patient`(`id`,`name`,`regDate`,`age`,`phone`,`rrn`,`height`,`weigh
 (2,'홍길순','2024-04-07',24,'010-5678-1234','010725-2504835',162.20,50.00,'없음','보류',2,'hongg','ilsoon'),
 (3,'박지성','2024-04-07',40,'010-1842-7640','850925-1104238',177.90,73.00,'골절','이상없음',2,'park','jisung'),
 (4,'이우주','2024-04-07',7,'010-8820-7610','181217-1409635',120.50,23.50,'없음','보류',5,'lee','woojoo'),
-(6,'환자1','2024-04-07',26,'010-1245-1845','920412-1403863',180.00,80.00,'없음','보류',3,'user1','user1');
+(5,'김민섭','2024-04-08',26,'010-4809-7610','991217-1407412',174.50,62.20,'폐렴','null',0,'bok','asd');
 
 /*Table structure for table `reservation` */
 
@@ -217,17 +212,20 @@ CREATE TABLE `reservation` (
   `regDate` date NOT NULL,
   `rh` text NOT NULL,
   `doctor_id` int(10) unsigned NOT NULL,
+  `name` char(100) NOT NULL,
+  `time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`rn`),
   UNIQUE KEY `patient_id` (`patient_id`),
-  KEY `doctor_id` (`doctor_id`),
-  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  UNIQUE KEY `time` (`time`),
+  KEY `fk_doctor_id` (`doctor_id`),
+  CONSTRAINT `fk_doctor_id` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`),
+  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reservation` */
 
-insert  into `reservation`(`patient_id`,`rn`,`regDate`,`rh`,`doctor_id`) values 
-(6,1,'0000-00-00','가슴이 아파요',4);
+insert  into `reservation`(`patient_id`,`rn`,`regDate`,`rh`,`doctor_id`,`name`,`time`) values 
+(1,1,'2024-05-01','가슴이 아파요',1,'홍길동',1);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

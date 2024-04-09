@@ -108,7 +108,7 @@ public class MemberController extends Controller {
         System.out.printf("이름 : ");
         String name = sc.nextLine();
 
-        memberService.join(loginId, loginPw, age, phone,rrn,height,weight,ud, name);
+        memberService.join(name, age, phone, rrn, height,weight,ud,loginId,loginPw);
 
         System.out.printf("[%s]님! 회원가입이 완료되었습니다! 환영합니다^^~\n", name);
     }

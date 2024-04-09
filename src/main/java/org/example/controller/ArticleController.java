@@ -127,8 +127,8 @@ public class ArticleController extends Controller{
 
         Member member = memberService.getMember(foundArticle.patient_id);
 
-        System.out.printf("번호 : %d\n", foundArticle.id);
-        System.out.printf("날짜 : %s\n", foundArticle.regDate);
+        System.out.printf("번호 : %d\n", foundArticle.getId());
+        System.out.printf("날짜 : %s\n", foundArticle.getRegDate());
         System.out.printf("작성자 : %s\n", member.name);
         System.out.printf("제목 : %s\n", foundArticle.title);
         System.out.printf("내용 : %s\n", foundArticle.body);
@@ -166,7 +166,7 @@ public class ArticleController extends Controller{
             ArticleReply reply = forPrintArticleReplies.get(i);
             Member replyMember = memberService.getMember(reply.memberId);
 
-            System.out.printf("%4d | %5s | %s\n", reply.id, replyMember.name, reply.body);
+            System.out.printf("%4d | %5s | %s\n", reply.getId(), replyMember.name, reply.body);
         }
     }
 
@@ -188,7 +188,7 @@ public class ArticleController extends Controller{
 
         Member loginedMember = session.getLoginedMember();
 
-        if ( foundArticle.patient_id != loginedMember.id ) {
+        if ( foundArticle.patient_id != loginedMember.getId()) {
             System.out.printf("권한이 없습니다.\n");
             return;
         }
@@ -198,9 +198,9 @@ public class ArticleController extends Controller{
         System.out.printf("내용 : ");
         String body = sc.nextLine();
 
-        articleService.modify(foundArticle.id, title, body);
+        articleService.modify(foundArticle.getId(), title, body);
 
-        System.out.printf("%d번 게시물이 수정되었습니다.\n", foundArticle.id);
+        System.out.printf("%d번 게시물이 수정되었습니다.\n", foundArticle.getId());
     }
 
     public void doDelete() {
@@ -221,14 +221,14 @@ public class ArticleController extends Controller{
 
         Member loginedMember = session.getLoginedMember();
 
-        if ( foundArticle.patient_id != loginedMember.id ) {
+        if ( foundArticle.patient_id != loginedMember.getId()) {
             System.out.printf("권한이 없습니다.\n");
             return;
         }
 
-        articleService.delete(foundArticle.id);
+        articleService.delete(foundArticle.getId());
 
-        System.out.printf("%d번 게시물이 삭제되었습니다.\n", foundArticle.id);
+        System.out.printf("%d번 게시물이 삭제되었습니다.\n", foundArticle.getId());
     }
 
     public int checkScNum() {

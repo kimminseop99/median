@@ -2,6 +2,7 @@ DROP DATABASE IF EXISTS `median`;
 CREATE DATABASE `median`;
 USE `median`;
 
+SHOW DATABASES;
 
 CREATE TABLE dpt(
   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -35,6 +36,7 @@ phone = '042-586-7676';
 
 
 SELECT * FROM dpt;
+DROP TABLE dpt;
 
 CREATE TABLE doctor(
   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -43,6 +45,9 @@ CREATE TABLE doctor(
   loginPw CHAR(100) NOT NULL,
   FOREIGN KEY(dpt_id) REFERENCES dpt(id)
 );
+
+ALTER TABLE doctor ADD COLUMN `time` INT(10) UNSIGNED NOT NULL;
+
 
 INSERT INTO doctor (`name`, dpt_id, loginPw)
 VALUES ('공용', 0, 'admin');
@@ -79,6 +84,8 @@ VALUES ('한현희', 5, 'han');
 
 SELECT * FROM doctor;
 
+
+
 CREATE TABLE patient(
 id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 `name` CHAR(100) NOT NULL,
@@ -95,6 +102,23 @@ loginId CHAR(100) NOT NULL UNIQUE,
 loginPw CHAR(100) NOT NULL,
 FOREIGN KEY(doctor_id) REFERENCES doctor(id)
 );
+
+ALTER TABLE reservation ADD CONSTRAINT fk_doctor_id
+    FOREIGN KEY (doctor_id) REFERENCES doctor(id);
+
+INSERT INTO patient
+ SET `name` = '김민섭',
+regDate = NOW(),
+age = '26',
+phone = '010-4809-7610',
+rrn = '991217-1407412',
+height = '174.500000',
+weight = '62.200000',
+ud = '폐렴',
+medicalHistory = 'null',
+doctor_id = '0',
+loginId = 'bok',
+loginPw = 'asd';
 
 INSERT INTO patient
 SET `name` = '홍길동',
@@ -140,16 +164,7 @@ ud = '없음', medicalHistory = '보류',
 doctor_id = 5,
 loginId = 'lee', loginPw = 'woojoo';
 
-INSERT INTO patient
-SET `name` = '환자1',
-regDate = NOW(),
-age = 26,
-phone = '010-1245-1845',
-rrn = '920412-1403863',
-height = 180, weight = 80,
-ud = '없음', medicalHistory = '보류',
-doctor_id = 3,
-loginId = 'user1', loginPw = 'user1';
+
 
 
 SELECT * FROM patient;
@@ -250,13 +265,20 @@ CREATE TABLE reservation (
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
-INSERT INTO reservation
-SET patient_id = 6,
-rh = '가슴이 아파요',
-doctor_id = 4;
+ALTER TABLE reservation ADD COLUMN `time` INT(10) UNSIGNED NOT NULL UNIQUE;
+ALTER TABLE reservation ADD COLUMN `name` CHAR(100) NOT NULL;
+
+INSERT INTO reservation ( rh, `name`)
+VALUES ( '가슴이 아파요',  '홍길동');
+
+SELECT * FROM reservation
+WHERE `time` = 2;
+
 
 SELECT * FROM reservation;
 DROP TABLE article;
+
+DESC doctor
 
 CREATE TABLE article (
 	id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -308,3 +330,14 @@ SET regDate = NOW(),
 patient_id = 1,
 article_id = 2;
 
+SELECT `name` FROM doctor
+WHERE dpt_id = 1;
+
+SELECT D.`name` FROM doctor AS D
+INNER JOIN reservation AS R
+WHERE D.dpt_id = 1;
+
+SELECT D.`name`
+FROM doctor AS D
+INNER JOIN reservation AS R ON D.id = R.doctor_id
+WHERE R.dpt_id = 1;

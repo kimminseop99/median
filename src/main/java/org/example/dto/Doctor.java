@@ -10,10 +10,11 @@ import java.util.Map;
 @Setter
 
 public class Doctor extends Dto{
-    private int id;
-    private String name;
-    private int dpt_id;
-    private String loginPw;
+    public int id;
+    public String name;
+    public int dpt_id;
+    public String loginPw;
+    public int time;
 
     public Doctor() {
         // 기본 생성자
@@ -26,13 +27,15 @@ public class Doctor extends Dto{
         this.name = (String) row.get("name");
         this.dpt_id = (int) row.get("dpt_id");
         this.loginPw = (String) row.get("loginPw");
+        this.time = (int) row.get("time");
     }
 
-    public Doctor(int id, String name, int dpt_id, String loginPw) {
+    public Doctor(int id, String name, int dpt_id, String loginPw, int time) {
         this.id = id;
         this.name = name;
         this.dpt_id = dpt_id;
         this.loginPw = loginPw;
+        this.time = time;
     }
 
 

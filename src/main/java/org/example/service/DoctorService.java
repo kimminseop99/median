@@ -28,7 +28,7 @@ public class DoctorService {
         return doctorDao.getDoctors();
     }
 
-    public List<Doctor> getForPrintDoctors(int dpt) {
+    public static List<Doctor> getForPrintDoctors(int dpt) {
         return DoctorDao.getForPrintDoctors(dpt);
     }
 }

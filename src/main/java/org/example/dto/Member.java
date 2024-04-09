@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Getter
 @Setter
-@AllArgsConstructor
+
 public class Member extends Dto {
+    public String name;
     public int age;
     public String phone;
     public String rrn;
@@ -17,26 +19,30 @@ public class Member extends Dto {
     public double weight;
     public String ud;
     public String medicalHistory;
+    public int doctor_id;
     public String loginId;
     public String loginPw;
-    public int doctor_id;
-    public String name;
+
+
 
     public Member(Map<String, Object> row) {
         super(row);
+        this.name = (String) row.get("name");
         this.age = (int) row.get("age");
         this.phone = (String) row.get("phone");
         this.rrn = (String) row.get("rrn");
-        this.height = (double) row.get("height");
-        this.weight = (double) row.get("weight");
+        this.height = ((BigDecimal)row.get("height")).doubleValue();
+        this.weight = ((BigDecimal)row.get("weight")).doubleValue();
         this.ud = (String) row.get("ud");
         this.medicalHistory = (String) row.get("medicalHistory");
+        this.doctor_id = (int) row.get("doctor_id");
         this.loginId = (String) row.get("loginId");
         this.loginPw = (String) row.get("loginPw");
-        this.name = (String) row.get("name");
+
     }
 
-    public Member(String loginId, String loginPw, int age, String phone, String rrn, double height, double weight, String ud,String medicalHistory, int doctor_id, String name) {
+    public Member(String name, int age, String phone, String rrn, double height, double weight, String ud, String medicalHistory, int doctor_id, String loginId, String loginPw) {
+        this.name = name;
         this.age = age;
         this.phone = phone;
         this.rrn = rrn;
@@ -47,13 +53,11 @@ public class Member extends Dto {
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.doctor_id = doctor_id;
-        this.name = name;
     }
 
-    public Member(String loginId, String loginPw, int age, String phone, String rrn, double height, double weight, String ud,String name){
-        this(loginId, loginPw, age, phone, rrn, height, weight, ud,"null",0, name);
+    public Member(String name, int age, String phone, String rrn, double height, double weight, String ud, String loginId, String loginPw){
+        this(name, age, phone, rrn, height,weight,ud,"null",0,loginId,loginPw);
     }
-    public int getId() {
-        return id;
-    }
+
+
 }
