@@ -5,15 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.util.Util;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class Dto {
-    public int id;
-    public String regDate;
+    private int id;
+    private LocalDateTime regDate;
 
     public Dto() {
         this(0);
@@ -23,8 +24,17 @@ public class Dto {
         this(id, Util.getNowDateStr());
     }
 
-    public Dto(Map<String, Object> row) {
-        this((int) row.get("id"), ((LocalDateTime) row.get("regDate")).toString());
+    public Dto(int id, LocalDateTime regDate) {
+        this.id = id;
+        this.regDate = regDate;
     }
 
+    public Dto(Map<String, Object> row) {
+        this((int) row.get("id"), (Date) row.get("regDate"));
+    }
+
+    public Dto(int id, Date regDate) {
+        this.id = id;
+        this.regDate = regDate.toLocalDateTime();
+    }
 }

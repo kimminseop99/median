@@ -22,15 +22,17 @@ public class DoctorDao extends Dao {
     public static List<Doctor> getForPrintDoctors(int dpt) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format("SELECT D.* "));
-        sb.append(String.format("FROM `doctor` AS D "));
+        sb.append(String.format("SELECT * "));
+        sb.append(String.format("FROM `doctor` "));
         sb.append(String.format("WHERE dpt_id = '%d' ", dpt));
 
         List<Doctor> doctors = new ArrayList<>();
         List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
 
-        for ( Map<String, Object> row : rows ) {
-            doctors.add(new Doctor((row)));
+        for (Map<String, Object> row : rows) {
+            // Doctor 객체 생성자를 통해 ID 값을 설정하여 객체 생성
+            Doctor doctor = new Doctor((int) row.get("id"), (String) row.get("name"), (int) row.get("dpt_id"), (String) row.get("loginPw"));
+            doctors.add(doctor);
         }
 
         return doctors;
@@ -39,13 +41,13 @@ public class DoctorDao extends Dao {
     public int doDoctor(Doctor doctor) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format("INSERT INTO doctor "));
-        sb.append(String.format("SET `name` = '%s', ", doctor.name));
-        sb.append(String.format("dpt_id = '%d', ", doctor.id));
-        sb.append(String.format("loginPw = '%s' ", doctor.loginPw));
+        sb.append("INSERT INTO doctor ");
+        sb.append(String.format("(`name`, `dpt_id`, `loginPw`) VALUES ('%s', '%d', '%s')",
+                doctor.getName(), doctor.getDptId(), doctor.getLoginPw()));
 
         return dbConnection.insert(sb.toString());
     }
+
 
     public List<Doctor> getDoctors() {
         StringBuilder sb = new StringBuilder();
@@ -55,28 +57,36 @@ public class DoctorDao extends Dao {
         List<Doctor> doctors = new ArrayList<>();
         List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
 
-        for ( Map<String, Object> row : rows ) {
-            doctors.add(new Doctor((row)));
+        for (Map<String, Object> row : rows) {
+            int id = (int) row.get("id");
+            String name = (String) row.get("name");
+            int dptId = (int) row.get("dpt_id");
+            String loginPw = (String) row.get("loginPw");
+
+            Doctor doctor = new Doctor(id, name, dptId, loginPw);
+            doctors.add(doctor);
         }
 
         return doctors;
     }
 
+
     public Doctor getDoctor(String name) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format("SELECT * "));
-        sb.append(String.format("FROM doctor "));
-        sb.append(String.format("WHERE `name` = %d ", name));
+        sb.append("SELECT * ");
+        sb.append("FROM doctor ");
+        sb.append(String.format("WHERE `name` = '%s' ", name));
 
         Map<String, Object> row = dbConnection.selectRow(sb.toString());
 
-        if ( row.isEmpty() ) {
+        if (row.isEmpty()) {
             return null;
         }
 
         return new Doctor(row);
     }
+
 
 
 }

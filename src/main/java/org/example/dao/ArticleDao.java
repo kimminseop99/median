@@ -4,7 +4,6 @@ import org.example.container.Container;
 import org.example.db.DBConnection;
 import org.example.dto.Article;
 import org.example.dto.ArticleReply;
-import org.example.dto.Board;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,14 +79,13 @@ public class ArticleDao extends Dao {
         return new Article(row);
     }
 
-    public List<Article> getForPrintArticles(String boardCode, String searchKeyword) {
+    public List<Article> getForPrintArticles(String searchKeyword) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT A.* "));
         sb.append(String.format("FROM `article` AS A "));
         sb.append(String.format("INNER JOIN `board` AS B "));
         sb.append(String.format("ON A.boardId = B.id "));
-        sb.append(String.format("WHERE B.`code` = '%s' ", boardCode));
         if ( searchKeyword.length() > 0 ) {
             sb.append(String.format("AND A.title LIKE '%%%s%%' ", searchKeyword));
         }
@@ -103,21 +101,7 @@ public class ArticleDao extends Dao {
         return articles;
     }
 
-    public Board getBoard(int id) {
-        StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format("SELECT * "));
-        sb.append(String.format("FROM `board` "));
-        sb.append(String.format("WHERE id = %d ", id));
-
-        Map<String, Object> row = dbConnection.selectRow(sb.toString());
-
-        if ( row.isEmpty() ) {
-            return null;
-        }
-
-        return new Board(row);
-    }
 
     public int modify(int id, String title, String body) {
         StringBuilder sb = new StringBuilder();

@@ -53,4 +53,7 @@ public class Member extends Dto {
     public Member(String loginId, String loginPw, int age, String phone, String rrn, double height, double weight, String ud,String name){
         this(loginId, loginPw, age, phone, rrn, height, weight, ud,"null",0, name);
     }
+    public int getId() {
+        return id;
+    }
 }

@@ -15,10 +15,14 @@ public class DoctorService {
         doctorDao = Container.doctorDao;
     }
 
-    public int doDoctor(String name, int dpt_id,String loginPw) {
-        Doctor doctor = new Doctor(name, dpt_id, loginPw);
+    public int doDoctor(String name, int dpt_id, String loginPw) {
+        Doctor doctor = new Doctor();
+        doctor.setName(name);
+        doctor.setDpt_id(dpt_id);
+        doctor.setLoginPw(loginPw);
         return doctorDao.doDoctor(doctor);
     }
+
 
     public List<Doctor> getDoctors(){
         return doctorDao.getDoctors();

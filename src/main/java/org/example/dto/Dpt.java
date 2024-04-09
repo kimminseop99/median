@@ -25,6 +25,8 @@ public class Dpt extends Dto {
         this.name = name;
         this.phone = phone;
     }
-
+    public String getName() {
+        return name;
+    }
 
 }

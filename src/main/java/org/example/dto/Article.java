@@ -24,9 +24,9 @@ public class Article extends Dto {
         this.hit = hit;
     }
 
-    public Article(int memberId, int boardId, String title, String body) {
+    public Article(int patient_id,int doctor_id, String title, String body) {
 
-        this(memberId, boardId, title, body, 0);
+        this(patient_id,doctor_id, title, body, 0);
     }
 
     public Article(Map<String, Object> row) {
@@ -37,6 +37,7 @@ public class Article extends Dto {
         this.doctor_id = (int) row.get("doctor_id");
         this.hit = (int) row.get("hit");
     }
+
 
     public void increaseHit() {
         hit++;

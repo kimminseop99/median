@@ -28,7 +28,7 @@ public class MemberDao extends Dao {
         sb.append(String.format("medicalHistory = '%s', ", member.medicalHistory));
         sb.append(String.format("doctor_id = '%d', ", member.doctor_id));
         sb.append(String.format("loginId = '%s', ", member.loginId));
-        sb.append(String.format("loginPw = '%s', ", member.loginPw));
+        sb.append(String.format("loginPw = '%s' ", member.loginPw));
 
 
         return dbConnection.insert(sb.toString());
@@ -38,7 +38,7 @@ public class MemberDao extends Dao {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT * "));
-        sb.append(String.format("FROM `member` "));
+        sb.append(String.format("FROM patient "));
         sb.append(String.format("WHERE loginId = '%s' ", loginId));
 
         Map<String, Object> row = dbConnection.selectRow((sb.toString()));
@@ -54,7 +54,7 @@ public class MemberDao extends Dao {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT * "));
-        sb.append(String.format("FROM `member` "));
+        sb.append(String.format("FROM patient "));
         sb.append(String.format("WHERE id = %d ", id));
 
         Map<String, Object> row = dbConnection.selectRow((sb.toString()));

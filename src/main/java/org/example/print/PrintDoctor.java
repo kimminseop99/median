@@ -11,8 +11,6 @@ import static org.example.container.Container.doctorService;
 
 public class PrintDoctor {
 
-
-
     public void doctorPage(int dpt){
 
         List<Doctor> forPrintDoctors = doctorService.getForPrintDoctors(dpt);
@@ -25,20 +23,10 @@ public class PrintDoctor {
         System.out.println("의사 | 진료과");
         for ( int i = forPrintDoctors.size() - 1; i >= 0 ; i-- ) {
             Doctor doctor = forPrintDoctors.get(i);
-            Dpt dpt_id = DptService.getDpt(doctor.dpt_id);
+            Dpt dptObj = DptService.getDpt(doctor.getDptId());
 
-            System.out.printf("%4s | %5s \n", doctor.name, dpt_id.name);
+            System.out.printf("%4s | %5s \n", doctor.getName(), dptObj.getName());
         }
-        if(dpt == 1){
 
-        } else if (dpt == 2) {
-
-        } else if (dpt == 3) {
-
-        } else if (dpt == 4) {
-
-        } else{
-
-        }
     }
 }

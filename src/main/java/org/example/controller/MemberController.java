@@ -68,7 +68,6 @@ public class MemberController extends Controller {
         }
 
         int age = 0;
-
         while (true){
             System.out.print("나이 : ");
             age = sc.nextInt();
@@ -80,11 +79,22 @@ public class MemberController extends Controller {
             break;
         }
 
-        System.out.printf("핸드폰 번호 : ");
-        String phone = sc.nextLine();
 
-        System.out.printf("주민 번호 : ");
+        sc.nextLine();
+        String phone = "";
+        while (true) {
+            System.out.print("핸드폰 번호 : ");
+            phone = sc.nextLine();
+
+            if(phone.isEmpty()){
+                continue;
+            }
+            break;
+        }
+
+        System.out.print("주민 번호 : ");
         String rrn = sc.nextLine();
+
 
         System.out.printf("신장 : ");
         double height = sc.nextDouble();
@@ -94,7 +104,7 @@ public class MemberController extends Controller {
 
         System.out.printf("기저질환 : ");
         String ud = sc.nextLine();
-
+        sc.nextLine();
         System.out.printf("이름 : ");
         String name = sc.nextLine();
 

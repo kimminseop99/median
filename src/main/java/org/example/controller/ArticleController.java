@@ -3,7 +3,6 @@ package org.example.controller;
 import org.example.container.Container;
 import org.example.dto.Article;
 import org.example.dto.ArticleReply;
-import org.example.dto.Board;
 import org.example.dto.Member;
 import org.example.service.ArticleService;
 import org.example.service.MemberService;
@@ -45,38 +44,13 @@ public class ArticleController extends Controller{
             case "delete":
                 doDelete();
                 break;
-            case "currentBoard":
-                doCurrentBoard();
-                break;
-            case "changeBoard":
-                doChangeBoard();
-                break;
             default:
                 System.out.println("존재하지 않는 명령어 입니다.");
                 break;
         }
     }
 
-    private void doChangeBoard() {
-        System.out.println("1. 공지 게시판");
-        System.out.println("2. 자유 게시판");
-        System.out.print("게시판 번호를 입력하세요) ");
 
-        int boardId = checkScNum();
-        Board board = articleService.getBoard(boardId);
-
-        if ( board == null ) {
-            System.out.println("해당 게시판은 존재하지 않습니다.");
-        } else {
-            System.out.printf("[%s 게시판]으로 변경되었습니다.\n", board.getName());
-            session.setCurrentBoard(board);
-        }
-    }
-
-    private void doCurrentBoard() {
-        Board board = session.getCurrentBoard();
-        System.out.printf("현재 게시판 : [%s 게시판]\n", board.getName());
-    }
 
     public void doWrite() {
         System.out.printf("제목 : ");
@@ -84,28 +58,29 @@ public class ArticleController extends Controller{
         System.out.printf("내용 : ");
         String body = sc.nextLine();
 
-        int memberId = session.getLoginedMember().getId();
-        int boardId = session.getCurrentBoard().getId();
+        int patient_id = session.getLoginedMember().getId();
+        int doctor_id = session.getLoginedMember().doctor_id;
 
-        int newId = articleService.write(memberId, boardId, title, body);
+
+        int newId = articleService.write(patient_id, doctor_id, title, body);
 
         System.out.printf("%d번 게시물이 생성되었습니다.\n", newId);
     }
 
     public void showList() {
         String searchKeyword = cmd.substring("article list".length()).trim();
-        String boardCode = Container.getSession().getCurrentBoard().getCode();
 
-        List<Article> forPrintArticles = articleService.getForPrintArticles(boardCode, searchKeyword);
+
+        List<Article> forPrintArticles = articleService.getForPrintArticles(searchKeyword);
 
         if (forPrintArticles.isEmpty()) {
             System.out.println("검색결과가 존재하지 않습니다.");
             return;
         }
 
-        String boardName = Container.getSession().getCurrentBoard().getName();
 
-        System.out.printf("[%s 게시판]\n", boardName);
+
+
         System.out.println("번호 |   작성자 | 조회 | 제목 ");
         for ( int i = forPrintArticles.size() - 1; i >= 0 ; i-- ) {
             Article article = forPrintArticles.get(i);
