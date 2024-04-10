@@ -27,6 +27,7 @@ public class Reservation extends Dto {
     }
 
     public Reservation(Map<String, Object> row) {
+        super(row);
         this.rh = (String) row.get("rh");
         Integer doctorIdObj = (Integer) row.get("doctor_id");
         this.doctor_id = (doctorIdObj != null) ? doctorIdObj.intValue() : 0;
@@ -34,4 +35,8 @@ public class Reservation extends Dto {
         this.time = (int) row.get("time");
         this.dpt_id = (int) row.get("dpt_id");
     }
+
+
+
+
 }

@@ -5,6 +5,7 @@ import org.example.dao.ReservationDao;
 import org.example.dto.Reservation;
 
 import java.util.List;
+import java.util.function.DoublePredicate;
 
 public class ReservationService {
     private ReservationDao reservationDao;
@@ -33,5 +34,24 @@ public class ReservationService {
 
     public List<Reservation> getTime(int time) {
         return reservationDao.getTime(time);
+    }
+
+    public List<Reservation> getDoctorsDpt(int dpt_id) {
+        return reservationDao.getDoctorsDpt(dpt_id);
+    }
+
+    public List<Integer> getReservedTimes(int doctor_id) {
+
+        return reservationDao.getReservedTimes(doctor_id);
+    }
+
+    public List<Integer> getAvailableTimes(int doctor_id) {
+
+        return reservationDao.getAvailableTimes(doctor_id);
+    }
+
+
+    public void createReservation(int patient_id, int doctor_id, int dpt_id, int time) {
+        reservationDao.createReservation(patient_id, doctor_id, dpt_id, time);
     }
 }
