@@ -104,10 +104,33 @@ public class ReservationController extends Controller {
             System.out.println("║    4.  흉부외과       │          042-987-6543         ║");
             System.out.println("║    5.  소아외과       │          042-111-2222         ║");
             System.out.println("╚═════════════════════════════════════════════════════╝");
+            // 세션에서 현재 로그인한 회원의 ID 가져오기
+            int patient_id = session.getLoginedMember().getId();
+            int dpt_id = 0;
+            boolean checkduplicate = false;
+            while (true) {
+                System.out.print("진료과 번호를 선택하세요: ");
+                dpt_id = sc.nextInt();
+                sc.nextLine();
+                // 같은과에 중복으로 예약하는지 체크
+                List<Reservation> isDuplicateReservation = reservationService.getReservation(patient_id);
+                for (Reservation list : isDuplicateReservation) {
+                    if (list.dpt_id == dpt_id) {
+                        System.out.println("동일한 진료과에 중복으로 예약할 수 없습니다.");
+                        checkduplicate = true;
+                        break;
+                    }
 
-            System.out.print("진료과 번호를 선택하세요: ");
-            int dpt_id = sc.nextInt();
-            sc.nextLine();
+                }
+
+                if(!checkduplicate){
+                    break;
+                }
+
+                checkduplicate = false;
+
+            }
+            // 같은과에 중복으로 예약하는지 체크
 
             // 의사 목록 가져오기
             List<String> doctors = reservationService.getDoctorsDpt(dpt_id);
@@ -182,20 +205,13 @@ public class ReservationController extends Controller {
             // 선택한 시간대 번호에 해당하는 시간 가져오기
             Time selectedTime = doctor_time.get(selectedTimeIndex - 1);
 
-            // 세션에서 현재 로그인한 회원의 ID 가져오기
-            int patient_id = session.getLoginedMember().getId();
-
             // 세션에서 현재 로그인한 회원의 이름 가져오기
             String name = session.getLoginedMember().getName();
 
             System.out.print("증상을 적어주세요 : ");
             String rh = sc.nextLine();
 
-            boolean isDuplicate = reservationService.checkDuplicateReservation(patient_id);
-            if (isDuplicate) {
-                System.out.println("이미 예약이 되어 있어 예약을 추가할 수 없습니다.");
-                return;
-            }
+
 
 
             // 예약 생성

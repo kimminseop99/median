@@ -24,6 +24,16 @@ public class Dto {
     }
 
     public Dto(Map<String, Object> row) {
-        this((int) row.get("id"), String.valueOf((Date) row.get("regDate")));
+        Object idObject = row.get("id");
+        Object regDateObject = row.get("regDate");
+
+        if (idObject != null && regDateObject != null) {
+            this.id = (int) idObject;
+            this.regDate = String.valueOf(regDateObject);
+        } else {
+            // 예외 처리 또는 기본값 설정
+            this.id = 0;
+            this.regDate = Util.getNowDateStr();
+        }
     }
 }

@@ -60,8 +60,5 @@ public class ReservationService {
         return reservationDao.getUnavailableTimes(dpt_id,doctor_id);
     }
 
-    public boolean checkDuplicateReservation(int patient_id) {
-        List<Reservation> reservations = reservationDao.getReservation(patient_id);
-        return !reservations.isEmpty();
-    }
+
 }
