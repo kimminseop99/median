@@ -37,6 +37,7 @@ public class App {
         ArticleController articleController = new ArticleController();
         ReservationController reservationController = new ReservationController();
         while ( true ) {
+            System.out.println("[메인]");
             System.out.printf("명령어) ");
             String cmd = Container.getScanner().nextLine();
             cmd = cmd.trim();

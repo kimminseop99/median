@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public class Util {
     // 현재 날짜 저장
-    public static LocalDateTime getNowDateStr() {
+    public static String getNowDateStr() {
         LocalDateTime now = LocalDateTime.now();
-        return now;
+        return now.toString();
     }
 
 }

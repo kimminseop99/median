@@ -4,8 +4,8 @@ import org.example.container.Container;
 import org.example.dao.ReservationDao;
 import org.example.dto.Reservation;
 
+import java.sql.Time;
 import java.util.List;
-import java.util.function.DoublePredicate;
 
 public class ReservationService {
     private ReservationDao reservationDao;
@@ -14,7 +14,7 @@ public class ReservationService {
         reservationDao = Container.reservationDao;
     }
 
-    public int doReservation(int patient_id,String rh,int doctor_id, String name, int time, int dpt_id) {
+    public int doReservation(int patient_id,String rh,int doctor_id, String name, Time time, int dpt_id) {
         Reservation reservation = new Reservation(patient_id, rh, doctor_id, name, time, dpt_id);
         return reservationDao.doReservation(reservation);
     }
@@ -23,7 +23,7 @@ public class ReservationService {
         return reservationDao.getReservations();
     }
 
-    public Reservation getReservation(int patient_id){
+    public List<Reservation> getReservation(int patient_id){
         return reservationDao.getReservation(patient_id);
     }
 
@@ -36,7 +36,7 @@ public class ReservationService {
         return reservationDao.getTime(time);
     }
 
-    public List<Reservation> getDoctorsDpt(int dpt_id) {
+    public List<String> getDoctorsDpt(int dpt_id) {
         return reservationDao.getDoctorsDpt(dpt_id);
     }
 
@@ -45,13 +45,23 @@ public class ReservationService {
         return reservationDao.getReservedTimes(doctor_id);
     }
 
-    public List<Integer> getAvailableTimes(int doctor_id) {
+    public List<Time> getDoctor_time(int doctor_id) {
 
-        return reservationDao.getAvailableTimes(doctor_id);
+        return reservationDao.getDoctor_time(doctor_id);
     }
 
 
-    public void createReservation(int patient_id, int doctor_id, int dpt_id, int time) {
-        reservationDao.createReservation(patient_id, doctor_id, dpt_id, time);
+    public int createReservation(int patient_id, String rh, String name, int doctor_id,int dpt_id, Time doctor_time) {
+        Reservation reservation = new Reservation(patient_id, rh, doctor_id, name, doctor_time, dpt_id);
+        return reservationDao.createReservation(reservation);
+    }
+
+    public List<Time> getUnavailableTimes(int dpt_id, int doctor_id) {
+        return reservationDao.getUnavailableTimes(dpt_id,doctor_id);
+    }
+
+    public boolean checkDuplicateReservation(int patient_id) {
+        List<Reservation> reservations = reservationDao.getReservation(patient_id);
+        return !reservations.isEmpty();
     }
 }

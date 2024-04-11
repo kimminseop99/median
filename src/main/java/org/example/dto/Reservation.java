@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Time;
 import java.util.Map;
 
 @Getter
@@ -14,10 +15,10 @@ public class Reservation extends Dto {
     public String rh;
     public int doctor_id;
     public String name;
-    public int time;
+    public Time time;
     public int dpt_id;
 
-    public Reservation(int patient_id, String rh, int doctor_id, String name, int time, int dpt_id) {
+    public Reservation(int patient_id, String rh, int doctor_id, String name, Time time, int dpt_id) {
         this.patient_id = patient_id;
         this.rh = rh;
         this.doctor_id = doctor_id;
@@ -32,7 +33,7 @@ public class Reservation extends Dto {
         Integer doctorIdObj = (Integer) row.get("doctor_id");
         this.doctor_id = (doctorIdObj != null) ? doctorIdObj.intValue() : 0;
         this.name = (String) row.get("name");
-        this.time = (int) row.get("time");
+        this.time = (Time) row.get("time");
         this.dpt_id = (int) row.get("dpt_id");
     }
 

@@ -105,7 +105,6 @@ CREATE TABLE `doctor` (
   `name` char(100) NOT NULL,
   `dpt_id` int(10) unsigned NOT NULL,
   `loginPw` char(100) NOT NULL,
-  `time` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `dpt_id` (`dpt_id`),
   CONSTRAINT `doctor_ibfk_1` FOREIGN KEY (`dpt_id`) REFERENCES `dpt` (`id`)
@@ -113,18 +112,125 @@ CREATE TABLE `doctor` (
 
 /*Data for the table `doctor` */
 
-insert  into `doctor`(`id`,`name`,`dpt_id`,`loginPw`,`time`) values 
-(0,'공용',0,'admin',0),
-(1,'이익준',1,'jo',0),
-(2,'채송화',2,'chae',0),
-(3,'양석형',3,'yang',0),
-(4,'김준완',4,'kim',0),
-(5,'안정원',5,'ahn',0),
-(6,'장겨울',1,'jang',0),
-(7,'용석민',2,'yong',0),
-(8,'추민하',3,'choo',0),
-(9,'도재학',4,'do',0),
-(10,'한현희',5,'han',0);
+insert  into `doctor`(`id`,`name`,`dpt_id`,`loginPw`) values 
+(0,'공용',0,'admin'),
+(1,'이익준',1,'jo'),
+(2,'채송화',2,'chae'),
+(3,'양석형',3,'yang'),
+(4,'김준완',4,'kim'),
+(5,'안정원',5,'ahn'),
+(6,'장겨울',1,'jang'),
+(7,'용석민',2,'yong'),
+(8,'추민하',3,'choo'),
+(9,'도재학',4,'do'),
+(10,'한현희',5,'han');
+
+/*Table structure for table `doctor_time` */
+
+DROP TABLE IF EXISTS `doctor_time`;
+
+CREATE TABLE `doctor_time` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `doctor_id` int(10) unsigned NOT NULL,
+  `time` time NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `doctor_id` (`doctor_id`),
+  CONSTRAINT `doctor_time_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `doctor_time` */
+
+insert  into `doctor_time`(`id`,`doctor_id`,`time`) values 
+(1,1,'09:10:00'),
+(2,1,'10:10:00'),
+(3,1,'11:10:00'),
+(4,1,'13:10:00'),
+(5,1,'14:10:00'),
+(6,1,'15:10:00'),
+(7,1,'16:10:00'),
+(8,1,'17:10:00'),
+(9,1,'18:10:00'),
+(10,2,'09:10:00'),
+(11,2,'10:10:00'),
+(12,2,'11:10:00'),
+(13,2,'13:10:00'),
+(14,2,'14:10:00'),
+(15,2,'15:10:00'),
+(16,2,'16:10:00'),
+(17,2,'17:10:00'),
+(18,2,'18:10:00'),
+(19,3,'09:10:00'),
+(20,3,'10:10:00'),
+(21,3,'11:10:00'),
+(22,3,'13:10:00'),
+(23,3,'14:10:00'),
+(24,3,'15:10:00'),
+(25,3,'16:10:00'),
+(26,3,'17:10:00'),
+(27,3,'18:10:00'),
+(28,4,'09:10:00'),
+(29,4,'10:10:00'),
+(30,4,'11:10:00'),
+(31,4,'13:10:00'),
+(32,4,'14:10:00'),
+(33,4,'15:10:00'),
+(34,4,'16:10:00'),
+(35,4,'17:10:00'),
+(36,4,'18:10:00'),
+(37,5,'09:10:00'),
+(38,5,'10:10:00'),
+(39,5,'11:10:00'),
+(40,5,'13:10:00'),
+(41,5,'14:10:00'),
+(42,5,'15:10:00'),
+(43,5,'16:10:00'),
+(44,5,'17:10:00'),
+(45,5,'18:10:00'),
+(46,6,'09:10:00'),
+(47,6,'10:10:00'),
+(48,6,'11:10:00'),
+(49,6,'13:10:00'),
+(50,6,'14:10:00'),
+(51,6,'15:10:00'),
+(52,6,'16:10:00'),
+(53,6,'17:10:00'),
+(54,6,'18:10:00'),
+(55,7,'09:10:00'),
+(56,7,'10:10:00'),
+(57,7,'11:10:00'),
+(58,7,'13:10:00'),
+(59,7,'14:10:00'),
+(60,7,'15:10:00'),
+(61,7,'16:10:00'),
+(62,7,'17:10:00'),
+(63,7,'18:10:00'),
+(64,8,'09:10:00'),
+(65,8,'10:10:00'),
+(66,8,'11:10:00'),
+(67,8,'13:10:00'),
+(68,8,'14:10:00'),
+(69,8,'15:10:00'),
+(70,8,'16:10:00'),
+(71,8,'17:10:00'),
+(72,8,'18:10:00'),
+(73,9,'09:10:00'),
+(74,9,'10:10:00'),
+(75,9,'11:10:00'),
+(76,9,'13:10:00'),
+(77,9,'14:10:00'),
+(78,9,'15:10:00'),
+(79,9,'16:10:00'),
+(80,9,'17:10:00'),
+(81,9,'18:10:00'),
+(82,10,'09:10:00'),
+(83,10,'10:10:00'),
+(84,10,'11:10:00'),
+(85,10,'13:10:00'),
+(86,10,'14:10:00'),
+(87,10,'15:10:00'),
+(88,10,'16:10:00'),
+(89,10,'17:10:00'),
+(90,10,'18:10:00');
 
 /*Table structure for table `dpt` */
 
@@ -191,7 +297,7 @@ CREATE TABLE `patient` (
   UNIQUE KEY `loginId` (`loginId`),
   KEY `doctor_id` (`doctor_id`),
   CONSTRAINT `patient_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `patient` */
 
@@ -209,23 +315,20 @@ DROP TABLE IF EXISTS `reservation`;
 CREATE TABLE `reservation` (
   `patient_id` int(10) unsigned NOT NULL,
   `rn` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `regDate` date NOT NULL,
   `rh` text NOT NULL,
   `doctor_id` int(10) unsigned NOT NULL,
   `name` char(100) NOT NULL,
-  `time` int(10) unsigned NOT NULL,
+  `dpt_id` int(10) unsigned NOT NULL,
+  `doctor_time` time DEFAULT NULL,
+  `regDate` datetime NOT NULL,
   PRIMARY KEY (`rn`),
   UNIQUE KEY `patient_id` (`patient_id`),
-  UNIQUE KEY `time` (`time`),
   KEY `fk_doctor_id` (`doctor_id`),
   CONSTRAINT `fk_doctor_id` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`),
   CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reservation` */
-
-insert  into `reservation`(`patient_id`,`rn`,`regDate`,`rh`,`doctor_id`,`name`,`time`) values 
-(1,1,'2024-05-01','가슴이 아파요',1,'홍길동',1);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

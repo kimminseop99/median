@@ -47,6 +47,36 @@ CREATE TABLE doctor(
 );
 
 ALTER TABLE doctor ADD COLUMN `time` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE doctor DROP COLUMN `time`;
+
+-- 의사별 시간표를 삽입하기 위한 새로운 테이블 생성
+CREATE TABLE doctor_time (
+  id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  doctor_id INT(10) UNSIGNED NOT NULL,
+  TIME TIME NOT NULL,
+  FOREIGN KEY (doctor_id) REFERENCES doctor(id)
+);
+
+INSERT INTO doctor_time (doctor_id, TIME) VALUES
+(1, '09:10'),(1, '10:10'),(1, '11:10'),(1, '13:10'),(1, '14:10'),(1, '15:10'),(1, '16:10'),(1, '17:10'),(1, '18:10'),
+(2, '09:10'),(2, '10:10'),(2, '11:10'),(2, '13:10'),(2, '14:10'),(2, '15:10'),(2, '16:10'),(2, '17:10'),(2, '18:10'),
+(3, '09:10'),(3, '10:10'),(3, '11:10'),(3, '13:10'),(3, '14:10'),(3, '15:10'),(3, '16:10'),(3, '17:10'),(3, '18:10'),
+(4, '09:10'),(4, '10:10'),(4, '11:10'),(4, '13:10'),(4, '14:10'),(4, '15:10'),(4, '16:10'),(4, '17:10'),(4, '18:10'),
+(5, '09:10'),(5, '10:10'),(5, '11:10'),(5, '13:10'),(5, '14:10'),(5, '15:10'),(5, '16:10'),(5, '17:10'),(5, '18:10'),
+(6, '09:10'),(6, '10:10'),(6, '11:10'),(6, '13:10'),(6, '14:10'),(6, '15:10'),(6, '16:10'),(6, '17:10'),(6, '18:10'),
+(7, '09:10'),(7, '10:10'),(7, '11:10'),(7, '13:10'),(7, '14:10'),(7, '15:10'),(7, '16:10'),(7, '17:10'),(7, '18:10'),
+(8, '09:10'),(8, '10:10'),(8, '11:10'),(8, '13:10'),(8, '14:10'),(8, '15:10'),(8, '16:10'),(8, '17:10'),(8, '18:10'),
+(9, '09:10'),(9, '10:10'),(9, '11:10'),(9, '13:10'),(9, '14:10'),(9, '15:10'),(9, '16:10'),(9, '17:10'),(9, '18:10'),
+(10, '09:10'),(10, '10:10'),(10, '11:10'),(10, '13:10'),(10, '14:10'),(10, '15:10'),(10, '16:10'),(10, '17:10'),(10, '18:10');
+
+
+SELECT * FROM doctor_time;
+
+SELECT `time`
+FROM doctor_time
+WHERE doctor_id = 1;
+
+
 
 
 INSERT INTO doctor (`name`, dpt_id, loginPw)
@@ -83,6 +113,9 @@ INSERT INTO doctor (`name`, dpt_id, loginPw)
 VALUES ('한현희', 5, 'han');
 
 SELECT * FROM doctor;
+
+SELECT `name` FROM doctor
+WHERE dpt_id = 1;
 
 
 
@@ -163,8 +196,6 @@ height = 120.5, weight = 23.5,
 ud = '없음', medicalHistory = '보류',
 doctor_id = 5,
 loginId = 'lee', loginPw = 'woojoo';
-
-
 
 
 SELECT * FROM patient;
@@ -265,20 +296,26 @@ CREATE TABLE reservation (
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
-ALTER TABLE reservation ADD COLUMN `time` INT(10) UNSIGNED NOT NULL UNIQUE;
+ALTER TABLE reservation ADD COLUMN regDate DATETIME NOT NULL;
+ALTER TABLE reservation DROP COLUMN regDate;
 ALTER TABLE reservation ADD COLUMN `name` CHAR(100) NOT NULL;
+ALTER TABLE reservation ADD COLUMN dpt_id INT(10) UNSIGNED NOT NULL;
+
 
 INSERT INTO reservation ( rh, `name`)
 VALUES ( '가슴이 아파요',  '홍길동');
 
 SELECT * FROM reservation
-WHERE `time` = 2;
+WHERE `time` = 1;
 
 
 SELECT * FROM reservation;
 DROP TABLE article;
 
-DESC doctor
+ALTER TABLE reservation
+CHANGE COLUMN `time` doctor_time TIME;
+
+
 
 CREATE TABLE article (
 	id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -291,6 +328,10 @@ CREATE TABLE article (
 	INDEX doctor_id(`doctor_id`),
 	FOREIGN KEY (doctor_id) REFERENCES doctor(id) ON DELETE CASCADE
 );
+
+
+
+
 
 INSERT INTO article
 SET regDate = NOW(),
@@ -330,14 +371,4 @@ SET regDate = NOW(),
 patient_id = 1,
 article_id = 2;
 
-SELECT `name` FROM doctor
-WHERE dpt_id = 1;
 
-SELECT D.`name` FROM doctor AS D
-INNER JOIN reservation AS R
-WHERE D.dpt_id = 1;
-
-SELECT D.`name`
-FROM doctor AS D
-INNER JOIN reservation AS R ON D.id = R.doctor_id
-WHERE R.dpt_id = 1;
