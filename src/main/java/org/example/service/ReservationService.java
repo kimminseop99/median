@@ -14,45 +14,21 @@ public class ReservationService {
         reservationDao = Container.reservationDao;
     }
 
-    public int doReservation(int patient_id,String rh,int doctor_id, String name, Time time, int dpt_id) {
-        Reservation reservation = new Reservation(patient_id, rh, doctor_id, name, time, dpt_id);
-        return reservationDao.doReservation(reservation);
-    }
-
-    public List<Reservation> getReservations(){
-        return reservationDao.getReservations();
-    }
-
     public List<Reservation> getReservation(int patient_id){
         return reservationDao.getReservation(patient_id);
     }
 
-    public List<Reservation> getReservationDoctors(int dpt) {
-        return reservationDao.getReservationDoctors(dpt);
-    }
-
-
-    public List<Reservation> getTime(int time) {
-        return reservationDao.getTime(time);
-    }
 
     public List<String> getDoctorsDpt(int dpt_id) {
         return reservationDao.getDoctorsDpt(dpt_id);
-    }
-
-    public List<Integer> getReservedTimes(int doctor_id) {
-
-        return reservationDao.getReservedTimes(doctor_id);
     }
 
     public List<Time> getDoctor_time(int doctor_id) {
 
         return reservationDao.getDoctor_time(doctor_id);
     }
-
-
     public int createReservation(int patient_id, String rh, String name, int doctor_id,int dpt_id, Time doctor_time) {
-        Reservation reservation = new Reservation(patient_id, rh, doctor_id, name, doctor_time, dpt_id);
+        Reservation reservation = new Reservation(patient_id, rh, doctor_id, name, dpt_id, doctor_time);
         return reservationDao.createReservation(reservation);
     }
 

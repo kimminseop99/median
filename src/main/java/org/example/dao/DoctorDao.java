@@ -3,7 +3,6 @@ package org.example.dao;
 
 import org.example.container.Container;
 import org.example.db.DBConnection;
-import org.example.dto.Article;
 import org.example.dto.Doctor;
 import org.example.dto.Reservation;
 
@@ -31,11 +30,28 @@ public class DoctorDao extends Dao {
 
         for (Map<String, Object> row : rows) {
             // Doctor 객체 생성자를 통해 ID 값을 설정하여 객체 생성
-            Doctor doctor = new Doctor((int) row.get("id"), (String) row.get("name"), (int) row.get("dpt_id"), (String) row.get("loginPw"), (int) row.get("time"));
+            Doctor doctor = new Doctor((int) row.get("id"), (String) row.get("name"), (int) row.get("dpt_id"), (String) row.get("loginPw"));
             doctors.add(doctor);
         }
 
         return doctors;
+    }
+
+    public static List<Reservation> getDoctorId(int dptId) {
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(String.format("SELECT id FROM doctor "));
+            sb.append(String.format("WHERE dpt_id = %d", dptId));
+            List<Reservation> reservations = new ArrayList<>();
+            List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
+
+            for ( Map<String, Object> row : rows ) {
+                reservations.add(new Reservation((row)));
+            }
+
+            return reservations;
+
     }
 
     public int doDoctor(Doctor doctor) {
@@ -62,8 +78,7 @@ public class DoctorDao extends Dao {
             String name = (String) row.get("name");
             int dptId = (int) row.get("dpt_id");
             String loginPw = (String) row.get("loginPw");
-            int time = (int) row.get("time");
-            Doctor doctor = new Doctor(id, name, dptId, loginPw, time);
+            Doctor doctor = new Doctor(id, name, dptId, loginPw);
             doctors.add(doctor);
         }
 

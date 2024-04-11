@@ -16,21 +16,21 @@ public class ReservationDao extends Dao{
         dbConnection = Container.getDBConnection();
     }
 
-
-    public int doReservation(Reservation reservation) { // 새로운 예약 db에 추가
+    public int createReservation(Reservation reservation) { // 새오운 예약 생성
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("INSERT INTO reservation "));
-        sb.append(String.format("SET patient_id = '%d', ", reservation.patient_id));
-        sb.append(String.format("regDate = NOW(), "));
+        sb.append(String.format("SET regDate = NOW(), "));
+        sb.append(String.format("patient_id = %d, ", reservation.patient_id));
         sb.append(String.format("rh = '%s', ", reservation.rh));
-        sb.append(String.format("doctor_id = '%d', ", reservation.doctor_id));
-        sb.append(String.format("`name`= %s, ", reservation.name));
-        sb.append(String.format("`time`= %d, ", reservation.time));
-        sb.append(String.format("`dpt_id`= %d ", reservation.dpt_id));
+        sb.append(String.format("name = '%s', ", reservation.name));
+        sb.append(String.format("doctor_id = %d, ", reservation.doctor_id));
+        sb.append(String.format("dpt_id = %d, ", reservation.dpt_id));
+        sb.append(String.format("doctor_time = '%s' ", reservation.doctor_time));
 
         return dbConnection.insert(sb.toString());
     }
+
 
     public List<Reservation> getReservations() { // 모든 예약목록 보여줌
         StringBuilder sb = new StringBuilder();
@@ -159,20 +159,7 @@ public class ReservationDao extends Dao{
 
 
 
-    public int createReservation(Reservation reservation) { // 새오운 예약 생성
-        StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format("INSERT INTO reservation "));
-        sb.append(String.format("SET regDate = NOW(), "));
-        sb.append(String.format("patient_id = %d, ", reservation.patient_id));
-        sb.append(String.format("rh = '%s', ", reservation.rh));
-        sb.append(String.format("name = '%s', ", reservation.name));
-        sb.append(String.format("doctor_id = %d, ", reservation.doctor_id));
-        sb.append(String.format("dpt_id = %d, ", reservation.dpt_id));
-        sb.append(String.format("doctor_time = '%s' ", reservation.time));
-
-        return dbConnection.insert(sb.toString());
-    }
 
     public List<Time> getUnavailableTimes(int dpt_id, int doctor_id) {
         StringBuilder sb = new StringBuilder();
@@ -192,4 +179,7 @@ public class ReservationDao extends Dao{
 
         return unavailableTimes;
     }
+
+
+
 }

@@ -14,28 +14,28 @@ public class Doctor extends Dto{
     public String name;
     public int dpt_id;
     public String loginPw;
-    public int time;
+
 
     public Doctor() {
         // 기본 생성자
     }
 
-    // Lombok의 @AllArgsConstructor를 사용하여 생성자를 자동 생성하므로 따로 생성자 구현은 필요하지 않음
+
 
     public Doctor(Map<String, Object> row) {
         this.id = (int) row.get("id");
         this.name = (String) row.get("name");
         this.dpt_id = (int) row.get("dpt_id");
         this.loginPw = (String) row.get("loginPw");
-        this.time = (int) row.get("time");
+
     }
 
-    public Doctor(int id, String name, int dpt_id, String loginPw, int time) {
+    public Doctor(int id, String name, int dpt_id, String loginPw) {
         this.id = id;
         this.name = name;
         this.dpt_id = dpt_id;
         this.loginPw = loginPw;
-        this.time = time;
+
     }
 
 

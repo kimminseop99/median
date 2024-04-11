@@ -18,8 +18,6 @@ public class Member extends Dto {
     public double height;
     public double weight;
     public String ud;
-    public String medicalHistory;
-    public int doctor_id;
     public String loginId;
     public String loginPw;
 
@@ -34,14 +32,12 @@ public class Member extends Dto {
         this.height = ((BigDecimal)row.get("height")).doubleValue();
         this.weight = ((BigDecimal)row.get("weight")).doubleValue();
         this.ud = (String) row.get("ud");
-        this.medicalHistory = (String) row.get("medicalHistory");
-        this.doctor_id = (int) row.get("doctor_id");
         this.loginId = (String) row.get("loginId");
         this.loginPw = (String) row.get("loginPw");
 
     }
 
-    public Member(String name, int age, String phone, String rrn, double height, double weight, String ud, String medicalHistory, int doctor_id, String loginId, String loginPw) {
+    public Member(String name, int age, String phone, String rrn, double height, double weight, String ud, String loginId, String loginPw) {
         this.name = name;
         this.age = age;
         this.phone = phone;
@@ -49,15 +45,11 @@ public class Member extends Dto {
         this.height = height;
         this.weight = weight;
         this.ud = ud;
-        this.medicalHistory = medicalHistory;
         this.loginId = loginId;
         this.loginPw = loginPw;
-        this.doctor_id = doctor_id;
     }
 
-    public Member(String name, int age, String phone, String rrn, double height, double weight, String ud, String loginId, String loginPw){
-        this(name, age, phone, rrn, height,weight,ud,"null",0,loginId,loginPw);
-    }
+
 
 
 }

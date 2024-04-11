@@ -1,8 +1,11 @@
 package org.example.controller;
 
 import org.example.container.Container;
+import org.example.dto.Doctor;
 import org.example.dto.Member;
 import org.example.dto.Reservation;
+import org.example.resource.DptName;
+import org.example.service.DoctorService;
 import org.example.service.MemberService;
 import org.example.service.ReservationService;
 
@@ -28,11 +31,11 @@ public class ReservationController extends Controller {
 
     public void doAction(String cmd, String actionMethodName) {
         if (actionMethodName.equals("page")) {
-            System.out.println("           환영합니다!! 여기는 예약 페이지 입니다          ");
+            System.out.println("                      예약 페이지                      ");
             System.out.println("═════════════════════════════════════════════════════");
-            System.out.println("                   1. 예약 정보 출력                   ");
-            System.out.println("                   2. 병원 예약                        ");
-            System.out.println("                   3. 뒤로 가기                        ");
+            System.out.println("|                   1. 예약 정보 출력                  |");
+            System.out.println("|                   2. 병원 예약                      |");
+            System.out.println("|                   3. 뒤로 가기                      |");
             System.out.println("═════════════════════════════════════════════════════");
             System.out.print("번호를 선택해 주세요: ");
             int num = sc.nextInt();
@@ -67,20 +70,24 @@ public class ReservationController extends Controller {
 
         // 현재 로그인한 회원 정보 확인
         Member loginedMember = session.getLoginedMember();
-        System.out.println("로그인한 회원: " + loginedMember.getName());
+
+        int patient_id = session.getLoginedMember().getId();
 
         // 예약 정보 출력
-        List<Reservation> reservations = reservationService.getReservation(loginedMember.getId());
+        List<Reservation> reservations = reservationService.getReservation(patient_id);
         if (reservations.isEmpty()) {
             System.out.println("예약된 정보가 없습니다.");
             return;
         } else {
             System.out.println("[예약 목록]");
             for (Reservation reservation : reservations) {
-                System.out.println("진료과: " + reservation.getDpt_id());
-                System.out.println("의사: " + reservation.getDoctor_id());
-                System.out.println("예약 시간: " + reservation.getTime());
-                System.out.println("환자 ID: " + reservation.getPatient_id());
+                List<String> doctors = reservationService.getDoctorsDpt(reservation.dpt_id);
+
+                System.out.println("예약자 이름: " + loginedMember.getName());
+                System.out.println("의사 이름: " + doctors);
+                System.out.println("진료과: " + DptName.numToDept(reservation.dpt_id));
+                System.out.println("예약 시간: " + reservation.doctor_time);
+                System.out.println("환자 증상: " + reservation.rh);
                 System.out.println();
             }
         }
@@ -136,10 +143,12 @@ public class ReservationController extends Controller {
             List<String> doctors = reservationService.getDoctorsDpt(dpt_id);
 
 // 의사 목록 출력
+
+
             System.out.println("[의사 목록]");
             for (int i = 0; i < doctors.size(); i++) {
                 String doctor = doctors.get(i);
-                System.out.println((i + 1) + ". " + doctor);
+                System.out.println((i + 1)+ ". " + doctor);
             }
 
 
@@ -188,7 +197,7 @@ public class ReservationController extends Controller {
                 Time selectedTime = doctor_time.get(selectedTimeIndex - 1);
                 boolean isAvailableTime = true;
                 for (Time Atime : AavailableTimes) {
-                    if (selectedTime.equals(Atime)) { // 수정된 부분
+                    if (selectedTime.equals(Atime)) {
                         isAvailableTime = false;
                         break;
                     }

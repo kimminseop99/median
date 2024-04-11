@@ -15,16 +15,16 @@ public class Reservation extends Dto {
     public String rh;
     public int doctor_id;
     public String name;
-    public Time time;
     public int dpt_id;
+    public Time doctor_time;
 
-    public Reservation(int patient_id, String rh, int doctor_id, String name, Time time, int dpt_id) {
+    public Reservation(int patient_id, String rh, int doctor_id, String name, int dpt_id, Time doctor_time) {
         this.patient_id = patient_id;
         this.rh = rh;
         this.doctor_id = doctor_id;
         this.name = name;
-        this.time = time;
         this.dpt_id = dpt_id;
+        this.doctor_time = doctor_time;
     }
 
     public Reservation(Map<String, Object> row) {
@@ -33,9 +33,11 @@ public class Reservation extends Dto {
         Integer doctorIdObj = (Integer) row.get("doctor_id");
         this.doctor_id = (doctorIdObj != null) ? doctorIdObj.intValue() : 0;
         this.name = (String) row.get("name");
-        this.time = (Time) row.get("time");
-        this.dpt_id = (int) row.get("dpt_id");
+        Integer dptIdObj = (Integer) row.get("dpt_id");
+        this.dpt_id = (dptIdObj != null) ? dptIdObj.intValue() : 0;
+        this.doctor_time = (Time) row.get("doctor_time");
     }
+
 
 
 

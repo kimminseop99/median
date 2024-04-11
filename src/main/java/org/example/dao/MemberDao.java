@@ -25,8 +25,6 @@ public class MemberDao extends Dao {
         sb.append(String.format("height = '%f', ", member.height));
         sb.append(String.format("weight = '%f', ", member.weight));
         sb.append(String.format("ud = '%s', ", member.ud));
-        sb.append(String.format("medicalHistory = '%s', ", member.medicalHistory));
-        sb.append(String.format("doctor_id = '%d', ", member.doctor_id));
         sb.append(String.format("loginId = '%s', ", member.loginId));
         sb.append(String.format("loginPw = '%s' ", member.loginPw));
 

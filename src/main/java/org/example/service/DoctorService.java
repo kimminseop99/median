@@ -2,7 +2,6 @@ package org.example.service;
 
 import org.example.container.Container;
 import org.example.dao.DoctorDao;
-import org.example.dao.ReservationDao;
 import org.example.dto.Doctor;
 import org.example.dto.Reservation;
 
@@ -14,6 +13,11 @@ public class DoctorService {
     public DoctorService() {
         doctorDao = Container.doctorDao;
     }
+
+    public static List<Reservation> getDoctorId(int dptId) {
+        return DoctorDao.getDoctorId(dptId);
+    }
+
 
     public int doDoctor(String name, int dpt_id, String loginPw) {
         Doctor doctor = new Doctor();

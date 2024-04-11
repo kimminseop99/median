@@ -59,10 +59,10 @@ public class ArticleController extends Controller{
         String body = sc.nextLine();
 
         int patient_id = session.getLoginedMember().getId();
-        int doctor_id = session.getLoginedMember().doctor_id;
 
 
-        int newId = articleService.write(patient_id, doctor_id, title, body);
+
+        int newId = articleService.write(patient_id, title, body);
 
         System.out.printf("%d번 게시물이 생성되었습니다.\n", newId);
     }

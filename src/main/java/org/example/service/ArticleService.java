@@ -18,8 +18,8 @@ public class ArticleService {
         return articleDao.getForPrintArticles(searchKeyword);
     }
 
-    public int write(int patient_id,int doctor_id, String title, String body) {
-        Article article = new Article(patient_id, doctor_id, title, body);
+    public int write(int patient_id, String title, String body) {
+        Article article = new Article(patient_id, title, body);
         return articleDao.write(article);
     }
 
