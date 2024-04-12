@@ -14,6 +14,10 @@ public class ReservationService {
         reservationDao = Container.reservationDao;
     }
 
+    public static void setName(String exname, String name) {
+        ReservationDao.setName(exname, name);
+    }
+
     public List<Reservation> getReservation(int patient_id){
         return reservationDao.getReservation(patient_id);
     }

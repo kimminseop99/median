@@ -2,6 +2,7 @@ package org.example.resource;
 
 import org.example.dto.Member;
 import org.example.service.MemberService;
+import org.example.service.ReservationService;
 
 import java.util.Scanner;
 
@@ -10,13 +11,18 @@ import static org.example.container.Container.session;
 
 public class ChangeInfo {
     static Scanner sc = new Scanner(System.in);
-    public static void changeName(int id){
+
+    public static void changeName(int id) {
+        String exname = session.getLoginedMember().name;
+
         System.out.print("바꾸실 이름을 적어주세요 : ");
         String name = sc.nextLine();
-        MemberService.StringUpdate("name",name,id);
+        ReservationService.setName(exname, name);
+        session.getLoginedMember().setName(name);
+        MemberService.StringUpdate("name", name, id);
     }
 
-    public static void changeAge(int id){
+    public static void changeAge(int id) {
         int age = 0;
         while (true) {
             System.out.print("바꾸실 나이를 적어주세요 : ");
@@ -30,32 +36,53 @@ public class ChangeInfo {
             break;
         }
 
+        session.getLoginedMember().setAge(age);
         MemberService.IntUpdate("age", age, id);
     }
 
-    public static void changePhone(int id){
-        System.out.print("바꾸실 전화번호를 적어주세요 : ");
-        String phone = sc.nextLine();
+    public static void changePhone(int id) {
+        String phone = "";
+        while (true) {
+            System.out.print("바꾸실 핸드폰 번호 : ");
+            phone = sc.nextLine();
+
+            if (phone.isEmpty()) {
+                continue;
+            }
+            if (phone.length() > 13) {
+                System.out.println("전화번호는 13자리 이하여야 합니다.");
+            } else {
+                break;
+            }
+        }
+        session.getLoginedMember().setPhone(phone);
         MemberService.StringUpdate("phone", phone, id);
     }
-    public static void changeHeight(int id){
+
+    public static void changeHeight(int id) {
         System.out.print("바꾸실 키를 적어주세요 : ");
         double height = sc.nextDouble();
         sc.nextLine();
+        session.getLoginedMember().setHeight(height);
         MemberService.DoubleUpdate("height", height, id);
     }
-    public static void changeWeight(int id){
+
+    public static void changeWeight(int id) {
         System.out.print("바꾸실 몸무게를 적어주세요 : ");
         double weight = sc.nextDouble();
         sc.nextLine();
+        session.getLoginedMember().setWeight(weight);
         MemberService.DoubleUpdate("weight", weight, id);
     }
-    public static void changeUd(int id){
+
+    public static void changeUd(int id) {
         System.out.print("바꾸실 기저질환을 적어주세요 : ");
         String ud = sc.nextLine();
+        session.getLoginedMember().setUd(ud);
         MemberService.StringUpdate("ud", ud, id);
     }
-    public static void changeLoginId(int id){
+
+    public static void changeLoginId(int id) {
         String loginId = null;
 
         while (true) {
@@ -69,16 +96,18 @@ public class ChangeInfo {
 
             break;
         }
+        session.getLoginedMember().setLoginId(loginId);
         MemberService.StringUpdate("loginId", loginId, id);
     }
-    public static void changeLoginPw(int id){
+
+    public static void changeLoginPw(int id) {
         String loginPw = null;
         String loginPwConfirm = null;
         while (true) {
             System.out.print("아이디 : ");
             String loginId = sc.nextLine();
             String memberId = session.getLoginedMember().loginId;
-            if(!loginId.equals(memberId)){
+            if (!loginId.equals(memberId)) {
                 System.out.println("아이디가 올바르지 않습니다.");
                 continue;
             }
@@ -89,7 +118,7 @@ public class ChangeInfo {
                 loginPwConfirm = sc.nextLine();
 
                 if (!loginPw.equals(loginPwConfirm)) {
-                    System.out.println("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+                    System.out.println("비밀번호가 일치하지 않습니다.");
                     continue;
                 }
 
@@ -97,6 +126,7 @@ public class ChangeInfo {
             }
             break;
         }
+        session.getLoginedMember().setLoginPw(loginPw);
         MemberService.StringUpdate("loginPw", loginPw, id);
     }
 

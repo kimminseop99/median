@@ -13,7 +13,7 @@ public class MemberDao extends Dao {
         dbConnection = Container.getDBConnection();
     }
 
-    public int join(Member member) {
+    public int join(Member member) { // 회원가입
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("INSERT INTO patient "));
@@ -64,7 +64,7 @@ public class MemberDao extends Dao {
         return new Member(row);
     }
 
-    public void StringUpdate(String Info, String changeInfo, int id) {
+    public void StringUpdate(String Info, String changeInfo, int id) { // 문자열 정보 업데이트
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("UPDATE patient "));
@@ -76,7 +76,7 @@ public class MemberDao extends Dao {
         dbConnection.update(sb.toString());
     }
 
-    public void IntUpdate(String Info, int changeInfo, int id) {
+    public void IntUpdate(String Info, int changeInfo, int id) { // 숫자 정보 업데이트
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("UPDATE patient "));
@@ -88,7 +88,7 @@ public class MemberDao extends Dao {
         dbConnection.update(sb.toString());
     }
 
-    public void DoubleUpdate(String Info, double changeInfo, int id) {
+    public void DoubleUpdate(String Info, double changeInfo, int id) { // 실수 정보 업데이트
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("UPDATE patient "));

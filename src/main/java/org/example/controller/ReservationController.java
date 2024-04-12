@@ -10,6 +10,7 @@ import org.example.service.ReservationService;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -307,10 +308,22 @@ public class ReservationController extends Controller {
 
         // 예약 페이지 푸터 출력
         System.out.println("═════════════════════════════════════════════════════");
+        int reservationNumber = 0;
+        while (true) {
+            System.out.print("취소하시고 싶은 예약번호를 선택해주세요 : ");
+            reservationNumber = sc.nextInt();
+            List<Integer> reservationNumCheck = new ArrayList<>();
+            for (Reservation reservation : reservations) {
 
-        System.out.print("취소하시고 싶은 예약번호를 선택해주세요 : ");
-        int reservationNumber = sc.nextInt();
+                reservationNumCheck.add(reservation.getId());
+            }
 
+            if (!reservationNumCheck.contains(reservationNumber)) {
+                System.out.println("예약 번호를 다시 확인해 주세요");
+                continue;
+            }
+            break;
+        }
         reservationService.cancelReservation(reservationNumber);
         System.out.println("예약이 취소되었습니다.");
 

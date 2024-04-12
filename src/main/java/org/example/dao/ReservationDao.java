@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ReservationDao extends Dao{
-    private DBConnection dbConnection;
+    private static DBConnection dbConnection;
 
     public ReservationDao() {
         dbConnection = Container.getDBConnection();
@@ -157,10 +157,6 @@ public class ReservationDao extends Dao{
         return doctor_time;
     }
 
-
-
-
-
     public List<Time> getUnavailableTimes(int dpt_id, int doctor_id) {
         StringBuilder sb = new StringBuilder();
 
@@ -181,7 +177,7 @@ public class ReservationDao extends Dao{
     }
 
 
-    public void cancelReservation(int reservationNumber) {
+    public void cancelReservation(int reservationNumber) { // 예약 취소
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("DELETE FROM reservation "));
@@ -189,4 +185,15 @@ public class ReservationDao extends Dao{
 
         dbConnection.delete(sb.toString());
     }
+
+    public static void setName(String exname, String name) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("UPDATE reservation ");
+        sb.append(String.format("SET `name` = '%s' ", name));
+        sb.append(String.format("WHERE `name` = '%s' ", exname));
+
+        dbConnection.update(sb.toString());
+    }
+
 }
