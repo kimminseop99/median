@@ -17,7 +17,7 @@ public class App {
         Container.getDBConnection().connect();
 
     }
-    public void start() {
+    public static void start() {
 
         System.out.println("╔═══════════════════════════════════════════════════════════════════════════╗");
         System.out.println("║                                명령어 모음                                  ║");
@@ -27,9 +27,10 @@ public class App {
         System.out.println("║  1  │ 회원가입 : member join                                                ║");
         System.out.println("║  2  │ 로그인 : member login                                                ║");
         System.out.println("║  3  │ 로그아웃 (로그인 후 이용가능) : member logout                            ║");
-        System.out.println("║  4  │ 마이페이지 (로그인 후 이용가능) : member page                            ║");
-        System.out.println("║  5  │ 예약 페이지 (로그인 후 이용가능) : reservation page                      ║");
-        System.out.println("║  6  │ 게시판 페이지 : article page                                          ║");
+        System.out.println("║  4  │ 회원정보 수정 (로그인 후 이용가능) : member update                        ║");
+        System.out.println("║  5  │ 마이페이지 (로그인 후 이용가능) : member page                            ║");
+        System.out.println("║  6  │ 예약 페이지 (로그인 후 이용가능) : reservation page                      ║");
+        System.out.println("║  7  │ 게시판 페이지 : article page                                          ║");
         System.out.println("╚═══════════════════════════════════════════════════════════════════════════");
 
 
@@ -83,6 +84,7 @@ public class App {
                 case "member/page":
                 case "reservation/page":
                 case "member/logout":
+                case "member/update":
                     if (!Container.getSession().isLogined()) {
                         System.out.println("로그인 후 이용해주세요.");
                         continue;

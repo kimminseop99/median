@@ -63,4 +63,40 @@ public class MemberDao extends Dao {
 
         return new Member(row);
     }
+
+    public void StringUpdate(String Info, String changeInfo, int id) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("UPDATE patient "));
+        sb.append(String.format("SET `%s` = '%s' ", Info, changeInfo));
+        sb.append(String.format("WHERE id = %d ", id));
+
+
+
+        dbConnection.update(sb.toString());
+    }
+
+    public void IntUpdate(String Info, int changeInfo, int id) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("UPDATE patient "));
+        sb.append(String.format("SET `%s` = %d ", Info, changeInfo));
+        sb.append(String.format("WHERE id = %d ", id));
+
+
+
+        dbConnection.update(sb.toString());
+    }
+
+    public void DoubleUpdate(String Info, double changeInfo, int id) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("UPDATE patient "));
+        sb.append(String.format("SET `%s` = %f ", Info, changeInfo));
+        sb.append(String.format("WHERE id = %d ", id));
+
+
+
+        dbConnection.update(sb.toString());
+    }
 }

@@ -1,12 +1,10 @@
 package org.example.controller;
 
 import org.example.container.Container;
-import org.example.dto.Doctor;
 import org.example.dto.Member;
 import org.example.dto.Reservation;
 import org.example.resource.DoctorName;
 import org.example.resource.DptName;
-import org.example.service.DoctorService;
 import org.example.service.MemberService;
 import org.example.service.ReservationService;
 
