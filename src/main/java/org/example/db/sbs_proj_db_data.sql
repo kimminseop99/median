@@ -318,17 +318,17 @@ CREATE TABLE `reservation` (
   `doctor_time` time DEFAULT NULL,
   `regDate` datetime NOT NULL,
   PRIMARY KEY (`rn`),
-  UNIQUE KEY `patient_id` (`patient_id`),
   KEY `fk_doctor_id` (`doctor_id`),
   CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reservation` */
 
 insert  into `reservation`(`patient_id`,`rn`,`rh`,`doctor_id`,`name`,`dpt_id`,`doctor_time`,`regDate`) values 
 (5,14,'다리 골절',1,'김민섭',5,'14:10:00','2024-04-11 17:11:48'),
 (1,15,'가슴이 답답해요',2,'홍길동',4,'18:10:00','2024-04-11 17:18:27'),
-(3,18,'발목 부상',1,'박지성',2,'09:10:00','2024-04-11 22:31:52');
+(3,18,'발목 부상',1,'박지성',2,'09:10:00','2024-04-11 22:31:52'),
+(5,20,'가슴이 시려와요',2,'김민섭',4,'13:10:00','2024-04-12 01:27:02');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

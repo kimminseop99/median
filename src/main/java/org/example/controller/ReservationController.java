@@ -4,6 +4,7 @@ import org.example.container.Container;
 import org.example.dto.Doctor;
 import org.example.dto.Member;
 import org.example.dto.Reservation;
+import org.example.resource.DoctorName;
 import org.example.resource.DptName;
 import org.example.service.DoctorService;
 import org.example.service.MemberService;
@@ -77,16 +78,25 @@ public class ReservationController extends Controller {
         List<Reservation> reservations = reservationService.getReservation(patient_id);
         if (reservations.isEmpty()) {
             System.out.println("예약된 정보가 없습니다.");
-            return;
+            System.out.println("예약 페이지로 되돌아가는 중...");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // 스레드가 중단되었을 때 발생하는 예외 처리
+                e.printStackTrace();
+            }
+
+            doAction("reservation", "page");
         } else {
             System.out.println("[예약 목록]");
             for (Reservation reservation : reservations) {
-                List<String> doctors = reservationService.getDoctorsDpt(reservation.dpt_id);
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                String formattedTime = sdf.format(reservation.doctor_time);
 
                 System.out.println("예약자 이름: " + loginedMember.getName());
-                System.out.println("의사 이름: " + doctors);
+                System.out.println("의사 이름: " + DoctorName.numToDoctor(reservation.dpt_id, reservation.doctor_id));
                 System.out.println("진료과: " + DptName.numToDept(reservation.dpt_id));
-                System.out.println("예약 시간: " + reservation.doctor_time);
+                System.out.println("예약 시간: " + formattedTime);
                 System.out.println("환자 증상: " + reservation.rh);
                 System.out.println();
             }
@@ -94,6 +104,13 @@ public class ReservationController extends Controller {
 
         // 예약 페이지 푸터 출력
         System.out.println("═════════════════════════════════════════════════════");
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            // 스레드가 중단되었을 때 발생하는 예외 처리
+            e.printStackTrace();
+        }
+        doAction("reservation", "page");
     }
 
 
@@ -228,8 +245,8 @@ public class ReservationController extends Controller {
 
             System.out.printf("%d번 예약이 성공적으로 생성되었습니다.\n", newReservation);
 
-
-            return;
+            System.out.println("예약 페이지로 되돌아가는 중...");
+            showReservationPage();
         }
     }
 

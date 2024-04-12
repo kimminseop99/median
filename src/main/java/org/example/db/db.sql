@@ -36,7 +36,7 @@ phone = '042-586-7676';
 
 
 SELECT * FROM dpt;
-DROP TABLE dpt;
+drop table dpt;
 
 CREATE TABLE doctor(
   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -45,6 +45,7 @@ CREATE TABLE doctor(
   loginPw CHAR(100) NOT NULL,
   FOREIGN KEY(dpt_id) REFERENCES dpt(id)
 );
+
 
 
 INSERT INTO doctor (`name`, dpt_id, loginPw)
@@ -88,11 +89,11 @@ SELECT * FROM doctor;
 CREATE TABLE doctor_time (
   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   doctor_id INT(10) UNSIGNED NOT NULL,
-  TIME TIME NOT NULL,
+  time TIME NOT NULL,
   FOREIGN KEY (doctor_id) REFERENCES doctor(id)
 );
 
-INSERT INTO doctor_time (doctor_id, TIME) VALUES
+INSERT INTO doctor_time (doctor_id, time) VALUES
 (1, '09:10'),(1, '10:10'),(1, '11:10'),(1, '13:10'),(1, '14:10'),(1, '15:10'),(1, '16:10'),(1, '17:10'),(1, '18:10'),
 (2, '09:10'),(2, '10:10'),(2, '11:10'),(2, '13:10'),(2, '14:10'),(2, '15:10'),(2, '16:10'),(2, '17:10'),(2, '18:10'),
 (3, '09:10'),(3, '10:10'),(3, '11:10'),(3, '13:10'),(3, '14:10'),(3, '15:10'),(3, '16:10'),(3, '17:10'),(3, '18:10'),
@@ -105,7 +106,7 @@ INSERT INTO doctor_time (doctor_id, TIME) VALUES
 (10, '09:10'),(10, '10:10'),(10, '11:10'),(10, '13:10'),(10, '14:10'),(10, '15:10'),(10, '16:10'),(10, '17:10'),(10, '18:10');
 
 
-SELECT * FROM doctor_time;
+select * from doctor_time;
 
 
 
@@ -273,13 +274,13 @@ CREATE TABLE reservation (
     rh TEXT NOT NULL,
     doctor_id INT(10) UNSIGNED NOT NULL,
     PRIMARY KEY (rn),
-    UNIQUE KEY(patient_id),
+
     FOREIGN KEY (doctor_id) REFERENCES doctor(id) ON DELETE CASCADE,
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
-ALTER TABLE reservation ADD COLUMN regDate DATETIME NOT NULL;
-ALTER TABLE reservation DROP COLUMN regDate;
+ALTER TABLE reservation ADD COLUMN regDate datetime not null;
+alter table reservation drop column regDate;
 ALTER TABLE reservation ADD COLUMN `name` CHAR(100) NOT NULL;
 ALTER TABLE reservation ADD COLUMN dpt_id INT(10) UNSIGNED NOT NULL;
 
@@ -287,8 +288,8 @@ ALTER TABLE reservation ADD COLUMN dpt_id INT(10) UNSIGNED NOT NULL;
 INSERT INTO reservation ( rh, `name`)
 VALUES ( '가슴이 아파요',  '홍길동');
 
-SELECT * FROM reservation
-WHERE `time` = 1;
+select * from reservation
+where `time` = 1;
 
 
 SELECT * FROM reservation;
@@ -353,4 +354,6 @@ SET regDate = NOW(),
 patient_id = 1,
 article_id = 2;
 
-SELECT * FROM reservation;
+select * from reservation;
+select * from doctor;
+
