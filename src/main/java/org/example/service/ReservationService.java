@@ -37,4 +37,7 @@ public class ReservationService {
     }
 
 
+    public void cancelReservation(int reservationNumber) {
+        reservationDao.cancelReservation(reservationNumber);
+    }
 }

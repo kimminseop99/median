@@ -181,5 +181,12 @@ public class ReservationDao extends Dao{
     }
 
 
+    public void cancelReservation(int reservationNumber) {
+        StringBuilder sb = new StringBuilder();
 
+        sb.append(String.format("DELETE FROM reservation "));
+        sb.append(String.format("WHERE id = %d ", reservationNumber));
+
+        dbConnection.delete(sb.toString());
+    }
 }
