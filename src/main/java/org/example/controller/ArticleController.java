@@ -11,9 +11,9 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-public class ArticleController extends Controller{
+public class ArticleController extends Controller {
     private Scanner sc;
-    private String cmd;
+
     private ArticleService articleService;
     private MemberService memberService;
     private Session session;
@@ -26,30 +26,49 @@ public class ArticleController extends Controller{
     }
 
     public void doAction(String cmd, String actionMethodName) {
-        this.cmd = cmd;
+        if (actionMethodName.equals("page")) {
+            System.out.println("                      게시판 페이지                      ");
+            System.out.println("═════════════════════════════════════════════════════");
+            System.out.println("|                   1. 게시물 작성                     |");
+            System.out.println("|                   2. 게시물 목록                     |");
+            System.out.println("|                   3. 게시물 댓글                     |");
+            System.out.println("|                   4. 게시물 수정                     |");
+            System.out.println("|                   5. 게시물 삭제                     |");
+            System.out.println("|                   4. 뒤로 가기                       |");
+            System.out.println("═════════════════════════════════════════════════════");
+            System.out.print("번호를 선택해 주세요: ");
+            int num = sc.nextInt();
+            sc.nextLine();
 
-        switch ( actionMethodName ) {
-            case "write":
-                doWrite();
-                break;
-            case "list":
-                showList();
-                break;
-            case "detail":
-                showDetail();
-                break;
-            case "modify":
-                doModify();
-                break;
-            case "delete":
-                doDelete();
-                break;
-            default:
-                System.out.println("존재하지 않는 명령어 입니다.");
-                break;
+            switch (num) {
+                case 1:
+                    doWrite();
+                    break;
+                case 2:
+                    showList();
+                    break;
+                case 3:
+                    showDetail();
+                    break;
+                case 4:
+                    doModify();
+                    break;
+                case 5:
+                    doDelete();
+                    break;
+                case 6:
+                    System.out.println("이전 메뉴로 돌아갑니다.");
+                    break;
+                default:
+                    System.out.println("잘못된 번호입니다. 다시 입력해 주세요.");
+                    break;
+            }
         }
-    }
+        else {
+            System.out.println("명령어가 올바르지 않습니다.");
+        }
 
+    }
 
 
     public void doWrite() {
@@ -61,14 +80,14 @@ public class ArticleController extends Controller{
         int patient_id = session.getLoginedMember().getId();
 
 
-
         int newId = articleService.write(patient_id, title, body);
 
         System.out.printf("%d번 게시물이 생성되었습니다.\n", newId);
     }
 
     public void showList() {
-        String searchKeyword = cmd.substring("article list".length()).trim();
+        System.out.print("검색하시고 싶은 글의 제목을 적어주세요 : ");
+        String searchKeyword = sc.nextLine().trim();
 
 
         List<Article> forPrintArticles = articleService.getForPrintArticles(searchKeyword);
@@ -79,10 +98,8 @@ public class ArticleController extends Controller{
         }
 
 
-
-
         System.out.println("번호 |   작성자 | 조회 | 제목 ");
-        for ( int i = forPrintArticles.size() - 1; i >= 0 ; i-- ) {
+        for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
             Article article = forPrintArticles.get(i);
             Member member = memberService.getMember(article.patient_id);
 
@@ -95,8 +112,8 @@ public class ArticleController extends Controller{
         System.out.printf("입력) ");
         String replyCheck = sc.nextLine();
 
-        if ( replyCheck.equals("1") || replyCheck.equals("네") ) {
-            if (session.isLogined() == false ) {
+        if (replyCheck.equals("1") || replyCheck.equals("네")) {
+            if (session.isLogined() == false) {
                 System.out.println("로그인 후 이용 가능합니다.");
                 return false;
             }
@@ -112,13 +129,13 @@ public class ArticleController extends Controller{
 
         int id = checkScNum();
 
-        if ( id == 0 ) {
+        if (id == 0) {
             return;
         }
 
         Article foundArticle = articleService.getForPrintArticle(id);
 
-        if ( foundArticle == null ) {
+        if (foundArticle == null) {
             System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
             return;
         }
@@ -140,11 +157,11 @@ public class ArticleController extends Controller{
         System.out.println("댓글을 작성 하시겠습니까?");
         boolean replyCheck = articleReplyAuthorityCheck();
 
-        if ( replyCheck == false ){
+        if (replyCheck == false) {
             return;
         }
 
-        if ( replyCheck ) {
+        if (replyCheck) {
             System.out.println("댓글을 입력 해주세요.");
             System.out.printf("입력) ");
             String replyBody = sc.nextLine();
@@ -162,7 +179,7 @@ public class ArticleController extends Controller{
 
         System.out.printf("%d번 게시물 댓글\n", articleId);
         System.out.println("번호 |   작성자 | 제목 ");
-        for ( int i = forPrintArticleReplies.size() - 1; i >= 0 ; i-- ) {
+        for (int i = forPrintArticleReplies.size() - 1; i >= 0; i--) {
             ArticleReply reply = forPrintArticleReplies.get(i);
             Member replyMember = memberService.getMember(reply.memberId);
 
@@ -175,20 +192,20 @@ public class ArticleController extends Controller{
 
         int id = checkScNum();
 
-        if ( id == 0 ) {
+        if (id == 0) {
             return;
         }
 
         Article foundArticle = articleService.getArticle(id);
 
-        if ( foundArticle == null ) {
+        if (foundArticle == null) {
             System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
             return;
         }
 
         Member loginedMember = session.getLoginedMember();
 
-        if ( foundArticle.patient_id != loginedMember.getId()) {
+        if (foundArticle.patient_id != loginedMember.getId()) {
             System.out.printf("권한이 없습니다.\n");
             return;
         }
@@ -208,20 +225,20 @@ public class ArticleController extends Controller{
 
         int id = checkScNum();
 
-        if ( id == 0 ) {
+        if (id == 0) {
             return;
         }
 
         Article foundArticle = articleService.getArticle(id);
 
-        if ( foundArticle == null ) {
+        if (foundArticle == null) {
             System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
             return;
         }
 
         Member loginedMember = session.getLoginedMember();
 
-        if ( foundArticle.patient_id != loginedMember.getId()) {
+        if (foundArticle.patient_id != loginedMember.getId()) {
             System.out.printf("권한이 없습니다.\n");
             return;
         }
@@ -237,7 +254,7 @@ public class ArticleController extends Controller{
         try {
             id = sc.nextInt();
             sc.nextLine();
-        } catch ( InputMismatchException e) {
+        } catch (InputMismatchException e) {
             System.out.println("잘못 입력하셨습니다.");
             sc.nextLine();
             return 0;

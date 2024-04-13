@@ -14,17 +14,25 @@ public class DoctorService {
         doctorDao = Container.doctorDao;
     }
 
-    public static List<Reservation> getDoctorId(int dptId) {
+    public static List<Integer> getDoctorId(int dptId) {
         return DoctorDao.getDoctorId(dptId);
+    }
+
+    public static void StringUpdate(String Info, String changeInfo, int id) {
+        DoctorDao.StringUpdate(Info, changeInfo, id);
+    }
+
+    public static String getDoctorName(int doctorId) {
+        return DoctorDao.getDoctorName(doctorId);
+    }
+
+    public static String getDptName(int dptId) {
+        return DoctorDao.getDptName(dptId);
     }
 
 
     public int doDoctor(String name, int dpt_id, String loginPw) {
-        Doctor doctor = new Doctor();
-        doctor.setName(name);
-        doctor.setDpt_id(dpt_id);
-        doctor.setLoginPw(loginPw);
-        return doctorDao.doDoctor(doctor);
+        return  doctorDao.doDoctor(name, dpt_id, loginPw);
     }
 
 
@@ -34,5 +42,9 @@ public class DoctorService {
 
     public static List<Doctor> getForPrintDoctors(int dpt) {
         return DoctorDao.getForPrintDoctors(dpt);
+    }
+
+    public Doctor getDoctorByLoginId(int id) {
+        return doctorDao.getDoctorByLoginId(id);
     }
 }

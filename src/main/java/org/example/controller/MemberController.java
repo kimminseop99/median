@@ -22,22 +22,61 @@ public class MemberController extends Controller {
     }
 
     public void doAction(String cmd, String actionMethodName) {
-        switch (actionMethodName) {
-            case "join":
-                doJoin();
+        if (actionMethodName.equals("page")) {
+            System.out.println("                      회원 페이지                      ");
+            System.out.println("═════════════════════════════════════════════════════");
+            System.out.println("|                   1. 회원 가입                      |");
+            System.out.println("|                   2. 로그인                         |");
+            System.out.println("|                   3. 로그아웃                       |");
+            System.out.println("|                   4. 회원 정보 수정                  |");
+            System.out.println("|                   5. 뒤로 가기                      |");
+            System.out.println("═════════════════════════════════════════════════════");
+            while (true) {
+                System.out.print("번호를 선택해 주세요: ");
+                int num = sc.nextInt();
+                sc.nextLine();
+
+                switch (num) {
+                    case 1:
+                        if (Container.getSession().isLogined() ) {
+                            System.out.println("로그아웃 후 이용해주세요.");
+                            continue;
+                        }
+                        doJoin();
+                        break;
+                    case 2:
+                        if (Container.getSession().isLogined() ) {
+                            System.out.println("로그아웃 후 이용해주세요.");
+                            continue;
+                        }
+                        doLogin();
+                        break;
+                    case 3:
+                        if (!Container.getSession().isLogined()) {
+                            System.out.println("로그인 후 이용해주세요.");
+                            continue;
+                        }
+                        doLogout();
+                        break;
+                    case 4:
+                        if (!Container.getSession().isLogined()) {
+                            System.out.println("로그인 후 이용해주세요.");
+                            continue;
+                        }
+                        doUpdate();
+                        break;
+                    case 5:
+                        System.out.println("이전 메뉴로 돌아갑니다.");
+                        App.start();
+                    default:
+                        System.out.println("잘못된 번호입니다. 다시 입력해 주세요.");
+                        break;
+                }
                 break;
-            case "login":
-                doLogin();
-                break;
-            case "logout":
-                doLogout();
-                break;
-            case "update":
-                doUpdate();
-                break;
-            default:
-                System.out.println("존재하지 않는 명령어 입니다.");
-                break;
+            }
+        }
+        else {
+            System.out.println("명령어가 올바르지 않습니다.");
         }
 
     }
@@ -56,7 +95,7 @@ public class MemberController extends Controller {
             System.out.printf("               1.이름 : %s                           \n", member.name);
             System.out.printf("               2.나이 : %d                           \n", member.age);
             System.out.printf("               3.전화번호 : %s                       \n", hiddenPhone);
-            System.out.printf("               4.주민번호 : %s(변경 불가)              \n", hiddenRrn);
+            System.out.printf("               4.주민번호 : %s                 (변경 불가)\n", hiddenRrn);
             System.out.printf("               5.신장 : %.1f                         \n", member.height);
             System.out.printf("               6.몸무게 : %.1f                        \n", member.weight);
             System.out.printf("               7.기저질환 : %s                       \n", member.ud);
@@ -250,6 +289,7 @@ public class MemberController extends Controller {
         memberService.join(name, age, phone, rrn, height, weight, ud, loginId, loginPw);
 
         System.out.printf("[%s]님! 회원가입이 완료되었습니다! 환영합니다^^~\n", name);
+        App.start();
     }
 
     public void doLogin() {
@@ -274,11 +314,13 @@ public class MemberController extends Controller {
         Member loginedMember = session.getLoginedMember();
 
         System.out.printf("로그인 성공! %s님 환영합니다!\n", loginedMember.name);
+        App.start();
     }
 
     private void doLogout() {
         session.setLoginedMember(null);
         System.out.println("로그아웃 되었습니다.");
+        App.start();
     }
 
     private boolean isJoinableLoginId(String loginId) {

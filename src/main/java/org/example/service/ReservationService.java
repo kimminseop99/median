@@ -23,7 +23,7 @@ public class ReservationService {
     }
 
 
-    public List<String> getDoctorsDpt(int dpt_id) {
+    public List<Reservation> getDoctorsDpt(int dpt_id) {
         return reservationDao.getDoctorsDpt(dpt_id);
     }
 

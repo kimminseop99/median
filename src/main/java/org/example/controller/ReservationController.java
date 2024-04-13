@@ -1,11 +1,10 @@
 package org.example.controller;
 
+import org.example.App;
 import org.example.container.Container;
 import org.example.dto.Member;
 import org.example.dto.Reservation;
-import org.example.resource.DoctorName;
-import org.example.resource.DptName;
-import org.example.service.MemberService;
+import org.example.service.DoctorService;
 import org.example.service.ReservationService;
 
 import java.sql.Time;
@@ -18,15 +17,14 @@ public class ReservationController extends Controller {
 
     private Scanner sc;
     private ReservationService reservationService;
+    private DoctorService doctorService;
     private Session session;
-
-    private MemberService memberService;
 
     public ReservationController() {
         sc = Container.getScanner();
         session = Container.getSession();
         reservationService = Container.reservaitonService;
-        memberService = Container.memberService;
+        doctorService = Container.doctorService;
     }
 
     public void doAction(String cmd, String actionMethodName) {
@@ -38,35 +36,50 @@ public class ReservationController extends Controller {
             System.out.println("|                   3. 예약 취소                      |");
             System.out.println("|                   4. 뒤로 가기                      |");
             System.out.println("═════════════════════════════════════════════════════");
-            System.out.print("번호를 선택해 주세요: ");
-            int num = sc.nextInt();
-            sc.nextLine();
+            while (true) {
+                System.out.print("번호를 선택해 주세요: ");
+                int num = sc.nextInt();
+                sc.nextLine();
 
-            switch (num) {
-                case 1:
-                    showReservationPage();
-                    break;
-                case 2:
-                    createReservation();
-                    break;
-                case 3:
-                    deleteReservation();
-                    break;
-                case 4:
-                    System.out.println("이전 메뉴로 돌아갑니다.");
-                    break;
-                default:
-                    System.out.println("잘못된 번호입니다. 다시 입력해 주세요.");
-                    break;
+                switch (num) {
+                    case 1:
+                        if (!Container.getSession().isLogined()) {
+                            System.out.println("로그인 후 이용해주세요.");
+                            continue;
+                        }
+                        showReservationPage();
+                        break;
+                    case 2:
+                        if (!Container.getSession().isLogined()) {
+                            System.out.println("로그인 후 이용해주세요.");
+                            continue;
+                        }
+                        createReservation();
+                        break;
+                    case 3:
+                        if (!Container.getSession().isLogined()) {
+                            System.out.println("로그인 후 이용해주세요.");
+                            continue;
+                        }
+                        deleteReservation();
+                        break;
+                    case 4:
+                        System.out.println("이전 메뉴로 돌아갑니다.");
+                        App.start();
+                    default:
+                        System.out.println("잘못된 번호입니다. 다시 입력해 주세요.");
+                        break;
+                }
+                break;
             }
-        } else {
-            System.out.println("명령어가 올바르지 않습니다.");
         }
+        else{
+                System.out.println("명령어가 올바르지 않습니다.");
 
+        }
     }
 
     public void showReservationPage() {
-        // 예약 페이지 헤더 출력
         System.out.println("═════════════════════════════════════════════════════");
         System.out.println("                    예약 정보 확인                     ");
         System.out.println("═════════════════════════════════════════════════════");
@@ -78,38 +91,9 @@ public class ReservationController extends Controller {
 
         // 예약 정보 출력
         List<Reservation> reservations = reservationService.getReservation(patient_id);
-        if (reservations.isEmpty()) {
-            System.out.println("예약된 정보가 없습니다.");
-            System.out.println("예약 페이지로 되돌아가는 중...");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                // 스레드가 중단되었을 때 발생하는 예외 처리
-                e.printStackTrace();
-            }
+        reservationList(reservations, loginedMember);
 
-            doAction("reservation", "page");
-        } else {
-            System.out.println("[예약 목록]");
-            for (Reservation reservation : reservations) {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                String formattedTime = sdf.format(reservation.doctor_time);
-
-
-                System.out.println("** 예약 번호 : "+reservation.getId()+" **");
-
-                System.out.println("예약자 이름: " + loginedMember.getName());
-                System.out.println("의사 이름: " + DoctorName.numToDoctor(reservation.dpt_id, reservation.doctor_id));
-                System.out.println("진료과: " + DptName.numToDept(reservation.dpt_id));
-                System.out.println("예약 시간: " + formattedTime);
-                System.out.println("환자 증상: " + reservation.rh);
-                System.out.println();
-            }
-        }
-
-        // 예약 페이지 푸터 출력
-        System.out.println("═════════════════════════════════════════════════════");
-
+        System.out.println("뒤로가기는 0을");
         System.out.println("예약 페이지로 되돌아가는 중...");
         try {
             Thread.sleep(1000);
@@ -161,32 +145,35 @@ public class ReservationController extends Controller {
                 checkduplicate = false;
 
             }
-            // 같은과에 중복으로 예약하는지 체크
-
             // 의사 목록 가져오기
-            List<String> doctors = reservationService.getDoctorsDpt(dpt_id);
-
-// 의사 목록 출력
-
+            List<Reservation> doctors = reservationService.getDoctorsDpt(dpt_id);
+            List<Integer> doctorsId = DoctorService.getDoctorId(dpt_id);
 
             System.out.println("[의사 목록]");
-            for (int i = 0; i < doctors.size(); i++) {
-                String doctor = doctors.get(i);
-                System.out.println((i + 1)+ ". " + doctor);
+            int index = 0;
+            for (Integer i : doctorsId) {
+                Reservation doctor = doctors.get(index);
+                System.out.println(i + ". " + doctor.name);
+                index++;
             }
 
+            int doctor_id = 0;
+            while (true) {
+                System.out.print("의사 번호를 선택하세요: ");
+                doctor_id = sc.nextInt();
+                sc.nextLine();
 
-            // 사용자로부터 의사 번호 입력 받기
-            System.out.print("의사 번호를 선택하세요: ");
-            int doctor_id = sc.nextInt();
-            sc.nextLine(); // 버퍼 비우기
-
+                if(!doctorsId.contains(doctor_id)){
+                    System.out.println("존재하지 않는 번호입니다.");
+                    continue;
+                }
+                break;
+            }
             // 선택한 의사의 시간대 목록 가져오기
             List<Time> doctor_time = reservationService.getDoctor_time(doctor_id);
 
             // 선택한 의사의 예약 불가능한 시간대 목록 가져오기
             List<Time> AavailableTimes = reservationService.getUnavailableTimes(dpt_id, doctor_id);
-
 
             // 예약 가능한 시간대 출력
             System.out.println("[예약 가능한 시간대]");
@@ -202,8 +189,6 @@ public class ReservationController extends Controller {
                 System.out.printf("%d. %s\n", (i + 1), formattedTime);
 
             }
-
-
             int selectedTimeIndex = 0;
 
             while (true) {
@@ -211,8 +196,6 @@ public class ReservationController extends Controller {
                 System.out.print("예약할 시간대 번호를 선택하세요: ");
                 selectedTimeIndex = sc.nextInt();
                 sc.nextLine(); // 버퍼 비우기
-
-
                 // 선택한 시간대 번호가 유효한지 확인
                 if (selectedTimeIndex < 1 || selectedTimeIndex > doctor_time.size()) {
                     System.out.println("잘못된 번호입니다. 다시 입력해 주세요.");
@@ -234,7 +217,6 @@ public class ReservationController extends Controller {
                 break;
             }
 
-
             // 선택한 시간대 번호에 해당하는 시간 가져오기
             Time selectedTime = doctor_time.get(selectedTimeIndex - 1);
 
@@ -243,9 +225,6 @@ public class ReservationController extends Controller {
 
             System.out.print("증상을 적어주세요 : ");
             String rh = sc.nextLine();
-
-
-
 
             // 예약 생성
             int newReservation = reservationService.createReservation(patient_id, rh, name, doctor_id, dpt_id, selectedTime);
@@ -277,6 +256,48 @@ public class ReservationController extends Controller {
 
         // 예약 정보 출력
         List<Reservation> reservations = reservationService.getReservation(patient_id);
+        reservationList(reservations, loginedMember);
+
+        int reservationNumber = 0;
+        while (true) {
+            System.out.print("취소하시고 싶은 예약번호를 선택해주세요(뒤로가기는 0번) : ");
+            reservationNumber = sc.nextInt();
+            List<Integer> reservationNumCheck = new ArrayList<>();
+            for (Reservation reservation : reservations) {
+
+                reservationNumCheck.add(reservation.getId());
+            }
+            if(reservationNumber == 0){
+                System.out.println("예약 페이지로 되돌아가는 중...");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    // 스레드가 중단되었을 때 발생하는 예외 처리
+                    e.printStackTrace();
+                }
+                doAction("reservation", "page");
+            }
+
+            if (!reservationNumCheck.contains(reservationNumber)) {
+                System.out.println("예약 번호를 다시 확인해 주세요");
+                continue;
+            }
+            break;
+        }
+        reservationService.cancelReservation(reservationNumber);
+        System.out.println("예약이 취소되었습니다.");
+
+        System.out.println("예약 페이지로 되돌아가는 중...");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // 스레드가 중단되었을 때 발생하는 예외 처리
+            e.printStackTrace();
+        }
+        doAction("reservation", "page");
+    }
+
+    private void reservationList(List<Reservation> reservations,Member loginedMember) {
         if (reservations.isEmpty()) {
             System.out.println("예약된 정보가 없습니다.");
             System.out.println("예약 페이지로 되돌아가는 중...");
@@ -293,49 +314,21 @@ public class ReservationController extends Controller {
             for (Reservation reservation : reservations) {
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 String formattedTime = sdf.format(reservation.doctor_time);
+                String doctorName = DoctorService.getDoctorName(reservation.doctor_id);
+                String dptName = DoctorService.getDptName(reservation.dpt_id);
 
-
-                System.out.println("** 예약 번호 : "+reservation.getId()+" **");
+                System.out.println("** 예약 번호 : " + reservation.getId() + " **");
 
                 System.out.println("예약자 이름: " + loginedMember.getName());
-                System.out.println("의사 이름: " + DoctorName.numToDoctor(reservation.dpt_id, reservation.doctor_id));
-                System.out.println("진료과: " + DptName.numToDept(reservation.dpt_id));
+                System.out.println("의사 이름: " + doctorName);
+                System.out.println("진료과: " + dptName);
                 System.out.println("예약 시간: " + formattedTime);
                 System.out.println("환자 증상: " + reservation.rh);
                 System.out.println();
             }
         }
-
         // 예약 페이지 푸터 출력
         System.out.println("═════════════════════════════════════════════════════");
-        int reservationNumber = 0;
-        while (true) {
-            System.out.print("취소하시고 싶은 예약번호를 선택해주세요 : ");
-            reservationNumber = sc.nextInt();
-            List<Integer> reservationNumCheck = new ArrayList<>();
-            for (Reservation reservation : reservations) {
-
-                reservationNumCheck.add(reservation.getId());
-            }
-
-            if (!reservationNumCheck.contains(reservationNumber)) {
-                System.out.println("예약 번호를 다시 확인해 주세요");
-                continue;
-            }
-            break;
-        }
-        reservationService.cancelReservation(reservationNumber);
-        System.out.println("예약이 취소되었습니다.");
-
-        System.out.println("예약 페이지로 되돌아가는 중...");
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            // 스레드가 중단되었을 때 발생하는 예외 처리
-            e.printStackTrace();
-        }
-        doAction("reservation", "page");
     }
-
 
 }

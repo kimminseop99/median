@@ -104,19 +104,19 @@ public class ReservationDao extends Dao{
         return reservations;
     }
 
-    public List<String> getDoctorsDpt(int dpt_id) {
+    public List<Reservation> getDoctorsDpt(int dpt_id) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format("SELECT doctor.name "));
+        sb.append(String.format("SELECT doctor.name, doctor.id "));
         sb.append(String.format("FROM doctor "));
         sb.append(String.format("JOIN dpt ON doctor.dpt_id = dpt.id "));
         sb.append(String.format("WHERE dpt.id = %d ", dpt_id));
 
-        List<String> doctors = new ArrayList<>();
+        List<Reservation> doctors = new ArrayList<>();
         List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
 
-        for (Map<String, Object> row : rows) {
-            doctors.add((String) row.get("name"));
+        for ( Map<String, Object> row : rows ) {
+            doctors.add(new Reservation((row)));
         }
 
         return doctors;

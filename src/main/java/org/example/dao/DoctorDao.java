@@ -4,6 +4,7 @@ package org.example.dao;
 import org.example.container.Container;
 import org.example.db.DBConnection;
 import org.example.dto.Doctor;
+import org.example.dto.Member;
 import org.example.dto.Reservation;
 
 import java.util.ArrayList;
@@ -37,29 +38,76 @@ public class DoctorDao extends Dao {
         return doctors;
     }
 
-    public static List<Reservation> getDoctorId(int dptId) {
+    public static List<Integer> getDoctorId(int dptId) {
 
             StringBuilder sb = new StringBuilder();
 
             sb.append(String.format("SELECT id FROM doctor "));
             sb.append(String.format("WHERE dpt_id = %d", dptId));
-            List<Reservation> reservations = new ArrayList<>();
-            List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
 
-            for ( Map<String, Object> row : rows ) {
-                reservations.add(new Reservation((row)));
-            }
+        List<Integer> doctorId = new ArrayList<>();
+        List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
 
-            return reservations;
+        for (Map<String, Object> row : rows) {
+            doctorId.add((int) row.get("id"));
+        }
+
+        return doctorId;
 
     }
 
-    public int doDoctor(Doctor doctor) {
+    public static void StringUpdate(String Info, String changeInfo, int id) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("UPDATE doctor "));
+        sb.append(String.format("SET `%s` = '%s' ", Info, changeInfo));
+        sb.append(String.format("WHERE id = %d ", id));
+
+
+
+        dbConnection.update(sb.toString());
+    }
+
+    public static String getDoctorName(int doctorId) { // 의사 id로 의사 이름 출력
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("SELECT doctor.name "));
+        sb.append(String.format("FROM doctor "));
+        sb.append(String.format("WHERE id = %d ", doctorId));
+
+        String doctorName = "";
+        List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
+        for (Map<String, Object> row : rows) {
+            doctorName = (String) row.get("name");
+            break;
+        }
+
+        return doctorName;
+    }
+
+    public static String getDptName(int dptId) { // 과 id로 과 이름 가져오기
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("SELECT dpt.name "));
+        sb.append(String.format("FROM dpt "));
+        sb.append(String.format("WHERE id = %d ", dptId));
+
+        String dptName = "";
+        List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
+        for (Map<String, Object> row : rows) {
+            dptName = (String) row.get("name");
+            break;
+        }
+
+        return dptName;
+    }
+
+    public int doDoctor(String name, int dpt_id, String loginPw) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("INSERT INTO doctor ");
         sb.append(String.format("(`name`, `dpt_id`, `loginPw`) VALUES ('%s', '%d', '%s')",
-                doctor.getName(), doctor.getDptId(), doctor.getLoginPw()));
+                name, dpt_id, loginPw));
 
         return dbConnection.insert(sb.toString());
     }
@@ -103,5 +151,19 @@ public class DoctorDao extends Dao {
     }
 
 
+    public Doctor getDoctorByLoginId(int id) {
+        StringBuilder sb = new StringBuilder();
 
+        sb.append(String.format("SELECT * "));
+        sb.append(String.format("FROM doctor "));
+        sb.append(String.format("WHERE id = '%d' ", id));
+
+        Map<String, Object> row = dbConnection.selectRow((sb.toString()));
+
+        if ( row.isEmpty() ) {
+            return null;
+        }
+
+        return new Doctor(row);
+    }
 }

@@ -1,6 +1,7 @@
 package org.example.resource;
 
 import org.example.dto.Member;
+import org.example.service.DoctorService;
 import org.example.service.MemberService;
 import org.example.service.ReservationService;
 
@@ -138,5 +139,31 @@ public class ChangeInfo {
         }
 
         return false;
+    }
+
+    public static void changeDoctorName(int id) {
+        System.out.print("바꾸실 이름을 적어주세요 : ");
+        String name = sc.nextLine();
+        session.getLoginedDoctor().setName(name);
+        DoctorService.StringUpdate("name", name, id);
+    }
+
+    public static void changeDoctorLoginPw(int id) {
+        String loginPw = null;
+        String loginPwConfirm = null;
+            while (true) {
+                System.out.print("바꾸실 비밀번호를 적어주세요 : ");
+                loginPw = sc.nextLine();
+                System.out.print("비번확인 : ");
+                loginPwConfirm = sc.nextLine();
+                if (!loginPw.equals(loginPwConfirm)) {
+                    System.out.println("비밀번호가 일치하지 않습니다.");
+                    continue;
+                }
+                break;
+            }
+
+        session.getLoginedDoctor().setLoginPw(loginPw);
+        MemberService.StringUpdate("loginPw", loginPw, id);
     }
 }

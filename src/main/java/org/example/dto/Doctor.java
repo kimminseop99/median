@@ -15,14 +15,8 @@ public class Doctor extends Dto{
     public int dpt_id;
     public String loginPw;
 
-
-    public Doctor() {
-        // 기본 생성자
-    }
-
-
-
     public Doctor(Map<String, Object> row) {
+        super(row);
         this.id = (int) row.get("id");
         this.name = (String) row.get("name");
         this.dpt_id = (int) row.get("dpt_id");
@@ -38,25 +32,5 @@ public class Doctor extends Dto{
 
     }
 
-
-    public int getDptId() {
-        return dpt_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public void setDpt_id(int dptId) {
-        this.dpt_id = dptId;
-    }
-    public void setLoginPw(String loginPw) {
-        this.loginPw = loginPw;
-    }
-    public String getLoginPw() {
-        return loginPw;
-    }
 
 }

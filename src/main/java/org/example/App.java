@@ -1,10 +1,7 @@
 package org.example;
 
 import org.example.container.Container;
-import org.example.controller.ArticleController;
-import org.example.controller.Controller;
-import org.example.controller.MemberController;
-import org.example.controller.ReservationController;
+import org.example.controller.*;
 import org.example.db.DBConnection;
 
 public class App {
@@ -20,23 +17,22 @@ public class App {
     public static void start() {
 
         System.out.println("╔═══════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("║                                명령어 모음                                  ║");
+        System.out.println("║                                    메인                                    ║");
         System.out.println("╟───────────────────────────────────────────────────────────────────────────╢");
         System.out.println("║ 번호 │ 명령어                                                               ║");
         System.out.println("╟───────────────────────────────────────────────────────────────────────────╢");
-        System.out.println("║  1  │ 회원가입 : member join                                                ║");
-        System.out.println("║  2  │ 로그인 : member login                                                ║");
-        System.out.println("║  3  │ 로그아웃 (로그인 후 이용가능) : member logout                            ║");
-        System.out.println("║  4  │ 회원정보 수정 (로그인 후 이용가능) : member update                        ║");
-        System.out.println("║  5  │ 마이페이지 (로그인 후 이용가능) : member page                            ║");
-        System.out.println("║  6  │ 예약 페이지 (로그인 후 이용가능) : reservation page                      ║");
-        System.out.println("║  7  │ 게시판 페이지 : article page                                          ║");
+        System.out.println("║  1  │ 회원 페이지 : member page                                             ║");
+        System.out.println("║  2  │ 의사 페이지 : doctor page                                             ║");
+        System.out.println("║  5  │ 예약 페이지 (로그인 후 이용가능) : reservation page                      ║");
+        System.out.println("║  6  │ 게시판 페이지 : article page                                          ║");
         System.out.println("╚═══════════════════════════════════════════════════════════════════════════");
 
 
         MemberController memberController = new MemberController();
+        DoctorController doctorController = new DoctorController();
         ArticleController articleController = new ArticleController();
         ReservationController reservationController = new ReservationController();
+
         while ( true ) {
             System.out.println("[메인]");
             System.out.printf("명령어) ");
@@ -47,60 +43,58 @@ public class App {
                 continue;
             }
 
-            if ( cmd.equals("exit") ) {
-                break;
+            try {
+                if ( cmd.equals("exit") ) {
+                    break;
+                }
+            }catch (IllegalStateException e){
+                System.out.println("시스템이 종료됩니다.");
             }
 
-            String[] cmdBits = cmd.split(" "); // article write / member join
+
+            String[] cmdBits = cmd.split(" ");
 
             if ( cmdBits.length == 1 ) {
                 System.out.println("존재하지 않는 명령어 입니다.");
                 continue;
             }
 
-            String controllerName = cmdBits[0]; // article / member
-            String actionMethodName = cmdBits[1]; // write / join
+            String controllerName = cmd;
+
+
+            String actionMethodName = cmdBits[1];
 
             Controller controller = null;
 
-            if ( controllerName.equals("article") ) {
+            if ( controllerName.equals("article page") ) {
                 controller = articleController;
             }
-            else if ( controllerName.equals("member") ) {
+            else if ( controllerName.equals("member page") ) {
+                if (Container.getSession().isLoginedDoctor() ) {
+                    System.out.println("의사 계정 로그아웃 후 이용해주세요.");
+                    continue;
+                }
                 controller = memberController;
             }
-            else if ( controllerName.equals("reservation") ) {
+            else if ( controllerName.equals("reservation page") ) {
+                if (Container.getSession().isLoginedDoctor() ) {
+                    System.out.println("이용할 수 없습니다.");
+                    continue;
+                }
                 controller =  reservationController;
+            }
+            else if ( controllerName.equals("doctor page") ) {
+                if (Container.getSession().isLogined() ) {
+                    System.out.println("회원 계정 로그아웃 후 이용해주세요.");
+                    continue;
+                }
+                controller =  doctorController;
             }
             else {
                 System.out.println("존재하지 않는 명령어입니다.");
                 continue;
             }
 
-            String actionName = controllerName + "/" + actionMethodName;
-
-            switch ( actionName ) {
-                case "article/write":
-                case "member/page":
-                case "reservation/page":
-                case "member/logout":
-                case "member/update":
-                    if (!Container.getSession().isLogined()) {
-                        System.out.println("로그인 후 이용해주세요.");
-                        continue;
-                    }
-                    break;
-            }
-
-            switch ( actionName ) {
-                case "member/login":
-                case "member/join":
-                    if (Container.getSession().isLogined() ) {
-                        System.out.println("로그아웃 후 이용해주세요.");
-                        continue;
-                    }
-                    break;
-            }
 
             controller.doAction(cmd, actionMethodName);
         }
