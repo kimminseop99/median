@@ -10,6 +10,7 @@ import org.example.service.ReservationService;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -93,15 +94,24 @@ public class ReservationController extends Controller {
         List<Reservation> reservations = reservationService.getReservation(patient_id);
         reservationList(reservations, loginedMember);
 
-        System.out.println("뒤로가기는 0을");
-        System.out.println("예약 페이지로 되돌아가는 중...");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            // 스레드가 중단되었을 때 발생하는 예외 처리
-            e.printStackTrace();
+        while (true) {
+            System.out.print("뒤로가기는 0번을 입력해주세요 : ");
+            int checkNum = Container.getScanner().nextInt();
+            if (checkNum == 0) {
+                System.out.println("예약 페이지로 되돌아가는 중...");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    // 스레드가 중단되었을 때 발생하는 예외 처리
+                    e.printStackTrace();
+                }
+                doAction("reservation", "page");
+            } else {
+                System.out.println("다시 입력해주세요");
+                continue;
+            }
+            break;
         }
-        doAction("reservation", "page");
     }
 
 
@@ -125,7 +135,12 @@ public class ReservationController extends Controller {
             boolean checkduplicate = false;
             while (true) {
                 System.out.print("진료과 번호를 선택하세요: ");
-                dpt_id = sc.nextInt();
+                try {
+                    dpt_id = sc.nextInt();
+                }catch (InputMismatchException e){
+                    System.out.println("다시 선택해 주세요");
+                    continue;
+                }
                 sc.nextLine();
                 // 같은과에 중복으로 예약하는지 체크
                 List<Reservation> isDuplicateReservation = reservationService.getReservation(patient_id);
@@ -190,7 +205,6 @@ public class ReservationController extends Controller {
 
             }
             int selectedTimeIndex = 0;
-
             while (true) {
                 // 사용자로부터 시간대 번호 입력 받기
                 System.out.print("예약할 시간대 번호를 선택하세요: ");

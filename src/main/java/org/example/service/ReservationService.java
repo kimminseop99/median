@@ -18,6 +18,10 @@ public class ReservationService {
         ReservationDao.setName(exname, name);
     }
 
+    public static List<Reservation> getforPrintReservation(int id) {
+        return ReservationDao.getforPrintReservation(id);
+    }
+
     public List<Reservation> getReservation(int patient_id){
         return reservationDao.getReservation(patient_id);
     }

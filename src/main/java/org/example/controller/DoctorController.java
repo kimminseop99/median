@@ -3,9 +3,15 @@ package org.example.controller;
 import org.example.App;
 import org.example.container.Container;
 import org.example.dto.Doctor;
+import org.example.dto.Reservation;
 import org.example.resource.ChangeInfo;
 import org.example.service.DoctorService;
+import org.example.service.MemberService;
+import org.example.service.ReservationService;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class DoctorController extends Controller {
@@ -14,10 +20,15 @@ public class DoctorController extends Controller {
     private DoctorService doctorService;
     private Session session;
 
+    private MemberService memberService;
+    private  ReservationService reservationService;
+
     public DoctorController() {
         sc = Container.getScanner();
         session = Container.getSession();
         doctorService = Container.doctorService;
+        memberService = Container.memberService;
+        reservationService = Container.reservaitonService;
     }
 
     public void doAction(String cmd, String actionMethodName) {
@@ -81,11 +92,74 @@ public class DoctorController extends Controller {
     }
 
     private void doConsultation() {
+        boolean checkpoint = false;
+        Doctor doctor = session.getLoginedDoctor();
+        List<Reservation> forPrintReservations = ReservationService.getforPrintReservation(doctor.id);
         System.out.println("═════════════════════════════════════════════════════");
         System.out.println("                    예약 정보 확인                     ");
         System.out.println("═════════════════════════════════════════════════════");
 
+        if (forPrintReservations.isEmpty()) {
+            System.out.println("예약된 정보가 없습니다.");
+            System.out.println("의사 페이지로 되돌아가는 중...");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // 스레드가 중단되었을 때 발생하는 예외 처리
+                e.printStackTrace();
+            }
 
+            doAction("doctor", "page");
+        } else {
+            System.out.println("[예약 목록]");
+            for (Reservation reservation : forPrintReservations) {
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                String formattedTime = sdf.format(reservation.doctor_time);
+                String dptName = DoctorService.getDptName(doctor.dpt_id);
+                String patientName = memberService.getMemberName(reservation.patient_id);
+
+                System.out.println("** 예약 번호 : " + reservation.getId() + " **");
+
+                System.out.println("진료과: " + dptName);
+                System.out.println("의사 이름: " + doctor.name);
+                System.out.println("예약자 이름: " + patientName); //
+                System.out.println("예약 시간: " + formattedTime);
+                System.out.println("환자 증상: " + reservation.rh);
+                System.out.println();
+            }
+        }
+        // 예약 페이지 푸터 출력
+        System.out.println("═════════════════════════════════════════════════════");
+        List<Integer> reservationNumCheck = new ArrayList<>();
+        for (Reservation reservation : forPrintReservations) {
+
+            reservationNumCheck.add(reservation.getId());
+        }
+        while (true) {
+            System.out.print("진료가 완료된 예약 번호를 입력해주세요(뒤로가기 0번) : ");
+            int completeConsultation = sc.nextInt();
+
+            if(!(completeConsultation == 0)){
+                if(!reservationNumCheck.contains(completeConsultation)){
+                    System.out.println("예약 번호를 다시 한번 확인해 주세요");
+                    continue;
+                }else{
+                    reservationService.cancelReservation(completeConsultation);
+                    System.out.println("진료가 완료되었습니다.");
+                }
+            }
+            break;
+        }
+
+        System.out.println("의사 페이지로 되돌아가는 중...");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // 스레드가 중단되었을 때 발생하는 예외 처리
+            e.printStackTrace();
+        }
+
+        doAction("doctor", "page");
     }
 
     private void doUpdate() {

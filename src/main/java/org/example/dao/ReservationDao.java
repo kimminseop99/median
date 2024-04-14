@@ -16,6 +16,8 @@ public class ReservationDao extends Dao{
         dbConnection = Container.getDBConnection();
     }
 
+
+
     public int createReservation(Reservation reservation) { // 새오운 예약 생성
         StringBuilder sb = new StringBuilder();
 
@@ -47,6 +49,22 @@ public class ReservationDao extends Dao{
         return reservations;
     }
 
+    public static List<Reservation> getforPrintReservation(int id) { // 특정 의사의 예약 정보를 가져옴
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("SELECT * FROM reservation "));
+        sb.append(String.format("WHERE doctor_id = %d ", id));
+
+        List<Reservation> reservations = new ArrayList<>();
+        List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
+
+        for ( Map<String, Object> row : rows ) {
+            reservations.add(new Reservation((row)));
+        }
+
+        return reservations;
+    }
+
     public List<Reservation> getReservation(int patient_id) { // 특정 환자 예약정보 보여줌
         StringBuilder sb = new StringBuilder();
 
@@ -64,31 +82,6 @@ public class ReservationDao extends Dao{
         return reservations;
     }
 
-    public List<Reservation> getReservationDoctors(int dpt) { // 특정 진료과의 의사들의 예약 정보 보여줌
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(String.format("SELECT R.* "));
-        sb.append(String.format("FROM reservation AS R "));
-        sb.append(String.format("INNER JOIN doctor AS D "));
-        sb.append(String.format("ON R.dpt_id = D.dpt_id "));
-        sb.append(String.format("WHERE D.dpt_id = %d ", dpt));
-        sb.append(String.format("ORDER BY R.id DESC"));
-
-
-
-        List<Reservation> reservations = new ArrayList<>();
-        List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
-
-        for ( Map<String, Object> row : rows ) {
-            reservations.add(new Reservation((row)));
-        }
-
-
-
-        return reservations;
-    }
-
-
     public List<Reservation> getTime(int time) { // 특정 시간대에 예약된 정보 보여줌
         StringBuilder sb = new StringBuilder();
 
@@ -104,7 +97,7 @@ public class ReservationDao extends Dao{
         return reservations;
     }
 
-    public List<Reservation> getDoctorsDpt(int dpt_id) {
+    public List<Reservation> getDoctorsDpt(int dpt_id) { // 특정 과에 속한 의사들의 이름과 의사번호
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT doctor.name, doctor.id "));
@@ -122,22 +115,6 @@ public class ReservationDao extends Dao{
         return doctors;
     }
 
-    public List<Integer> getReservedTimes(int doctorNumber) { // 특정 의사의 예약 시간 보여줌
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(String.format("SELECT doctor_time "));
-        sb.append(String.format("FROM reservation "));
-        sb.append(String.format("WHERE doctor_id = %d ", doctorNumber));
-
-        List<Integer> reservedTimes = new ArrayList<>();
-        List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
-
-        for (Map<String, Object> row : rows) {
-            reservedTimes.add((int) row.get("time"));
-        }
-
-        return reservedTimes;
-    }
 
     public List<Time> getDoctor_time(int doctor_id) { // 특정 의사의 예약 가능 시간 보여줌
         StringBuilder sb = new StringBuilder();
@@ -157,7 +134,7 @@ public class ReservationDao extends Dao{
         return doctor_time;
     }
 
-    public List<Time> getUnavailableTimes(int dpt_id, int doctor_id) {
+    public List<Time> getUnavailableTimes(int dpt_id, int doctor_id) { // 특정 의사의 예약 불가능한 시간
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT doctor_time "));
@@ -186,7 +163,7 @@ public class ReservationDao extends Dao{
         dbConnection.delete(sb.toString());
     }
 
-    public static void setName(String exname, String name) {
+    public static void setName(String exname, String name) { // 의사 정보 변경시 예약 페이지의 의사 이름도 변경
         StringBuilder sb = new StringBuilder();
 
         sb.append("UPDATE reservation ");

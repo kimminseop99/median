@@ -95,7 +95,7 @@ public class MemberController extends Controller {
             System.out.printf("               1.이름 : %s                           \n", member.name);
             System.out.printf("               2.나이 : %d                           \n", member.age);
             System.out.printf("               3.전화번호 : %s                       \n", hiddenPhone);
-            System.out.printf("               4.주민번호 : %s                 (변경 불가)\n", hiddenRrn);
+            System.out.printf("               4.주민번호 : %s       (변경 불가)        \n", hiddenRrn);
             System.out.printf("               5.신장 : %.1f                         \n", member.height);
             System.out.printf("               6.몸무게 : %.1f                        \n", member.weight);
             System.out.printf("               7.기저질환 : %s                       \n", member.ud);

@@ -4,6 +4,7 @@ import org.example.container.Container;
 import org.example.db.DBConnection;
 import org.example.dto.Member;
 
+import java.util.List;
 import java.util.Map;
 
 public class MemberDao extends Dao {
@@ -98,5 +99,22 @@ public class MemberDao extends Dao {
 
 
         dbConnection.update(sb.toString());
+    }
+
+    public String getMemberName(int patientId) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("SELECT patient.name "));
+        sb.append(String.format("FROM patient "));
+        sb.append(String.format("WHERE id = %d ", patientId));
+
+        String patientName = "";
+        List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
+        for (Map<String, Object> row : rows) {
+            patientName = (String) row.get("name");
+            break;
+        }
+
+        return patientName;
     }
 }

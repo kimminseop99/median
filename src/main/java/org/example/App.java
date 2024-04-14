@@ -14,6 +14,7 @@ public class App {
         Container.getDBConnection().connect();
 
     }
+
     public static void start() {
 
         System.out.println("╔═══════════════════════════════════════════════════════════════════════════╗");
@@ -23,8 +24,8 @@ public class App {
         System.out.println("╟───────────────────────────────────────────────────────────────────────────╢");
         System.out.println("║  1  │ 회원 페이지 : member page                                             ║");
         System.out.println("║  2  │ 의사 페이지 : doctor page                                             ║");
-        System.out.println("║  5  │ 예약 페이지 (로그인 후 이용가능) : reservation page                      ║");
-        System.out.println("║  6  │ 게시판 페이지 : article page                                          ║");
+        System.out.println("║  3  │ 예약 페이지 (로그인 후 이용가능) : reservation page                      ║");
+        System.out.println("║  4  │ 게시판 페이지 : article page                                          ║");
         System.out.println("╚═══════════════════════════════════════════════════════════════════════════");
 
 
@@ -33,7 +34,7 @@ public class App {
         ArticleController articleController = new ArticleController();
         ReservationController reservationController = new ReservationController();
 
-        while ( true ) {
+        while (true) {
             System.out.println("[메인]");
             System.out.printf("명령어) ");
             String cmd = Container.getScanner().nextLine();
@@ -43,18 +44,16 @@ public class App {
                 continue;
             }
 
-            try {
-                if ( cmd.equals("exit") ) {
-                    break;
-                }
-            }catch (IllegalStateException e){
-                System.out.println("시스템이 종료됩니다.");
+
+            if (cmd.equals("exit")) {
+                System.out.println("프로그램을 종료합니다.");
+                System.exit(0);
             }
 
 
             String[] cmdBits = cmd.split(" ");
 
-            if ( cmdBits.length == 1 ) {
+            if (cmdBits.length == 1) {
                 System.out.println("존재하지 않는 명령어 입니다.");
                 continue;
             }
@@ -66,31 +65,27 @@ public class App {
 
             Controller controller = null;
 
-            if ( controllerName.equals("article page") ) {
+            if (controllerName.equals("article page") || controllerName.equals("4")) {
                 controller = articleController;
-            }
-            else if ( controllerName.equals("member page") ) {
-                if (Container.getSession().isLoginedDoctor() ) {
+            } else if (controllerName.equals("member page") || controllerName.equals("1")) {
+                if (Container.getSession().isLoginedDoctor()) {
                     System.out.println("의사 계정 로그아웃 후 이용해주세요.");
                     continue;
                 }
                 controller = memberController;
-            }
-            else if ( controllerName.equals("reservation page") ) {
-                if (Container.getSession().isLoginedDoctor() ) {
+            } else if (controllerName.equals("reservation page") || controllerName.equals("3")) {
+                if (Container.getSession().isLoginedDoctor()) {
                     System.out.println("이용할 수 없습니다.");
                     continue;
                 }
-                controller =  reservationController;
-            }
-            else if ( controllerName.equals("doctor page") ) {
-                if (Container.getSession().isLogined() ) {
+                controller = reservationController;
+            } else if (controllerName.equals("doctor page") || controllerName.equals("2")) {
+                if (Container.getSession().isLogined()) {
                     System.out.println("회원 계정 로그아웃 후 이용해주세요.");
                     continue;
                 }
-                controller =  doctorController;
-            }
-            else {
+                controller = doctorController;
+            } else {
                 System.out.println("존재하지 않는 명령어입니다.");
                 continue;
             }
@@ -99,9 +94,5 @@ public class App {
             controller.doAction(cmd, actionMethodName);
         }
 
-        Container.getDBConnection().close();
-        Container.getScanner().close();
-
-        System.out.println("== 프로그램 끝 ==");
     }
 }

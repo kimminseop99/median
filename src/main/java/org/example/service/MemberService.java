@@ -36,4 +36,8 @@ public class MemberService {
     public static void DoubleUpdate(String Info, double changeInfo, int id) {
         memberDao.DoubleUpdate(Info, changeInfo, id);
     }
+
+    public String getMemberName(int patientId) {
+        return memberDao.getMemberName(patientId);
+    }
 }

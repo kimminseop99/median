@@ -19,7 +19,7 @@ public class DoctorDao extends Dao {
         dbConnection = Container.getDBConnection();
     }
 
-    public static List<Doctor> getForPrintDoctors(int dpt) {
+    public static List<Doctor> getForPrintDoctors(int dpt) { // 특정 과에 속한 모든 의사 정보
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT * "));
@@ -38,7 +38,7 @@ public class DoctorDao extends Dao {
         return doctors;
     }
 
-    public static List<Integer> getDoctorId(int dptId) {
+    public static List<Integer> getDoctorId(int dptId) { // 특정 과에 속한 의사들의 의사 번호
 
             StringBuilder sb = new StringBuilder();
 

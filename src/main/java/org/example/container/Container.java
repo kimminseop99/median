@@ -22,7 +22,6 @@ public class Container {
 
     public static DoctorService doctorService;
     public static DptDao dptDao;
-    public static DptService dptService;
 
 
     static {
@@ -34,7 +33,6 @@ public class Container {
         reservaitonService = new ReservationService();
         doctorDao = new DoctorDao();
         doctorService = new DoctorService();
-        dptService = new DptService();
     }
 
     public static Scanner getScanner(){

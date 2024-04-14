@@ -29,12 +29,21 @@ public class Reservation extends Dto {
 
     public Reservation(Map<String, Object> row) {
         super(row);
+
+        Integer patientIdObj = (Integer) row.get("patient_id");
+        this.patient_id = (patientIdObj != null) ? patientIdObj.intValue() : 0;
+
+
         this.rh = (String) row.get("rh");
+
         Integer doctorIdObj = (Integer) row.get("doctor_id");
         this.doctor_id = (doctorIdObj != null) ? doctorIdObj.intValue() : 0;
+
         this.name = (String) row.get("name");
+
         Integer dptIdObj = (Integer) row.get("dpt_id");
         this.dpt_id = (dptIdObj != null) ? dptIdObj.intValue() : 0;
+
         this.doctor_time = (Time) row.get("doctor_time");
     }
 
