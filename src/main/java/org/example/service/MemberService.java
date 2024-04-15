@@ -4,11 +4,17 @@ import org.example.container.Container;
 import org.example.dao.MemberDao;
 import org.example.dto.Member;
 
+import java.util.List;
+
 public class MemberService {
     private static MemberDao memberDao;
 
     public MemberService() {
         memberDao = Container.memberDao;
+    }
+
+    public static List<Member> getAllMember() {
+        return memberDao.getAllMember();
     }
 
     public int join(String name, int age, String phone, String rrn, double height, double weight, String ud, String loginId, String loginPw) {

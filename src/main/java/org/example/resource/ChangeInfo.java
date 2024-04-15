@@ -1,14 +1,16 @@
 package org.example.resource;
 
+
+import org.example.dto.Admin;
 import org.example.dto.Member;
+import org.example.service.AdminService;
 import org.example.service.DoctorService;
 import org.example.service.MemberService;
 import org.example.service.ReservationService;
 
 import java.util.Scanner;
 
-import static org.example.container.Container.memberService;
-import static org.example.container.Container.session;
+import static org.example.container.Container.*;
 
 public class ChangeInfo {
     static Scanner sc = new Scanner(System.in);
@@ -165,5 +167,70 @@ public class ChangeInfo {
 
         session.getLoginedDoctor().setLoginPw(loginPw);
         MemberService.StringUpdate("loginPw", loginPw, id);
+    }
+
+    public static void changeAdminName(int id) {
+        System.out.print("바꾸실 이름을 적어주세요 : ");
+        String name = sc.nextLine();
+        session.getLoginedAdmin().setName(name);
+        AdminService.StringUpdate("name", name, id);
+    }
+
+    public static void changeLoginAdminId(int id) {
+        String loginId = null;
+
+        while (true) {
+            System.out.print("바꾸실 아이디를 적어주세요 : ");
+            loginId = sc.nextLine();
+
+            if (!isJoinableAdminLoginId(loginId)) {
+                System.out.printf("%s(은)는 이미 사용중인 아이디 입니다.\n", loginId);
+                continue;
+            }
+
+            break;
+        }
+        session.getLoginedAdmin().setLoginId(loginId);
+        AdminService.StringUpdate("loginId", loginId, id);
+    }
+
+    public static void changeLoginAdminPw(int id) {
+        String loginPw = null;
+        String loginPwConfirm = null;
+        while (true) {
+            System.out.print("아이디 : ");
+            String loginId = sc.nextLine();
+            String adminId = session.getLoginedAdmin().loginId;
+            if (!loginId.equals(adminId)) {
+                System.out.println("아이디가 올바르지 않습니다.");
+                continue;
+            }
+            while (true) {
+                System.out.print("바꾸실 비밀번호를 적어주세요 : ");
+                loginPw = sc.nextLine();
+                System.out.printf("비번확인 : ");
+                loginPwConfirm = sc.nextLine();
+
+                if (!loginPw.equals(loginPwConfirm)) {
+                    System.out.println("비밀번호가 일치하지 않습니다.");
+                    continue;
+                }
+
+                break;
+            }
+            break;
+        }
+        session.getLoginedAdmin().setLoginPw(loginPw);
+        AdminService.StringUpdate("loginPw", loginPw, id);
+    }
+
+    private static boolean isJoinableAdminLoginId(String loginId) {
+        Admin admin = adminService.getAdminByLoginId(loginId);
+
+        if (admin == null) {
+            return true;
+        }
+
+        return false;
     }
 }

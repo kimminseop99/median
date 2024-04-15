@@ -3,7 +3,9 @@ package org.example.dao;
 import org.example.container.Container;
 import org.example.db.DBConnection;
 import org.example.dto.Member;
+import org.example.dto.Reservation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ public class MemberDao extends Dao {
         return dbConnection.insert(sb.toString());
     }
 
-    public Member getMemberByLoginId(String loginId) {
+    public Member getMemberByLoginId(String loginId) { // 회원가입 아이디 중복 처리
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT * "));
@@ -49,7 +51,7 @@ public class MemberDao extends Dao {
         return new Member(row);
     }
 
-    public Member getMember(int id) {
+    public Member getMember(int id) { // 번호에 따른 환자 정보
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT * "));
@@ -116,5 +118,20 @@ public class MemberDao extends Dao {
         }
 
         return patientName;
+    }
+
+    public List<Member> getAllMember() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("SELECT * FROM patient"));
+
+        List<Member> memberList = new ArrayList<>();
+        List<Map<String, Object>> rows = dbConnection.selectRows(sb.toString());
+
+        for ( Map<String, Object> row : rows ) {
+            memberList.add(new Member((row)));
+        }
+
+        return memberList;
     }
 }

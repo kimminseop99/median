@@ -21,7 +21,11 @@ public class Container {
     public static DoctorDao doctorDao;
 
     public static DoctorService doctorService;
-    public static DptDao dptDao;
+    public static AdminDao adminDao;
+
+    public static AdminService adminService;
+
+
 
 
     static {
@@ -33,6 +37,8 @@ public class Container {
         reservaitonService = new ReservationService();
         doctorDao = new DoctorDao();
         doctorService = new DoctorService();
+        adminDao = new AdminDao();
+        adminService = new AdminService();
     }
 
     public static Scanner getScanner(){
@@ -60,4 +66,6 @@ public class Container {
 
         return dbConnection;
     }
+
+
 }
