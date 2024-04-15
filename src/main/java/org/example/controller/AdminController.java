@@ -3,6 +3,7 @@ package org.example.controller;
 import org.example.App;
 import org.example.container.Container;
 import org.example.dto.Admin;
+import org.example.dto.Doctor;
 import org.example.dto.Member;
 import org.example.dto.Reservation;
 import org.example.resource.ChangeInfo;
@@ -19,13 +20,14 @@ public class AdminController extends Controller {
     private AdminService adminService;
     private Session session;
 
+
     public AdminController() {
         sc = Container.getScanner();
         session = Container.getSession();
         adminService = Container.adminService;
     }
 
-    public void doAction(String cmd, String actionMethodName) {
+    public void doAction(String patientNum, String actionMethodName) {
         if (actionMethodName.equals("page")) {
             System.out.println("                    관리자 페이지                      ");
             System.out.println("═════════════════════════════════════════════════════");
@@ -45,7 +47,7 @@ public class AdminController extends Controller {
 
                 switch (num) {
                     case 1:
-                        if (Container.getSession().isLoginedAdmin() ) {
+                        if (Container.getSession().isLoginedAdmin()) {
                             System.out.println("로그아웃 후 이용해주세요.");
                             continue;
                         }
@@ -102,8 +104,7 @@ public class AdminController extends Controller {
                 }
                 break;
             }
-        }
-        else {
+        } else {
             System.out.println("명령어가 올바르지 않습니다.");
         }
 
@@ -116,6 +117,124 @@ public class AdminController extends Controller {
     }
 
     private void manageDoctor() {
+        List<Doctor> doctorList = DoctorService.getAllDoctor();
+        List<Integer> doctorsId = DoctorService.getAllDoctorId();
+        System.out.println("═════════════════════════════════════════════════════");
+        System.out.println("                    의사 정보 확인                     ");
+        System.out.println("═════════════════════════════════════════════════════");
+        if (doctorList.isEmpty()) {
+            System.out.println("등록 된 의사가 없습니다.");
+            System.out.println("관리자 페이지로 되돌아가는 중...");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // 스레드가 중단되었을 때 발생하는 예외 처리
+                e.printStackTrace();
+            }
+
+            doAction("admin", "page");
+        } else {
+            System.out.println("[의사 목록]");
+            int index = 0;
+            for (Doctor doctor : doctorList) {
+                Integer id = doctorsId.get(index);
+                String dptName = DoctorService.getDptName(doctor.dpt_id);
+                System.out.println("** 의사 번호 : " + id + " **");
+
+                System.out.println("이름: " + doctor.name);
+                System.out.println("진료과: " + dptName);
+                System.out.println("비밀번호: " + doctor.loginPw);
+                System.out.println();
+                index++;
+            }
+        }
+        // 예약 페이지 푸터 출력
+        System.out.println("═════════════════════════════════════════════════════");
+
+        while (true) {
+            System.out.print("의사 추가는 1번 삭제는 2번을 입력해주세요 : ");
+            int checkCmd = sc.nextInt();
+            if (checkCmd == 1) {
+                doCreateDoctor();
+            } else if (checkCmd == 2) {
+                doDeleteDoctor();
+            } else {
+                continue;
+            }
+            break;
+        }
+
+    }
+
+    private void doDeleteDoctor() {
+        List<Integer> doctorsId = DoctorService.getAllDoctorId();
+        while (true) {
+            System.out.print("삭제 할 의사의 번호를 입력해주세요(뒤로가기 0번) : ");
+            int doctorNum = sc.nextInt();
+            if (doctorNum == 0) {
+                doAction("admin", "page");
+                return;
+            } else {
+                boolean doctorFound = false;
+
+                for (Integer doctorId : doctorsId) {
+
+                    if (doctorNum == doctorId) {
+                        DoctorService.deleteDoctorTime(doctorNum);
+                        DoctorService.deleteDoctor(doctorNum);
+                        System.out.println(doctorNum + "번 의사가 삭제되었습니다.");
+                        doctorFound = true;
+                        break;
+                    }
+
+                }
+                if (!doctorFound) {
+                    System.out.println("해당 번호의 의사가 존재하지 않습니다.");
+                    continue;
+                }
+                break;
+
+            }
+        }
+        doAction("admin", "page");
+    }
+
+    private void doCreateDoctor() {
+        sc.nextLine();
+        System.out.print("이름 : ");
+        String name = sc.nextLine();
+
+
+
+        System.out.print("진료과 번호를 입력해주세요 : ");
+        int dpt_id = sc.nextInt();
+
+        String loginPw = null;
+        String loginPwConfirm = null;
+
+
+        while (true) {
+            sc.nextLine();
+            System.out.print("사용하실 비밀번호 : ");
+            loginPw = sc.nextLine();
+
+            System.out.print("비밀번호 확인 : ");
+            loginPwConfirm = sc.nextLine();
+
+            if (!loginPw.equals(loginPwConfirm)) {
+                System.out.println("비밀번호가 일치하지 않습니다 다시 입력해주세요.");
+                continue;
+            }
+
+            break;
+        }
+
+        DoctorService.join(name, dpt_id, loginPw);
+        int doctor_id = DoctorService.getJoinDoctorId();
+        DoctorService.createDoctorTime(doctor_id);
+
+        System.out.printf("[%s]의사의 회원가입이 완료되었습니다!\n", name);
+        doAction("admin", "page");
     }
 
     private void manageMember() {
@@ -124,7 +243,7 @@ public class AdminController extends Controller {
         System.out.println("                    회원 정보 확인                     ");
         System.out.println("═════════════════════════════════════════════════════");
         if (memberList.isEmpty()) {
-            System.out.println("등록 된 없습니다.");
+            System.out.println("등록 된 회원이 없습니다.");
             System.out.println("관리자 페이지로 되돌아가는 중...");
             try {
                 Thread.sleep(1000);
@@ -156,11 +275,30 @@ public class AdminController extends Controller {
         // 예약 페이지 푸터 출력
         System.out.println("═════════════════════════════════════════════════════");
 
-        System.out.print("회원 추가는 1번 삭제는 2번을 입력해주세요(뒤로가기 0번) : ");
-        int cmd = sc.nextInt();
-        if(cmd == 1){
+        boolean checkPatientNum = false;
+        while (true) {
+            System.out.print("삭제 할 회원의 번호를 입력해주세요(뒤로가기 0번) : ");
+            int patientNum = sc.nextInt();
+            if (patientNum == 0) {
+                doAction("admin", "page");
+                return;
+            } else {
+                for (Member member : memberList) {
+                    if (member.id == patientNum) {
+                       MemberService.deletePatient(patientNum);
+                        System.out.println(patientNum + "번 회원이 삭제되었습니다.");
+                        checkPatientNum = true;
+                    }
+                }
+                if (!checkPatientNum) {
+                    System.out.println("해당 번호의 회원이 존재하지 않습니다.");
+                    continue;
+                }
+                break;
 
+            }
         }
+        doAction("admin", "page");
     }
 
     private void doUpdate() {
@@ -230,7 +368,7 @@ public class AdminController extends Controller {
                 }
             }
 
-            if(checkpoint){
+            if (checkpoint) {
                 continue;
             }
 
@@ -270,7 +408,7 @@ public class AdminController extends Controller {
         Admin loginedAdmin = session.getLoginedAdmin();
 
         System.out.printf("로그인 성공! %s님 환영합니다!\n", loginedAdmin.name);
-        App.start();
+        doAction("admin", "page");
     }
 
     private void doLogout() {

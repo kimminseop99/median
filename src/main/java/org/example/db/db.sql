@@ -36,7 +36,7 @@ phone = '042-586-7676';
 
 
 SELECT * FROM dpt;
-DROP TABLE dpt;
+drop table dpt;
 
 CREATE TABLE doctor(
   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -86,14 +86,15 @@ SELECT * FROM doctor;
 
 
 
+
 CREATE TABLE doctor_time (
   id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   doctor_id INT(10) UNSIGNED NOT NULL,
-  TIME TIME NOT NULL,
+  time TIME NOT NULL,
   FOREIGN KEY (doctor_id) REFERENCES doctor(id)
 );
 
-INSERT INTO doctor_time (doctor_id, TIME) VALUES
+INSERT INTO doctor_time (doctor_id, time) VALUES
 (1, '09:10'),(1, '10:10'),(1, '11:10'),(1, '13:10'),(1, '14:10'),(1, '15:10'),(1, '16:10'),(1, '17:10'),(1, '18:10'),
 (2, '09:10'),(2, '10:10'),(2, '11:10'),(2, '13:10'),(2, '14:10'),(2, '15:10'),(2, '16:10'),(2, '17:10'),(2, '18:10'),
 (3, '09:10'),(3, '10:10'),(3, '11:10'),(3, '13:10'),(3, '14:10'),(3, '15:10'),(3, '16:10'),(3, '17:10'),(3, '18:10'),
@@ -106,23 +107,24 @@ INSERT INTO doctor_time (doctor_id, TIME) VALUES
 (10, '09:10'),(10, '10:10'),(10, '11:10'),(10, '13:10'),(10, '14:10'),(10, '15:10'),(10, '16:10'),(10, '17:10'),(10, '18:10');
 
 
-SELECT * FROM doctor_time;
+select * from doctor_time;
 
 
 CREATE TABLE patient(
-id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-`name` CHAR(100) NOT NULL,
-regDate DATE NOT NULL,
-age INT(10) NOT NULL,
-phone CHAR(100) NOT NULL,
-rrn CHAR(100) NOT NULL,
-height DECIMAL(6,2),
-weight DECIMAL(6,2),
-ud CHAR(100) NOT NULL,
-loginId CHAR(100) NOT NULL UNIQUE,
-loginPw CHAR(100) NOT NULL,
+id int(10) unsigned NOT NULL AUTO_INCREMENT,
+`name` char(100) NOT NULL,
+regDate date NOT NULL,
+age int(10) NOT NULL,
+phone char(100) NOT NULL,
+rrn char(100) NOT NULL,
+height decimal(6,2) DEFAULT NULL,
+weight decimal(6,2) DEFAULT NULL,
+ud char(100) NOT NULL,
+loginId char(100) NOT NULL,
+loginPw char(100) NOT NULL,
+PRIMARY KEY (id),
+UNIQUE KEY loginId (loginId)
 );
-
 
 INSERT INTO patient
  SET `name` = '김민섭',
@@ -133,7 +135,7 @@ rrn = '991217-1407412',
 height = '174.500000',
 weight = '62.200000',
 ud = '폐렴',
-
+loginId = 'bok', loginPw = 'asd';
 
 INSERT INTO patient
 SET `name` = '홍길동',
@@ -185,75 +187,7 @@ height = 128.5, weight = 23.5,
 ud = '나리',
 loginId = 'leu', loginPw = 'woo';
 
-SELECT * FROM patient;
-
-
-CREATE TABLE `case`(
-id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-regDate DATE NOT NULL,
-doctor_id INT(10) UNSIGNED NOT NULL,
-patient_id INT(10) UNSIGNED NOT NULL,
-medicalHistory TEXT NOT NULL,
-PRIMARY KEY(id, doctor_id, patient_id),
-FOREIGN KEY(doctor_id) REFERENCES doctor(id) ON DELETE CASCADE,
-FOREIGN KEY(patient_id) REFERENCES patient(id) ON DELETE CASCADE
-);
-
-INSERT INTO `case`
-SET doctor_id = 1,
-patient_id = 1,
-medicalHistory = '운동 열심히 하세요!!';
-
-INSERT INTO `case`
-SET doctor_id = 2,
-patient_id = 2,
-medicalHistory = '운동 열심히 하세요!!';
-
-INSERT INTO `case`
-SET doctor_id = 2,
-patient_id = 3,
-medicalHistory = '식단 관리가 필요합니다.';
-
-INSERT INTO `case`
-SET doctor_id = 5,
-patient_id = 4,
-medicalHistory = '조심히 다니세요';
-
-
-SELECT * FROM `case`;
-DROP TABLE `case`;
-
-CREATE TABLE medicalHistory (
-id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-medicalHistory TEXT NOT NULL,
-patient_id INT(10) UNSIGNED NOT NULL,
-FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE,
-UNIQUE KEY (medicalHistory, patient_id)
-);
-
-INSERT INTO medicalHistory
-SET
-patient_id = 1,
-medicalHistory = '운동 열심히 하세요!!';
-
-INSERT INTO medicalHistory
-SET
-patient_id = 2,
-medicalHistory = '운동 열심히 하세요!!';
-
-INSERT INTO medicalHistory
-SET
-patient_id = 3,
-medicalHistory = '식단 관리가 필요합니다.';
-
-INSERT INTO medicalHistory
-SET
-patient_id = 4,
-medicalHistory = '조심히 다니세요';
-
-
-SELECT * FROM medicalHistory
-DROP TABLE medicalHistory
+select * from patient;
 
 CREATE TABLE `admin`(
 id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -272,34 +206,24 @@ loginPw = 'admin',
 SELECT * FROM `admin`
 
 CREATE TABLE reservation (
-    patient_id INT(10) UNSIGNED NOT NULL,
-    id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-    regDate DATE NOT NULL,
-    rh TEXT NOT NULL,
-    doctor_id INT(10) UNSIGNED NOT NULL,
-    PRIMARY KEY (rn),
-
-    FOREIGN KEY (doctor_id) REFERENCES doctor(id) ON DELETE CASCADE,
-    FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
+  patient_id int(10) unsigned NOT NULL,
+  id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  rh text NOT NULL,
+  doctor_id int(10) unsigned NOT NULL,
+  `name` char(100) NOT NULL,
+  dpt_id int(10) unsigned NOT NULL,
+  doctor_time time DEFAULT NULL,
+  regDate datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (doctor_id) REFERENCES doctor(id) ON DELETE CASCADE,
+  FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
-ALTER TABLE reservation ADD COLUMN regDate DATETIME NOT NULL;
-ALTER TABLE reservation DROP COLUMN regDate;
-ALTER TABLE reservation ADD COLUMN `name` CHAR(100) NOT NULL;
-ALTER TABLE reservation ADD COLUMN dpt_id INT(10) UNSIGNED NOT NULL;
-
-
-
-
-UPDATE reservation
-SET `name` = '박효신'
-WHERE `name` = '홍길순'
 
 SELECT * FROM reservation;
-DROP TABLE article;
 
-ALTER TABLE reservation
-CHANGE COLUMN `time` doctor_time TIME;
+
+
 
 
 
@@ -357,7 +281,7 @@ SET regDate = NOW(),
 patient_id = 1,
 article_id = 2;
 
-SELECT * FROM reservation;
-SELECT * FROM doctor;
+select * from reservation;
+select * from doctor;
 
 

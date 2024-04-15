@@ -92,9 +92,9 @@ public class DoctorController extends Controller {
     }
 
     private void doConsultation() {
-        boolean checkpoint = false;
         Doctor doctor = session.getLoginedDoctor();
-        List<Reservation> forPrintReservations = ReservationService.getforPrintReservation(doctor.id);
+
+        List<Reservation> forPrintReservations = ReservationService.getforPrintReservation(doctor.getId());
         System.out.println("═════════════════════════════════════════════════════");
         System.out.println("                    예약 정보 확인                     ");
         System.out.println("═════════════════════════════════════════════════════");

@@ -30,15 +30,40 @@ public class DoctorService {
         return DoctorDao.getDptName(dptId);
     }
 
+    public static List<Doctor> getAllDoctor() {
+        return DoctorDao.getAllDoctor();
+    }
+
+    public static int deleteDoctor(int doctorNum) {
+        return DoctorDao.deleteDoctor(doctorNum);
+    }
+
+    public static int join(String name, int dptId, String loginPw) {
+        return DoctorDao.join(name, dptId, loginPw);
+
+    }
+
+    public static List<Integer> getAllDoctorId() {
+        return DoctorDao.getAllDoctorId();
+    }
+
+    public static void createDoctorTime(int doctor_id) {
+        DoctorDao.createDoctorTime(doctor_id);
+    }
+
+    public static int getJoinDoctorId() {
+        return DoctorDao.getJoinDoctorId();
+    }
+
+    public static void deleteDoctorTime(int doctorNum) {
+        DoctorDao.deleteDoctorTime(doctorNum);
+    }
+
 
     public int doDoctor(String name, int dpt_id, String loginPw) {
         return  doctorDao.doDoctor(name, dpt_id, loginPw);
     }
 
-
-    public List<Doctor> getDoctors(){
-        return doctorDao.getDoctors();
-    }
 
     public static List<Doctor> getForPrintDoctors(int dpt) {
         return DoctorDao.getForPrintDoctors(dpt);

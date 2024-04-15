@@ -3,7 +3,6 @@ package org.example.dao;
 import org.example.container.Container;
 import org.example.db.DBConnection;
 import org.example.dto.Member;
-import org.example.dto.Reservation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,5 +132,14 @@ public class MemberDao extends Dao {
         }
 
         return memberList;
+    }
+
+    public int deletePatient(int patientNum) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("DELETE FROM patient "));
+        sb.append(String.format("WHERE id = %d ", patientNum));
+
+        return dbConnection.delete(sb.toString());
     }
 }

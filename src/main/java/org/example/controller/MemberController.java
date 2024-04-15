@@ -81,7 +81,7 @@ public class MemberController extends Controller {
 
     }
 
-    private void doUpdate() {
+    public void doUpdate() {
 
         while (true) {
             boolean checkpoint = false;

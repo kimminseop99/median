@@ -17,6 +17,10 @@ public class MemberService {
         return memberDao.getAllMember();
     }
 
+    public static int deletePatient(int patientNum) {
+        return memberDao.deletePatient(patientNum);
+    }
+
     public int join(String name, int age, String phone, String rrn, double height, double weight, String ud, String loginId, String loginPw) {
         Member member = new Member(name, age, phone, rrn, height, weight, ud, loginId, loginPw);
         return memberDao.join(member);

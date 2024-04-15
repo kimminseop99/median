@@ -23,6 +23,7 @@ public class Dto {
         this(id, Util.getNowDateStr());
     }
 
+
     public Dto(Map<String, Object> row) {
         Object idObject = row.get("id");
         Object regDateObject = row.get("regDate");
