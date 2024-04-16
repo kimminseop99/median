@@ -8,7 +8,7 @@ import java.sql.Time;
 import java.util.List;
 
 public class ReservationService {
-    private ReservationDao reservationDao;
+    private static ReservationDao reservationDao;
 
     public ReservationService() {
         reservationDao = Container.reservationDao;
@@ -20,6 +20,10 @@ public class ReservationService {
 
     public static List<Reservation> getforPrintReservation(int id) {
         return ReservationDao.getforPrintReservation(id);
+    }
+
+    public static List<Reservation> getReservations() {
+        return reservationDao.getReservations();
     }
 
     public List<Reservation> getReservation(int patient_id){
@@ -45,7 +49,7 @@ public class ReservationService {
     }
 
 
-    public void cancelReservation(int reservationNumber) {
+    public static void cancelReservation(int reservationNumber) {
         reservationDao.cancelReservation(reservationNumber);
     }
 }

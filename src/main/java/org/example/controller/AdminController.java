@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.App;
 import org.example.container.Container;
+import org.example.dao.MemberDao;
 import org.example.dto.Admin;
 import org.example.dto.Doctor;
 import org.example.dto.Member;
@@ -10,8 +11,10 @@ import org.example.resource.ChangeInfo;
 import org.example.service.AdminService;
 import org.example.service.DoctorService;
 import org.example.service.MemberService;
+import org.example.service.ReservationService;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -114,6 +117,75 @@ public class AdminController extends Controller {
     }
 
     private void manageReservation() {
+        List<Reservation> reservationList = ReservationService.getReservations();
+        System.out.println("═════════════════════════════════════════════════════");
+        System.out.println("                    예약 내용 확인                     ");
+        System.out.println("═════════════════════════════════════════════════════");
+
+        if (reservationList.isEmpty()) {
+            System.out.println("예약된 정보가 없습니다.");
+            System.out.println("관리자 페이지로 되돌아가는 중...");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // 스레드가 중단되었을 때 발생하는 예외 처리
+                e.printStackTrace();
+            }
+
+            doAction("admin", "page");
+        } else {
+            System.out.println("[예약 목록]");
+            for (Reservation reservation : reservationList) {
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                String formattedTime = sdf.format(reservation.doctor_time);
+                String dptName = DoctorService.getDptName(reservation.dpt_id);
+                String patientName = MemberService.getMemberName(reservation.patient_id);
+                String doctorName = DoctorService.getDoctorName(reservation.doctor_id);
+
+                System.out.println("** 예약 번호 : " + reservation.getId() + " **");
+
+                System.out.println("진료과: " + dptName);
+                System.out.println("의사 이름: " + doctorName);
+                System.out.println("예약자 이름: " + patientName);
+                System.out.println("예약 시간: " + formattedTime);
+                System.out.println("환자 증상: " + reservation.rh);
+                System.out.println();
+            }
+        }
+        // 예약 페이지 푸터 출력
+        System.out.println("═════════════════════════════════════════════════════");
+
+
+            List<Integer> reservationNumCheck = new ArrayList<>();
+            for (Reservation reservation : reservationList) {
+
+                reservationNumCheck.add(reservation.getId());
+            }
+            while (true){
+                System.out.print("삭제 할 예약 번호를 입력해주세요(뒤로가기 0번) : ");
+                int reservationNum = sc.nextInt();
+                if(!(reservationNum == 0)){
+                    if(!reservationNumCheck.contains(reservationNum)){
+                        System.out.println("예약 번호를 다시 한번 확인해 주세요");
+                        continue;
+                    }else{
+                        ReservationService.cancelReservation(reservationNum);
+                        System.out.println("예약이 삭제되었습니다.");
+                    }
+                }
+
+            break;
+        }
+        System.out.println("관리자 페이지로 되돌아가는 중...");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // 스레드가 중단되었을 때 발생하는 예외 처리
+            e.printStackTrace();
+        }
+
+        doAction("admin", "page");
+
     }
 
     private void manageDoctor() {
@@ -152,13 +224,24 @@ public class AdminController extends Controller {
         System.out.println("═════════════════════════════════════════════════════");
 
         while (true) {
-            System.out.print("의사 추가는 1번 삭제는 2번을 입력해주세요 : ");
+            System.out.print("의사 추가는 1번 삭제는 2번을 입력해주세요(뒤로가기 0번) : ");
             int checkCmd = sc.nextInt();
             if (checkCmd == 1) {
                 doCreateDoctor();
             } else if (checkCmd == 2) {
                 doDeleteDoctor();
-            } else {
+            } else if(checkCmd == 0){
+                System.out.println("관리자 페이지로 되돌아가는 중...");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    // 스레드가 중단되었을 때 발생하는 예외 처리
+                    e.printStackTrace();
+                }
+
+                doAction("admin", "page");
+            }
+            else {
                 continue;
             }
             break;

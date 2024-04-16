@@ -9,10 +9,10 @@ import java.util.Map;
 @Setter
 
 public class Admin extends Dto {
-
+    public String name;
     public String loginId;
     public String loginPw;
-    public String name;
+
 
 
     public Admin(Map<String, Object> row) {
@@ -25,7 +25,6 @@ public class Admin extends Dto {
 
     public Admin(String name, String loginId, String loginPw) {
         this.name = name;
-
         this.loginId = loginId;
         this.loginPw = loginPw;
     }
