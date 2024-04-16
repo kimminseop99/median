@@ -4,6 +4,7 @@ import org.example.container.Container;
 import org.example.db.DBConnection;
 import org.example.dto.Article;
 import org.example.dto.ArticleReply;
+import org.example.dto.Board;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class ArticleDao extends Dao {
         sb.append(String.format("title = '%s', ", article.title));
         sb.append(String.format("`body` = '%s', ", article.body));
         sb.append(String.format("patient_id = %d, ", article.patient_id));
+        sb.append(String.format("boardId = %d, ", article.boardId));
         sb.append(String.format("hit = %d ", article.hit));
 
         return dbConnection.insert(sb.toString());
@@ -34,8 +36,8 @@ public class ArticleDao extends Dao {
 
         sb.append(String.format("SELECT A.*, M.name AS writerName "));
         sb.append(String.format("FROM article AS A "));
-        sb.append(String.format("INNER JOIN `member` AS M "));
-        sb.append(String.format("ON A.memberId = M.id "));
+        sb.append(String.format("INNER JOIN `patient` AS M "));
+        sb.append(String.format("ON A.patient_id = M.id "));
         sb.append(String.format("WHERE A.id = %d ", id));
 
         Map<String, Object> row = dbConnection.selectRow(sb.toString());
@@ -78,13 +80,14 @@ public class ArticleDao extends Dao {
         return new Article(row);
     }
 
-    public List<Article> getForPrintArticles(String searchKeyword) {
+    public List<Article> getForPrintArticles(String boardCode,String searchKeyword) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT A.* "));
         sb.append(String.format("FROM `article` AS A "));
         sb.append(String.format("INNER JOIN `board` AS B "));
         sb.append(String.format("ON A.boardId = B.id "));
+        sb.append(String.format("WHERE B.`code` = '%s' ", boardCode));
         if ( searchKeyword.length() > 0 ) {
             sb.append(String.format("AND A.title LIKE '%%%s%%' ", searchKeyword));
         }
@@ -98,6 +101,22 @@ public class ArticleDao extends Dao {
         }
 
         return articles;
+    }
+
+    public Board getBoard(int id) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("SELECT * "));
+        sb.append(String.format("FROM `board` "));
+        sb.append(String.format("WHERE id = %d ", id));
+
+        Map<String, Object> row = dbConnection.selectRow(sb.toString());
+
+        if ( row.isEmpty() ) {
+            return null;
+        }
+
+        return new Board(row);
     }
 
 
@@ -126,14 +145,14 @@ public class ArticleDao extends Dao {
 
     // 댓글 =======================================
 
-    public int replyWrite(int articleId, int memberId, String replyBody) {
+    public int replyWrite(int articleId, int patient_id, String replyBody) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("INSERT INTO articleReply "));
         sb.append(String.format("SET regDate = NOW(), "));
         sb.append(String.format("updateDate = NOW(), "));
         sb.append(String.format("`body` = '%s', ", replyBody));
-        sb.append(String.format("memberId = %d, ", memberId));
+        sb.append(String.format("patient_id = %d, ", patient_id));
         sb.append(String.format("articleId = %d ", articleId));
 
         return dbConnection.insert(sb.toString());

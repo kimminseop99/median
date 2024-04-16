@@ -114,6 +114,7 @@ public class AdminController extends Controller {
     }
 
     private void manageArticle() {
+
     }
 
     private void manageReservation() {

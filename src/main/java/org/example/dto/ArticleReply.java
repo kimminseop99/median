@@ -10,14 +10,14 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 public class ArticleReply extends Dto {
-    public int memberId;
+    public int patient_id;
     public int articleId;
     public String body;
 
     public ArticleReply(Map<String, Object> row) {
         super(row);
         this.articleId = (int) row.get("id");
-        this.memberId = (int) row.get("memberId");
+        this.patient_id = (int) row.get("patient_id");
         this.body = (String) row.get("body");
     }
 }

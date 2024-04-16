@@ -4,6 +4,7 @@ import org.example.container.Container;
 import org.example.dao.ArticleDao;
 import org.example.dto.Article;
 import org.example.dto.ArticleReply;
+import org.example.dto.Board;
 
 import java.util.List;
 
@@ -14,12 +15,12 @@ public class ArticleService {
         articleDao = Container.articleDao;
     }
 
-    public List<Article> getForPrintArticles(String searchKeyword) {
-        return articleDao.getForPrintArticles(searchKeyword);
+    public List<Article> getForPrintArticles(String boardCode, String searchKeyword) {
+        return articleDao.getForPrintArticles(boardCode, searchKeyword);
     }
 
-    public int write(int patient_id, String title, String body) {
-        Article article = new Article(patient_id, title, body);
+    public int write(int patient_id,int boardId, String title, String body) {
+        Article article = new Article(patient_id,boardId, title, body);
         return articleDao.write(article);
     }
 
@@ -29,6 +30,10 @@ public class ArticleService {
 
     public Article getArticle(int id) {
         return articleDao.getArticle(id);
+    }
+
+    public Board getBoard(int id) {
+        return articleDao.getBoard(id);
     }
 
 
@@ -46,8 +51,8 @@ public class ArticleService {
 
     // 댓글 =======================================
 
-    public int replyWrite(int articleId, int memberId, String replyBody) {
-        return articleDao.replyWrite(articleId, memberId, replyBody);
+    public int replyWrite(int articleId, int patient_id, String replyBody) {
+        return articleDao.replyWrite(articleId, patient_id, replyBody);
     }
 
     public List<ArticleReply> getForPrintArticleReplies(int articleId) {

@@ -14,6 +14,7 @@ public class App {
 
         Container.getDBConnection().connect();
 
+        Container.getSession().setCurrentBoard(Container.articleService.getBoard(1));
     }
 
     public static void start() {

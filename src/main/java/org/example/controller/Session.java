@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.dto.Admin;
+import org.example.dto.Board;
 import org.example.dto.Doctor;
 import org.example.dto.Member;
 
@@ -11,6 +12,8 @@ public class Session {
     private Doctor loginedDoctor;
 
     private Admin loginedAdmin;
+
+    private Board currentBoard;
 
     // 회원 정보
     public Member getLoginedMember() {
@@ -45,5 +48,13 @@ public class Session {
     }
     public boolean isLoginedAdmin() {
         return loginedAdmin != null;
+    }
+
+    public Board getCurrentBoard() {
+        return currentBoard;
+    }
+
+    public void setCurrentBoard(Board currentBoard) {
+        this.currentBoard = currentBoard;
     }
 }

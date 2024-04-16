@@ -30,7 +30,7 @@ public class ChangeInfo {
         while (true) {
             System.out.print("바꾸실 나이를 적어주세요 : ");
             age = sc.nextInt();
-            sc.nextLine(); // 버퍼 비우기
+            sc.nextLine();
 
             if (age < 1) {
                 System.out.println("나이를 다시한번 확인해 주세요.");
