@@ -10,6 +10,8 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import static org.example.container.Container.adminService;
+
 public class ArticleController extends Controller {
     private Scanner sc;
 
@@ -25,95 +27,83 @@ public class ArticleController extends Controller {
     }
 
     public void doAction(String cmd, String actionMethodName) {
-        if (actionMethodName.equals("page")) {
-            System.out.println("                      게시판 페이지                      ");
-            System.out.println("═════════════════════════════════════════════════════");
-            System.out.println("|                   1. 게시물 작성                    |");
-            System.out.println("|                   2. 게시물 목록                    |");
-            System.out.println("|                   3. 게시물 댓글                    |");
-            System.out.println("|                   4. 게시물 수정                    |");
-            System.out.println("|                   5. 게시물 삭제                    |");
-            System.out.println("|                   6. 현재 게시판 확인                |");
-            System.out.println("|                   7. 게시판 변경                    |");
-            System.out.println("|                   8. 뒤로 가기                      |");
-            System.out.println("═════════════════════════════════════════════════════");
+        while (true) {
+            if (actionMethodName.equals("page")) {
+                System.out.println("                      게시판 페이지                      ");
+                System.out.println("═════════════════════════════════════════════════════");
+                System.out.println("|                   1. 게시물 작성                    |");
+                System.out.println("|                   2. 게시물 목록                    |");
+                System.out.println("|                   3. 게시물 댓글                    |");
+                System.out.println("|                   4. 게시물 수정                    |");
+                System.out.println("|                   5. 게시물 삭제                    |");
+                System.out.println("|                   6. 현재 게시판 확인                |");
+                System.out.println("|                   7. 게시판 변경                    |");
+                System.out.println("|                   8. 뒤로 가기                      |");
+                System.out.println("═════════════════════════════════════════════════════");
 
-            while (true){
-            System.out.print("번호를 선택해 주세요: ");
-            int num = sc.nextInt();
-            sc.nextLine();
-            Board board = session.getCurrentBoard();
-            switch (num) {
-                case 1:
-                    if(Container.getSession().isLoginedDoctor()){
-                        System.out.println("사용 하실 수 없는 시스템 입니다.");
-                        continue;
-                    }
-                    if(!Container.getSession().isLogined()){
-                        System.out.println("로그인 후 이용 가능합니다.");
-                        continue;
-                    }
-                    if(board.getName().equals("공지") && !Container.getSession().isLoginedAdmin()){
-                        System.out.println("관리자만이 작성할 수 있는 게시판 입니다.");
-                        doAction("article","page");
-                    }
-                    doWrite();
-                    break;
-                case 2:
-                    showList();
-                    break;
-                case 3:
-                    showDetail();
-                    break;
-                case 4:
-                    if(Container.getSession().isLoginedDoctor()){
-                        System.out.println("사용 하실 수 없는 시스템 입니다.");
-                        continue;
-                    }
-                    if(!Container.getSession().isLogined()){
-                        System.out.println("로그인 후 이용 가능합니다.");
-                        continue;
-                    }
-                    if(board.getName().equals("공지") && !Container.getSession().isLoginedAdmin()){
-                        System.out.println("관리자만이 수정할 수 있는 게시판 입니다.");
-                        doAction("article","page");
-                    }
-                    doModify();
-                    break;
-                case 5:
-                    if(Container.getSession().isLoginedDoctor()){
-                        System.out.println("사용 하실 수 없는 시스템 입니다.");
-                        continue;
-                    }
-                    if(!Container.getSession().isLogined()){
-                        System.out.println("로그인 후 이용 가능합니다.");
-                        continue;
-                    }
-                    if(board.getName().equals("공지") && !Container.getSession().isLoginedAdmin()){
-                        System.out.println("관리자만이 삭제할 수 있는 게시판 입니다.");
-                        doAction("article","page");
-                    }
-                    doDelete();
-                    break;
-                case 6:
-                    doCurrentBoard();
-                    break;
-                case 7:
-                    doChangeBoard();
-                    break;
-                case 8:
-                    System.out.println("이전 메뉴로 돌아갑니다.");
-                    App.start();
-                default:
-                    System.out.println("잘못된 번호입니다. 다시 입력해 주세요.");
-                    break;
+                System.out.print("번호를 선택해 주세요: ");
+                int num = sc.nextInt();
+                sc.nextLine();
+                Board board = session.getCurrentBoard();
+                switch (num) {
+                    case 1:
+                        if (Container.getSession().isLoginedDoctor() || Container.getSession().isLoginedAdmin()) {
+                            System.out.println("사용 하실 수 없는 시스템 입니다.");
+                            continue;
+                        }
+                        if (!Container.getSession().isLogined()) {
+                            System.out.println("회원 로그인 후 이용 가능합니다.");
+                            continue;
+                        }
+
+                        doWrite();
+                        break;
+                    case 2:
+                        showList();
+                        break;
+                    case 3:
+                        showDetail();
+                        break;
+                    case 4:
+                        if (Container.getSession().isLoginedDoctor() || Container.getSession().isLoginedAdmin()) {
+                            System.out.println("사용 하실 수 없는 시스템 입니다.");
+                            continue;
+                        }
+                        if (!Container.getSession().isLogined()) {
+                            System.out.println("회원 로그인 후 이용 가능합니다.");
+                            continue;
+                        }
+
+                        doModify();
+                        break;
+                    case 5:
+                        if (Container.getSession().isLoginedDoctor() || Container.getSession().isLoginedAdmin()) {
+                            System.out.println("사용 하실 수 없는 시스템 입니다.");
+                            continue;
+                        }
+                        if (!Container.getSession().isLogined()) {
+                            System.out.println("회원 로그인 후 이용 가능합니다.");
+                            continue;
+                        }
+                        doDelete();
+                        break;
+                    case 6:
+                        doCurrentBoard();
+                        break;
+                    case 7:
+                        doChangeBoard();
+                        break;
+                    case 8:
+                        System.out.println("이전 메뉴로 돌아갑니다.");
+                        App.start();
+                        break;
+                    default:
+                        System.out.println("잘못된 번호입니다. 다시 입력해 주세요.");
+                        break;
+                }
             }
             break;
-          }
-        } else {
-            System.out.println("명령어가 올바르지 않습니다.");
         }
-
     }
 
     private void doChangeBoard() {
@@ -137,14 +127,14 @@ public class ArticleController extends Controller {
         int boardId = checkScNum();
         Board board = articleService.getBoard(boardId);
 
-        if ( board == null ) {
+        if (board == null) {
             System.out.println("해당 게시판은 존재하지 않습니다.");
         } else {
             System.out.printf("[%s 게시판]으로 변경되었습니다.\n", board.getName());
             session.setCurrentBoard(board);
         }
 
-        doAction("article","page");
+        doAction("article", "page");
     }
 
     private void doCurrentBoard() {
@@ -156,41 +146,43 @@ public class ArticleController extends Controller {
             // 스레드가 중단되었을 때 발생하는 예외 처리
             e.printStackTrace();
         }
-        doAction("article","page");
+        doAction("article", "page");
     }
 
     public void doWrite() {
 
-        if(Container.getSession().isLoginedAdmin()){
+        if (Container.getSession().isLoginedAdmin()) {
             System.out.printf("제목 : ");
             String title = sc.nextLine();
             System.out.printf("내용 : ");
             String body = sc.nextLine();
 
-            int patient_id = session.getLoginedAdmin().getId();
+            int patient_id = session.getLoginedAdmin().id;
             int boardId = session.getCurrentBoard().getId();
 
             int newId = articleService.write(patient_id, boardId, title, body);
 
             System.out.printf("%d번 게시물이 생성되었습니다.\n", newId);
-            doAction("article","page");
-        }else{
-        System.out.printf("제목 : ");
-        String title = sc.nextLine();
-        System.out.printf("내용 : ");
-        String body = sc.nextLine();
+            doAction("article", "page");
+        } else {
+            System.out.printf("제목 : ");
+            String title = sc.nextLine();
+            System.out.printf("내용 : ");
+            String body = sc.nextLine();
 
-        int patient_id = session.getLoginedMember().getId();
-        int boardId = session.getCurrentBoard().getId();
+            int patient_id = session.getLoginedMember().getId();
+            int boardId = session.getCurrentBoard().getId();
 
-        int newId = articleService.write(patient_id, boardId, title, body);
+            int newId = articleService.write(patient_id, boardId, title, body);
 
-        System.out.printf("%d번 게시물이 생성되었습니다.\n", newId);
-        doAction("article","page");
+            System.out.printf("%d번 게시물이 생성되었습니다.\n", newId);
+            doAction("article", "page");
         }
     }
 
     public void showList() {
+
+
         System.out.print("검색하시고 싶은 글의 제목을 적어주세요 : ");
         String searchKeyword = sc.nextLine().trim();
         String boardCode = Container.getSession().getCurrentBoard().getCode();
@@ -199,7 +191,7 @@ public class ArticleController extends Controller {
 
         if (forPrintArticles.isEmpty()) {
             System.out.println("검색결과가 존재하지 않습니다.");
-            doAction("article","page");
+            doAction("article", "page");
         }
 
 
@@ -210,7 +202,8 @@ public class ArticleController extends Controller {
 
             System.out.printf("%4d | %5s | %4d | %s\n", article.id, member.name, article.hit, article.title);
         }
-        doAction("article","page");
+        doAction("article", "page");
+
     }
 
     private boolean articleReplyAuthorityCheck() {
@@ -231,6 +224,7 @@ public class ArticleController extends Controller {
     }
 
     public void showDetail() {
+
         System.out.print("게시물 번호를 입력하세요) ");
 
         int id = checkScNum();
@@ -261,7 +255,7 @@ public class ArticleController extends Controller {
         System.out.printf("== [%d번 게시물 댓글] ==\n", id);
         articleRepliesShowList(id);
 
-        if(Container.getSession().isLoginedDoctor()){
+        if (Container.getSession().isLoginedDoctor()) {
             doAction("article", "page");
         }
 
@@ -283,7 +277,8 @@ public class ArticleController extends Controller {
 
             articleRepliesShowList(id);
         }
-        doAction("article","page");
+        doAction("article", "page");
+
     }
 
     private void articleRepliesShowList(int articleId) {
@@ -300,129 +295,70 @@ public class ArticleController extends Controller {
     }
 
     public void doModify() {
-        if(Container.getSession().isLoginedAdmin()){
-            System.out.print("수정할 게시물 번호를 입력하세요) ");
-            int id = checkScNum();
 
-            if (id == 0) {
-                return;
-            }
+        System.out.print("수정할 게시물 번호를 입력하세요) ");
 
-            Article foundArticle = articleService.getArticle(id);
+        int id = checkScNum();
 
-            if (foundArticle == null) {
-                System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
-                return;
-            }
-
-            Admin loginedMember = session.getLoginedAdmin();
-
-            if (foundArticle.patient_id != loginedMember.id) {
-                System.out.printf("권한이 없습니다.\n");
-                return;
-            }
-
-            System.out.printf("제목 : ");
-            String title = sc.nextLine();
-            System.out.printf("내용 : ");
-            String body = sc.nextLine();
-
-            articleService.modify(foundArticle.id, title, body);
-
-            System.out.printf("%d번 게시물이 수정되었습니다.\n", foundArticle.getId());
-            doAction("article","page");}
-        else {
-            System.out.print("수정할 게시물 번호를 입력하세요) ");
-
-            int id = checkScNum();
-
-            if (id == 0) {
-                return;
-            }
-
-            Article foundArticle = articleService.getArticle(id);
-
-            if (foundArticle == null) {
-                System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
-                return;
-            }
-
-            Member loginedAdmin = session.getLoginedMember();
-
-            if (foundArticle.patient_id != loginedAdmin.id) {
-                System.out.printf("권한이 없습니다.\n");
-                return;
-            }
-
-            System.out.printf("제목 : ");
-            String title = sc.nextLine();
-            System.out.printf("내용 : ");
-            String body = sc.nextLine();
-
-            articleService.modify(foundArticle.id, title, body);
-
-            System.out.printf("%d번 게시물이 수정되었습니다.\n", foundArticle.getId());
-            doAction("article", "page");
+        if (id == 0) {
+            return;
         }
+
+        Article foundArticle = articleService.getArticle(id);
+
+        if (foundArticle == null) {
+            System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+            return;
+        }
+
+        Member loginedAdmin = session.getLoginedMember();
+
+        if (foundArticle.patient_id != loginedAdmin.id) {
+            System.out.printf("권한이 없습니다.\n");
+            return;
+        }
+
+        System.out.printf("제목 : ");
+        String title = sc.nextLine();
+        System.out.printf("내용 : ");
+        String body = sc.nextLine();
+
+        articleService.modify(foundArticle.id, title, body);
+
+        System.out.printf("%d번 게시물이 수정되었습니다.\n", foundArticle.getId());
+        doAction("article", "page");
+
     }
 
     public void doDelete() {
-        if(Container.getSession().isLoginedAdmin()) {
-            System.out.print("삭제할 게시물 번호를 입력하세요) ");
 
-            int id = checkScNum();
+        System.out.print("삭제할 게시물 번호를 입력하세요) ");
 
-            if (id == 0) {
-                return;
-            }
+        int id = checkScNum();
 
-            Article foundArticle = articleService.getArticle(id);
-
-            if (foundArticle == null) {
-                System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
-                return;
-            }
-
-            Admin loginedAdmin = session.getLoginedAdmin();
-
-            if (foundArticle.patient_id != loginedAdmin.getId()) {
-                System.out.printf("권한이 없습니다.\n");
-                return;
-            }
-
-            articleService.delete(foundArticle.id);
-
-            System.out.printf("%d번 게시물이 삭제되었습니다.\n", foundArticle.id);
-            doAction("article","page");
+        if (id == 0) {
+            return;
         }
-        else {
-            System.out.print("삭제할 게시물 번호를 입력하세요) ");
 
-            int id = checkScNum();
+        Article foundArticle = articleService.getArticle(id);
 
-            if (id == 0) {
-                return;
-            }
+        if (foundArticle == null) {
+            System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+            return;
+        }
 
-            Article foundArticle = articleService.getArticle(id);
+        Member loginedMember = session.getLoginedMember();
 
-            if (foundArticle == null) {
-                System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
-                return;
-            }
-
-            Member loginedMember = session.getLoginedMember();
-
-            if (foundArticle.patient_id != loginedMember.getId()) {
-                System.out.printf("권한이 없습니다.\n");
-                return;
-            }
-
-            articleService.delete(foundArticle.id);
-
-            System.out.printf("%d번 게시물이 삭제되었습니다.\n", foundArticle.id);
+        if (foundArticle.patient_id != loginedMember.getId()) {
+            System.out.printf("권한이 없습니다.\n");
             doAction("article", "page");
         }
+
+        articleService.delete(foundArticle.id);
+
+        System.out.printf("%d번 게시물이 삭제되었습니다.\n", foundArticle.id);
+        doAction("article", "page");
+
     }
 
     public int checkScNum() {

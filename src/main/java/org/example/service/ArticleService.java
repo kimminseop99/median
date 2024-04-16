@@ -58,4 +58,8 @@ public class ArticleService {
     public List<ArticleReply> getForPrintArticleReplies(int articleId) {
         return articleDao.getForPrintArticleReplies(articleId);
     }
+
+    public Article getForPrintAdminArticle(int id) {
+        return articleDao.getForPrintAdminArticle(id);
+    }
 }

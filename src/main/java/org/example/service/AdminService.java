@@ -21,4 +21,8 @@ public class AdminService {
     public static void StringUpdate(String Info, String changeInfo, int id) {
         adminDao.StringUpdate(Info, changeInfo, id);
     }
+
+    public Admin getAdmin(int patientId) {
+        return adminDao.getAdmin(patientId);
+    }
 }

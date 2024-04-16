@@ -189,74 +189,6 @@ loginId = 'leu', loginPw = 'woo';
 
 SELECT * FROM patient;
 
-
-CREATE TABLE `case`(
-id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-regDate DATE NOT NULL,
-doctor_id INT(10) UNSIGNED NOT NULL,
-patient_id INT(10) UNSIGNED NOT NULL,
-medicalHistory TEXT NOT NULL,
-PRIMARY KEY(id, doctor_id, patient_id),
-FOREIGN KEY(doctor_id) REFERENCES doctor(id) ON DELETE CASCADE,
-FOREIGN KEY(patient_id) REFERENCES patient(id) ON DELETE CASCADE
-);
-
-INSERT INTO `case`
-SET doctor_id = 1,
-patient_id = 1,
-medicalHistory = '운동 열심히 하세요!!';
-
-INSERT INTO `case`
-SET doctor_id = 2,
-patient_id = 2,
-medicalHistory = '운동 열심히 하세요!!';
-
-INSERT INTO `case`
-SET doctor_id = 2,
-patient_id = 3,
-medicalHistory = '식단 관리가 필요합니다.';
-
-INSERT INTO `case`
-SET doctor_id = 5,
-patient_id = 4,
-medicalHistory = '조심히 다니세요';
-
-
-SELECT * FROM `case`;
-DROP TABLE `case`;
-
-CREATE TABLE medicalHistory (
-id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-medicalHistory TEXT NOT NULL,
-patient_id INT(10) UNSIGNED NOT NULL,
-FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE,
-UNIQUE KEY (medicalHistory, patient_id)
-);
-
-INSERT INTO medicalHistory
-SET
-patient_id = 1,
-medicalHistory = '운동 열심히 하세요!!';
-
-INSERT INTO medicalHistory
-SET
-patient_id = 2,
-medicalHistory = '운동 열심히 하세요!!';
-
-INSERT INTO medicalHistory
-SET
-patient_id = 3,
-medicalHistory = '식단 관리가 필요합니다.';
-
-INSERT INTO medicalHistory
-SET
-patient_id = 4,
-medicalHistory = '조심히 다니세요';
-
-
-SELECT * FROM medicalHistory
-
-
 CREATE TABLE `admin`(
 id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 loginId CHAR(100) NOT NULL UNIQUE,
@@ -308,7 +240,8 @@ title CHAR(100) NOT NULL,
 `body` TEXT NOT NULL,
 patient_id INT(10) UNSIGNED NOT NULL,
 boardId INT(10) UNSIGNED NOT NULL,
-INDEX boardId(`boardId`)
+INDEX boardId(`boardId`),
+hit INT(10) UNSIGNED NOT NULL
 );
 
 INSERT INTO article
@@ -317,7 +250,8 @@ updateDate = NOW(),
 title = '제목1',
 `body` = '내용1',
 patient_id = 1,
-boardId = 1;
+boardId = 1,
+hit = 1;;
 
 INSERT INTO article
 SET regDate = NOW(),
@@ -325,7 +259,8 @@ updateDate = NOW(),
 title = '제목2',
 `body` = '내용2',
 patient_id = 2,
-boardId = 1;
+boardId = 1,
+hit = 3;
 
 INSERT INTO article
 SET regDate = NOW(),
@@ -333,11 +268,10 @@ updateDate = NOW(),
 title = '제목3',
 `body` = '내용3',
 patient_id = 2,
-boardId = 2;
+boardId = 2,
+hit = 4;
 
 SELECT * FROM article;
-
-
 
 
 CREATE TABLE articleReply (

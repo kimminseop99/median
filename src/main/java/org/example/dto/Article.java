@@ -35,9 +35,8 @@ public class Article extends Dto {
         this.body = (String) row.get("body");
         this.patient_id = (int) row.get("patient_id");
         this.boardId = (int) row.get("boardId");
+        this.hit = (int) row.get("hit");
 
-        Integer hitObj = (Integer) row.get("hit");
-        this.hit = (hitObj != null) ? hitObj.intValue() : 0;
     }
 
 

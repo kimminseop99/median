@@ -42,4 +42,20 @@ public class AdminDao extends Dao {
 
         dbConnection.update(sb.toString());
     }
+
+    public Admin getAdmin(int id) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("SELECT * "));
+        sb.append(String.format("FROM admin "));
+        sb.append(String.format("WHERE id = %d ", id));
+
+        Map<String, Object> row = dbConnection.selectRow((sb.toString()));
+
+        if ( row.isEmpty() ) {
+            return null;
+        }
+
+        return new Admin(row);
+    }
 }
