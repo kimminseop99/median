@@ -25,7 +25,6 @@ public class Article extends Dto {
     }
 
     public Article(int patient_id,int boardId, String title, String body) {
-
         this(patient_id, boardId, title, body, 0);
     }
 
@@ -36,7 +35,6 @@ public class Article extends Dto {
         this.patient_id = (int) row.get("patient_id");
         this.boardId = (int) row.get("boardId");
         this.hit = (int) row.get("hit");
-
     }
 
 

@@ -29,6 +29,7 @@ public class ReservationController extends Controller {
     }
 
     public void doAction(String cmd, String actionMethodName) {
+        while (true) {
         if (actionMethodName.equals("page")) {
             System.out.println("                      예약 페이지                      ");
             System.out.println("═════════════════════════════════════════════════════");
@@ -37,11 +38,16 @@ public class ReservationController extends Controller {
             System.out.println("|                   3. 예약 취소                      |");
             System.out.println("|                   4. 뒤로 가기                      |");
             System.out.println("═════════════════════════════════════════════════════");
-            while (true) {
                 System.out.print("번호를 선택해 주세요: ");
-                int num = sc.nextInt();
-                sc.nextLine();
-
+                int num = 0;
+                try {
+                    num = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("잘못된 입력 형식입니다. 숫자를 입력해주세요.");
+                    sc.nextLine();
+                    continue;
+                }
                 switch (num) {
                     case 1:
                         if (!Container.getSession().isLogined()) {
@@ -72,12 +78,12 @@ public class ReservationController extends Controller {
                         break;
                 }
                 break;
-            }
-        }
-        else{
-                System.out.println("명령어가 올바르지 않습니다.");
+            }else{
+            System.out.println("명령어가 올바르지 않습니다.");
 
         }
+        }
+
     }
 
     public void showReservationPage() {

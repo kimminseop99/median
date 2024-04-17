@@ -9,7 +9,7 @@ import org.example.dto.Board;
 import java.util.List;
 
 public class ArticleService {
-    private ArticleDao articleDao;
+    public ArticleDao articleDao;
 
     public ArticleService() {
         articleDao = Container.articleDao;
@@ -22,6 +22,15 @@ public class ArticleService {
     public int write(int patient_id,int boardId, String title, String body) {
         Article article = new Article(patient_id,boardId, title, body);
         return articleDao.write(article);
+    }
+
+    public int adminWrite(int patient_id, int boardId, String title, String body) {
+        Article article = new Article(patient_id,boardId, title, body);
+        return articleDao.adminWrite(article);
+    }
+
+    public Article getForPrintAdminArticle(int id) {
+        return articleDao.getForPrintAdminArticle(id);
     }
 
     public List<Article> getArticles() {
@@ -59,7 +68,6 @@ public class ArticleService {
         return articleDao.getForPrintArticleReplies(articleId);
     }
 
-    public Article getForPrintAdminArticle(int id) {
-        return articleDao.getForPrintAdminArticle(id);
-    }
+
+
 }

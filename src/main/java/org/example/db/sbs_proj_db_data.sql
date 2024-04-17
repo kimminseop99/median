@@ -21,18 +21,17 @@ USE `median`;
 DROP TABLE IF EXISTS `admin`;
 
 CREATE TABLE `admin` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `loginId` char(100) NOT NULL,
   `loginPw` char(100) NOT NULL,
   `name` char(100) NOT NULL,
-  PRIMARY KEY (`id`),
   UNIQUE KEY `loginId` (`loginId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `admin` */
 
 insert  into `admin`(`id`,`loginId`,`loginPw`,`name`) values 
-(1,'admin','admin','김관리');
+(0,'admin','admin','김관리');
 
 /*Table structure for table `article` */
 
@@ -49,14 +48,16 @@ CREATE TABLE `article` (
   `hit` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `boardId` (`boardId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `article` */
 
 insert  into `article`(`id`,`regDate`,`updateDate`,`title`,`body`,`patient_id`,`boardId`,`hit`) values 
 (1,'2024-04-17 01:32:51','2024-04-17 01:32:51','제목1','내용1',1,1,1),
-(2,'2024-04-17 01:32:51','2024-04-17 01:32:51','제목2','내용2',2,1,3),
-(3,'2024-04-17 01:32:51','2024-04-17 01:32:51','제목3','내용3',2,2,4);
+(5,'2024-04-18 00:40:45','2024-04-18 00:40:45','공지 제목 1','공지 내용 1',0,2,0),
+(6,'2024-04-18 01:23:37','2024-04-18 01:23:37','칭찬합니다','의사선생님이 친절하게 설명해주셨습니다.',3,6,0),
+(7,'2024-04-18 01:27:57','2024-04-18 01:27:57','공지합니다','공지 페이지는 관리자만이 작성 수정 삭제 가능합니다',0,2,0),
+(8,'2024-04-18 01:29:52','2024-04-18 01:29:52','병원 위치가 어딘가요?','어디죠?',4,1,0);
 
 /*Table structure for table `articleReply` */
 
@@ -70,14 +71,16 @@ CREATE TABLE `articleReply` (
   `patient_id` int(10) unsigned NOT NULL,
   `articleId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `articleId` (`articleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `articleId` (`articleId`),
+  CONSTRAINT `articlereply_ibfk_1` FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `articleReply` */
 
 insert  into `articleReply`(`id`,`regDate`,`updateDate`,`body`,`patient_id`,`articleId`) values 
-(1,'2024-04-17 00:18:17','2024-04-17 00:18:17','댓글1',1,2),
-(2,'2024-04-17 00:18:17','2024-04-17 00:18:17','댓글2',2,1);
+(3,'2024-04-17 22:42:12','2024-04-17 22:42:12','댓글1',1,1),
+(5,'2024-04-18 01:22:33','2024-04-18 01:22:33','좋아요',3,1),
+(6,'2024-04-18 01:48:10','2024-04-18 01:48:10','서울 강서구 마곡동입니다~',1,8);
 
 /*Table structure for table `board` */
 
@@ -282,9 +285,9 @@ CREATE TABLE `patient` (
 /*Data for the table `patient` */
 
 insert  into `patient`(`id`,`name`,`regDate`,`age`,`phone`,`rrn`,`height`,`weight`,`ud`,`loginId`,`loginPw`) values 
-(1,'김민섭','2024-04-17',26,'010-4809-7610','991217-1407412',174.50,62.20,'폐렴','bok','asd'),
+(1,'대한','2024-04-17',26,'010-4809-7610','991217-1407412',174.50,62.20,'폐렴','bok','asd'),
 (2,'홍길동','2024-04-17',26,'010-1234-5678','991825-1507863',174.20,70.00,'폐렴','hong','gildong'),
-(3,'홍길순','2024-04-17',24,'010-5678-1234','010725-2504835',162.20,50.00,'없음','hongg','ilsoon'),
+(3,'박효신','2024-04-17',42,'010-5678-1234','810901-1408215',178.00,78.20,'인후두염','parkhyo','shin'),
 (4,'박지성','2024-04-17',40,'010-1842-7640','850925-1104238',177.90,73.00,'골절','park','jisung'),
 (5,'이우주','2024-04-17',7,'010-8820-7610','181217-1409635',120.50,23.50,'없음','lee','woojoo');
 
@@ -304,9 +307,12 @@ CREATE TABLE `reservation` (
   PRIMARY KEY (`id`),
   KEY `fk_doctor_id` (`doctor_id`),
   CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reservation` */
+
+insert  into `reservation`(`patient_id`,`id`,`rh`,`doctor_id`,`name`,`dpt_id`,`doctor_time`,`regDate`) values 
+(4,1,'발이 부어오름',3,'박지성',2,'09:10:00','2024-04-18 01:28:53');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

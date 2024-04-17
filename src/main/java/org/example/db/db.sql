@@ -123,20 +123,6 @@ CREATE TABLE patient(
     loginPw VARCHAR(100) NOT NULL
 );
 
-
-INSERT INTO patient
- SET `name` = '김민섭',
-regDate = NOW(),
-age = '26',
-phone = '010-4809-7610',
-rrn = '991217-1407412',
-height = '174.5',
-weight = '62.2',
-ud = '폐렴',
-loginId = 'bok', loginPw = 'asd';
-
-
-
 INSERT INTO patient
 SET `name` = '홍길동',
 regDate = NOW(),
@@ -189,21 +175,27 @@ loginId = 'leu', loginPw = 'woo';
 
 SELECT * FROM patient;
 
+
+
+
 CREATE TABLE `admin`(
-id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id INT(10) UNSIGNED NOT NULL,
 loginId CHAR(100) NOT NULL UNIQUE,
 loginPw CHAR(100) NOT NULL,
 `name` CHAR(100) NOT NULL
 );
 
 INSERT INTO `admin`
-SET loginId = 'admin',
+SET id = 0,
+loginId = 'admin',
 loginPw = 'admin',
 `name` = '김관리';
 
 
+SELECT * FROM `admin`;
 
-SELECT * FROM `admin`
+
+
 
 CREATE TABLE reservation (
   `patient_id` INT(10) UNSIGNED NOT NULL,
@@ -220,11 +212,6 @@ CREATE TABLE reservation (
 );
 
 
-
-
-UPDATE reservation
-SET `name` = '박효신'
-WHERE `name` = '홍길순'
 
 SELECT * FROM reservation;
 DROP TABLE article;
@@ -282,7 +269,8 @@ updateDate DATETIME NOT NULL,
 `body` CHAR(100) NOT NULL,
 patient_id INT(10) UNSIGNED NOT NULL,
 articleId INT(10) UNSIGNED NOT NULL,
-INDEX articleId(`articleId`)
+INDEX articleId(`articleId`),
+FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE CASCADE
 );
 
 INSERT INTO articleReply
@@ -290,14 +278,17 @@ SET regDate = NOW(),
 updateDate = NOW(),
 `body` = '댓글1',
 patient_id = 1,
-articleId = 2;
+articleId = 1;
 
 INSERT INTO articleReply
 SET regDate = NOW(),
 updateDate = NOW(),
 `body` = '댓글2',
 patient_id = 2,
-articleId = 1;
+articleId = 3;
+
+
+
 
 SELECT * FROM articleReply;
 
@@ -356,5 +347,8 @@ updateDate = NOW(),
 SELECT * FROM board;
 SELECT * FROM reservation;
 SELECT * FROM doctor;
-
+SELECT * FROM patient;
+SELECT * FROM article;
+SELECT * FROM articleReply;
+SELECT * FROM `admin`;
 
