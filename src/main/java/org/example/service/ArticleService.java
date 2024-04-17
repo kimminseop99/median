@@ -59,7 +59,5 @@ public class ArticleService {
         return articleDao.getForPrintArticleReplies(articleId);
     }
 
-    public Article getForPrintAdminArticle(int id) {
-        return articleDao.getForPrintAdminArticle(id);
-    }
+
 }

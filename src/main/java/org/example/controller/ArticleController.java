@@ -40,11 +40,9 @@ public class ArticleController extends Controller {
                 System.out.println("|                   7. 게시판 변경                    |");
                 System.out.println("|                   8. 뒤로 가기                      |");
                 System.out.println("═════════════════════════════════════════════════════");
-
                 System.out.print("번호를 선택해 주세요: ");
                 int num = sc.nextInt();
                 sc.nextLine();
-                Board board = session.getCurrentBoard();
                 switch (num) {
                     case 1:
                         if (Container.getSession().isLoginedDoctor() || Container.getSession().isLoginedAdmin()) {
@@ -111,10 +109,6 @@ public class ArticleController extends Controller {
         System.out.println("═════════════════════════════════════════════════════");
         System.out.println("|   1. 자유 게시판                                    |");
         System.out.println("|   2. 공지 게시판                                    |");
-        System.out.println("═════════════════════════════════════════════════════");
-        System.out.println();
-        System.out.println("                   진료과 게시판 목록                    ");
-        System.out.println("═════════════════════════════════════════════════════");
         System.out.println("|   3. 간담췌외과                                    |");
         System.out.println("|   4. 신경외과                                      |");
         System.out.println("|   5. 산부인과                                      |");
@@ -150,40 +144,23 @@ public class ArticleController extends Controller {
     }
 
     public void doWrite() {
+        System.out.printf("제목 : ");
+        String title = sc.nextLine();
+        System.out.printf("내용 : ");
+        String body = sc.nextLine();
 
-        if (Container.getSession().isLoginedAdmin()) {
-            System.out.printf("제목 : ");
-            String title = sc.nextLine();
-            System.out.printf("내용 : ");
-            String body = sc.nextLine();
+        int patient_id = session.getLoginedMember().getId();
+        int boardId = session.getCurrentBoard().getId();
 
-            int patient_id = session.getLoginedAdmin().id;
-            int boardId = session.getCurrentBoard().getId();
+        int newId = articleService.write(patient_id, boardId, title, body);
 
-            int newId = articleService.write(patient_id, boardId, title, body);
+        System.out.printf("%d번 게시물이 생성되었습니다.\n", newId);
+        doAction("article", "page");
 
-            System.out.printf("%d번 게시물이 생성되었습니다.\n", newId);
-            doAction("article", "page");
-        } else {
-            System.out.printf("제목 : ");
-            String title = sc.nextLine();
-            System.out.printf("내용 : ");
-            String body = sc.nextLine();
-
-            int patient_id = session.getLoginedMember().getId();
-            int boardId = session.getCurrentBoard().getId();
-
-            int newId = articleService.write(patient_id, boardId, title, body);
-
-            System.out.printf("%d번 게시물이 생성되었습니다.\n", newId);
-            doAction("article", "page");
-        }
     }
 
     public void showList() {
-
-
-        System.out.print("검색하시고 싶은 글의 제목을 적어주세요 : ");
+        System.out.print("검색하시고 싶은 글의 제목을 적어주세요(없을 시엔 공백) : ");
         String searchKeyword = sc.nextLine().trim();
         String boardCode = Container.getSession().getCurrentBoard().getCode();
 
@@ -194,7 +171,9 @@ public class ArticleController extends Controller {
             doAction("article", "page");
         }
 
+        String boardName = Container.getSession().getCurrentBoard().getName();
 
+        System.out.printf("[%s 게시판]\n", boardName);
         System.out.println("번호 |   작성자 | 조회 | 제목 ");
         for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
             Article article = forPrintArticles.get(i);
@@ -255,7 +234,7 @@ public class ArticleController extends Controller {
         System.out.printf("== [%d번 게시물 댓글] ==\n", id);
         articleRepliesShowList(id);
 
-        if (Container.getSession().isLoginedDoctor()) {
+        if (Container.getSession().isLoginedDoctor() || Container.getSession().isLoginedAdmin()) {
             doAction("article", "page");
         }
 
@@ -311,9 +290,9 @@ public class ArticleController extends Controller {
             return;
         }
 
-        Member loginedAdmin = session.getLoginedMember();
+        Member loginedMember = session.getLoginedMember();
 
-        if (foundArticle.patient_id != loginedAdmin.id) {
+        if (foundArticle.patient_id != loginedMember.id) {
             System.out.printf("권한이 없습니다.\n");
             return;
         }
