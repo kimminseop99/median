@@ -27,6 +27,7 @@ public class ArticleController extends Controller {
     }
 
     public void doAction(String cmd, String actionMethodName) {
+        Board board = session.getCurrentBoard();
         while (true) {
             if (actionMethodName.equals("page")) {
                 System.out.println("                      게시판 페이지                      ");
@@ -41,19 +42,29 @@ public class ArticleController extends Controller {
                 System.out.println("|                   8. 뒤로 가기                      |");
                 System.out.println("═════════════════════════════════════════════════════");
                 System.out.print("번호를 선택해 주세요: ");
-                int num = sc.nextInt();
-                sc.nextLine();
+                int num = 0;
+                try {
+                    num = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("잘못된 입력 형식입니다. 숫자를 입력해주세요.");
+                    sc.nextLine();
+                    continue;
+                }
                 switch (num) {
                     case 1:
                         if (Container.getSession().isLoginedDoctor() || Container.getSession().isLoginedAdmin()) {
                             System.out.println("사용 하실 수 없는 시스템 입니다.");
                             continue;
                         }
+                        if(board.getName().equals("공지")){
+                            System.out.println("공지 페이지는 관리자만 작성가능합니다. ");
+                            continue;
+                        }
                         if (!Container.getSession().isLogined()) {
                             System.out.println("회원 로그인 후 이용 가능합니다.");
                             continue;
                         }
-
                         doWrite();
                         break;
                     case 2:
@@ -109,7 +120,7 @@ public class ArticleController extends Controller {
         System.out.println("═════════════════════════════════════════════════════");
         System.out.println("|   1. 자유 게시판                                    |");
         System.out.println("|   2. 공지 게시판                                    |");
-        System.out.println("|   3. 간담췌외과                                    |");
+        System.out.println("|   3. 간담췌외과                                     |");
         System.out.println("|   4. 신경외과                                      |");
         System.out.println("|   5. 산부인과                                      |");
         System.out.println("|   6. 흉부외과                                      |");
@@ -179,7 +190,12 @@ public class ArticleController extends Controller {
             Article article = forPrintArticles.get(i);
             Member member = memberService.getMember(article.patient_id);
 
-            System.out.printf("%4d | %5s | %4d | %s\n", article.id, member.name, article.hit, article.title);
+
+            if(boardName.equals("공지")){
+                System.out.printf("0   |  관리자 | %3d | %s\n", article.hit, article.title);
+            }else {
+                System.out.printf("%4d | %5s | %4d | %s\n", article.id, member.name, article.hit, article.title);
+            }
         }
         doAction("article", "page");
 
@@ -208,28 +224,48 @@ public class ArticleController extends Controller {
 
         int id = checkScNum();
 
-        if (id == 0) {
-            return;
+        Article foundArticle = null;
+        Article foundAdminArticle = null;
+        Member member = null;
+        String boardName = Container.getSession().getCurrentBoard().getName();
+
+        if(boardName.equals("공지")) {
+            foundAdminArticle = articleService.getForPrintAdminArticle(id);
+
+            if (foundAdminArticle == null) {
+                System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
+                return;
+            }
+        }
+        else {
+            foundArticle = articleService.getForPrintArticle(id);
+
+            if (foundArticle == null) {
+                System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+                return;
+            }
+            foundArticle.increaseHit(); // 조회수 증가
+            member = memberService.getMember(foundArticle.patient_id);
         }
 
-        Article foundArticle = articleService.getForPrintArticle(id);
 
-        if (foundArticle == null) {
-            System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
-            return;
-        }
-
-        foundArticle.increaseHit();
-
-        Member member = memberService.getMember(foundArticle.patient_id);
-
-        System.out.println("** 번호 : " + foundArticle.id + " **");
-        System.out.printf("날짜 : %s\n", foundArticle.regDate);
-        System.out.printf("작성자 : %s\n", member.name);
-        System.out.printf("제목 : %s\n", foundArticle.title);
-        System.out.printf("내용 : %s\n", foundArticle.body);
-        System.out.printf("조회 : %d\n", foundArticle.hit);
+        if(boardName.equals("공지")){
+        System.out.println("** 번호 : " + "0" + " **");
+        System.out.printf("날짜 : %s\n", foundAdminArticle.regDate);
+        System.out.print("작성자 : 관리자\n");
+        System.out.printf("제목 : %s\n", foundAdminArticle.title);
+        System.out.printf("내용 : %s\n", foundAdminArticle.body);
+        System.out.printf("조회 : %d\n", foundAdminArticle.hit);
         System.out.println();
+        }
+        else {
+            System.out.println("** 번호 : " + foundArticle.id + " **");
+            System.out.printf("날짜 : %s\n", foundArticle.regDate);
+            System.out.printf("작성자 : %s\n", member.name);
+            System.out.printf("제목 : %s\n", foundArticle.title);
+            System.out.printf("내용 : %s\n", foundArticle.body);
+            System.out.printf("조회 : %d\n", foundArticle.hit);
+        }
 
         System.out.printf("== [%d번 게시물 댓글] ==\n", id);
         articleRepliesShowList(id);
@@ -241,17 +277,23 @@ public class ArticleController extends Controller {
         System.out.println("댓글을 작성 하시겠습니까?");
         boolean replyCheck = articleReplyAuthorityCheck();
 
-        if (replyCheck == false) {
-            return;
+        if (!replyCheck) {
+            doAction("article", "page");
         }
 
         if (replyCheck) {
             System.out.println("댓글을 입력 해주세요.");
             System.out.printf("입력) ");
             String replyBody = sc.nextLine();
-            int patient_id = session.getLoginedMember().getId();
 
-            articleService.replyWrite(id, patient_id, replyBody);
+            Board board = session.getCurrentBoard();
+
+            int patient_id = session.getLoginedMember().getId();
+            if(board.getName().equals("공지")){
+                articleService.replyWrite(0, patient_id, replyBody);
+            }else {
+                articleService.replyWrite(id, patient_id, replyBody);
+            }
             System.out.println("댓글이 작성되었습니다.");
 
             articleRepliesShowList(id);
@@ -259,6 +301,7 @@ public class ArticleController extends Controller {
         doAction("article", "page");
 
     }
+
 
     private void articleRepliesShowList(int articleId) {
         List<ArticleReply> forPrintArticleReplies = articleService.getForPrintArticleReplies(articleId);

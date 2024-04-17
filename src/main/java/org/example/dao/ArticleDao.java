@@ -31,6 +31,21 @@ public class ArticleDao extends Dao {
 
         return dbConnection.insert(sb.toString());
     }
+
+    public int adminWrite(Article article) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("INSERT INTO article "));
+        sb.append(String.format("SET regDate = NOW(), "));
+        sb.append(String.format("updateDate = NOW(), "));
+        sb.append(String.format("title = '%s', ", article.title));
+        sb.append(String.format("`body` = '%s', ", article.body));
+        sb.append(String.format("patient_id = %d, ", article.patient_id));
+        sb.append(String.format("boardId = %d, ", article.boardId));
+        sb.append(String.format("hit = %d ", article.hit));
+
+        return dbConnection.insert(sb.toString());
+    }
     public Article getForPrintArticle(int id) {
         StringBuilder sb = new StringBuilder();
 
@@ -47,6 +62,25 @@ public class ArticleDao extends Dao {
         }
 
         return new Article(row);
+    }
+
+    public Article getForPrintAdminArticle(int id) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("SELECT A.*, M.name AS writerName "));
+        sb.append(String.format("FROM article AS A "));
+        sb.append(String.format("INNER JOIN `admin` AS M "));
+        sb.append(String.format("ON A.patient_id = M.id "));
+        sb.append(String.format("WHERE A.id = %d ", id));
+
+        Map<String, Object> row = dbConnection.selectRow(sb.toString());
+
+        if ( row.isEmpty() ) {
+            return null;
+        }
+
+        return new Article(row);
+
     }
 
     public List<Article> getArticles() {
@@ -177,6 +211,7 @@ public class ArticleDao extends Dao {
 
         return articleReplies;
     }
+
 
 
 }

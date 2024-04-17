@@ -22,6 +22,7 @@ public class MemberController extends Controller {
     }
 
     public void doAction(String cmd, String actionMethodName) {
+        while (true) {
         if (actionMethodName.equals("page")) {
             System.out.println("                      회원 페이지                      ");
             System.out.println("═════════════════════════════════════════════════════");
@@ -31,10 +32,17 @@ public class MemberController extends Controller {
             System.out.println("|                   4. 회원 정보 수정                  |");
             System.out.println("|                   5. 뒤로 가기                      |");
             System.out.println("═════════════════════════════════════════════════════");
-            while (true) {
+
                 System.out.print("번호를 선택해 주세요: ");
-                int num = sc.nextInt();
-                sc.nextLine();
+                int num = 0;
+                try {
+                    num = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("잘못된 입력 형식입니다. 숫자를 입력해주세요.");
+                    sc.nextLine();
+                    continue;
+                }
 
                 switch (num) {
                     case 1:
@@ -73,11 +81,11 @@ public class MemberController extends Controller {
                         break;
                 }
                 break;
-            }
-        }
-        else {
+            }else {
             System.out.println("명령어가 올바르지 않습니다.");
         }
+        }
+
 
     }
 

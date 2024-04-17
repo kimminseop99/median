@@ -11,6 +11,7 @@ import org.example.service.ReservationService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,6 +33,7 @@ public class DoctorController extends Controller {
     }
 
     public void doAction(String cmd, String actionMethodName) {
+        while (true) {
         if (actionMethodName.equals("page")) {
             System.out.println("                      의사 페이지                      ");
             System.out.println("═════════════════════════════════════════════════════");
@@ -41,11 +43,16 @@ public class DoctorController extends Controller {
             System.out.println("|                   4. 진료                          |");
             System.out.println("|                   5. 뒤로 가기                      |");
             System.out.println("═════════════════════════════════════════════════════");
-            while (true) {
                 System.out.print("번호를 선택해 주세요: ");
-                int num = sc.nextInt();
-                sc.nextLine();
-
+                int num = 0;
+                try {
+                    num = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("잘못된 입력 형식입니다. 숫자를 입력해주세요.");
+                    sc.nextLine();
+                    continue;
+                }
                 switch (num) {
                     case 1:
                         if (Container.getSession().isLoginedDoctor() ) {
@@ -83,11 +90,11 @@ public class DoctorController extends Controller {
                         break;
                 }
                 break;
-            }
-        }
-        else {
+            }else {
             System.out.println("명령어가 올바르지 않습니다.");
         }
+        }
+
 
     }
 

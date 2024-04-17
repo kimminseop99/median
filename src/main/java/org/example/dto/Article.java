@@ -25,7 +25,6 @@ public class Article extends Dto {
     }
 
     public Article(int patient_id,int boardId, String title, String body) {
-
         this(patient_id, boardId, title, body, 0);
     }
 

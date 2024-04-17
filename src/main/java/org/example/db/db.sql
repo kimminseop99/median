@@ -189,6 +189,9 @@ loginId = 'leu', loginPw = 'woo';
 
 SELECT * FROM patient;
 
+
+
+
 CREATE TABLE `admin`(
 id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 loginId CHAR(100) NOT NULL UNIQUE,
@@ -202,8 +205,9 @@ loginPw = 'admin',
 `name` = '김관리';
 
 
-
 SELECT * FROM `admin`
+
+
 
 CREATE TABLE reservation (
   `patient_id` INT(10) UNSIGNED NOT NULL,
@@ -274,6 +278,7 @@ hit = 4;
 SELECT * FROM article;
 
 
+
 CREATE TABLE articleReply (
 id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 regDate DATETIME NOT NULL,
@@ -281,7 +286,8 @@ updateDate DATETIME NOT NULL,
 `body` CHAR(100) NOT NULL,
 patient_id INT(10) UNSIGNED NOT NULL,
 articleId INT(10) UNSIGNED NOT NULL,
-INDEX articleId(`articleId`)
+INDEX articleId(`articleId`),
+FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE CASCADE
 );
 
 INSERT INTO articleReply
@@ -289,14 +295,17 @@ SET regDate = NOW(),
 updateDate = NOW(),
 `body` = '댓글1',
 patient_id = 1,
-articleId = 2;
+articleId = 4;
 
 INSERT INTO articleReply
 SET regDate = NOW(),
 updateDate = NOW(),
 `body` = '댓글2',
 patient_id = 2,
-articleId = 1;
+articleId = 5;
+
+
+
 
 SELECT * FROM articleReply;
 
@@ -355,5 +364,6 @@ updateDate = NOW(),
 SELECT * FROM board;
 SELECT * FROM reservation;
 SELECT * FROM doctor;
-
-
+SELECT * FROM patient;
+SELECT * FROM article;
+SELECT * FROM articleReply;

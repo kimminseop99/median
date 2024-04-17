@@ -3,18 +3,13 @@ package org.example.controller;
 import org.example.App;
 import org.example.container.Container;
 import org.example.dao.MemberDao;
-import org.example.dto.Admin;
-import org.example.dto.Doctor;
-import org.example.dto.Member;
-import org.example.dto.Reservation;
+import org.example.dto.*;
 import org.example.resource.ChangeInfo;
-import org.example.service.AdminService;
-import org.example.service.DoctorService;
-import org.example.service.MemberService;
-import org.example.service.ReservationService;
+import org.example.service.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,14 +18,21 @@ public class AdminController extends Controller {
     private AdminService adminService;
     private Session session;
 
+    private ArticleService articleService;
+    private MemberService memberService;
+    private ReservationService reservationService;
 
     public AdminController() {
         sc = Container.getScanner();
         session = Container.getSession();
         adminService = Container.adminService;
+        articleService = Container.articleService;
+        memberService = Container.memberService;
+        reservationService = Container.reservaitonService;
     }
 
     public void doAction(String patientNum, String actionMethodName) {
+        while (true) {
         if (actionMethodName.equals("page")) {
             System.out.println("                    관리자 페이지                      ");
             System.out.println("═════════════════════════════════════════════════════");
@@ -43,11 +45,17 @@ public class AdminController extends Controller {
             System.out.println("|                   7. 관리자 정보 변경                |");
             System.out.println("|                   8. 뒤로 가기                      |");
             System.out.println("═════════════════════════════════════════════════════");
-            while (true) {
-                System.out.print("번호를 선택해 주세요: ");
-                int num = sc.nextInt();
-                sc.nextLine();
 
+                System.out.print("번호를 선택해 주세요: ");
+                int num = 0;
+                try {
+                    num = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("잘못된 입력 형식입니다. 숫자를 입력해주세요.");
+                    sc.nextLine(); // 입력 버퍼를 비워줍니다.
+                    continue; // 다시 반복문의 처음으로 돌아갑니다.
+                }
                 switch (num) {
                     case 1:
                         if (Container.getSession().isLoginedAdmin()) {
@@ -65,35 +73,35 @@ public class AdminController extends Controller {
                         break;
                     case 3:
                         if (!Container.getSession().isLoginedAdmin()) {
-                            System.out.println("로그인 후 이용해주세요.");
+                            System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         manageMember();
                         break;
                     case 4:
                         if (!Container.getSession().isLoginedAdmin()) {
-                            System.out.println("로그인 후 이용해주세요.");
+                            System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         manageDoctor();
                         break;
                     case 5:
                         if (!Container.getSession().isLoginedAdmin()) {
-                            System.out.println("로그인 후 이용해주세요.");
+                            System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         manageReservation();
                         break;
                     case 6:
                         if (!Container.getSession().isLoginedAdmin()) {
-                            System.out.println("로그인 후 이용해주세요.");
+                            System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         manageArticle();
                         break;
                     case 7:
                         if (!Container.getSession().isLoginedAdmin()) {
-                            System.out.println("로그인 후 이용해주세요.");
+                            System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         doUpdate();
@@ -106,14 +114,94 @@ public class AdminController extends Controller {
                         break;
                 }
                 break;
-            }
-        } else {
+            }else {
             System.out.println("명령어가 올바르지 않습니다.");
+        }
         }
 
     }
 
     private void manageArticle() {
+        List<Article> articleList = articleService.getArticles();
+
+        System.out.println("═════════════════════════════════════════════════════");
+        System.out.println("                      모든 게시물                       ");
+        System.out.println("═════════════════════════════════════════════════════");
+        if(articleList.isEmpty()){
+            System.out.println("작성된 게시물이 없습니다.");
+            System.out.println("관리자 페이지로 되돌아가는 중...");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // 스레드가 중단되었을 때 발생하는 예외 처리
+                e.printStackTrace();
+            }
+
+            doAction("admin", "page");
+        } else {
+            for(Article article : articleList) {
+                if(article.boardId == 2){
+                    System.out.println("** 번호 : " + article.id + " **");
+                    System.out.printf("날짜 : %s\n", article.regDate);
+                    System.out.print("작성자 : 관리자\n");
+                    System.out.printf("제목 : %s\n", article.title);
+                    System.out.printf("내용 : %s\n", article.body);
+                    System.out.printf("조회 : %d\n", article.hit);
+                    System.out.println();
+                }else {
+                    Member member = memberService.getMember(article.patient_id);
+                    System.out.println("** 번호 : " + article.id + " **");
+                    System.out.printf("날짜 : %s\n", article.regDate);
+                    System.out.printf("작성자 : %s\n", member.name);
+                    System.out.printf("제목 : %s\n", article.title);
+                    System.out.printf("내용 : %s\n", article.body);
+                    System.out.printf("조회 : %d\n", article.hit);
+                    System.out.println();
+                }
+            }
+        }
+        List<Integer> articleNumCheck = new ArrayList<>();
+        for (Article article : articleList) {
+
+            articleNumCheck.add(article.getId());
+        }
+        while (true) {
+            System.out.print("의사 추가는 1번 삭제는 2번을 입력해주세요(뒤로가기 0번) : ");
+            int deleteArticleNum = sc.nextInt();
+            if (deleteArticleNum == 1) {
+                sc.nextLine();
+                System.out.printf("제목 : ");
+                String title = sc.nextLine();
+                System.out.printf("내용 : ");
+                String body = sc.nextLine();
+
+               int adminAticleNum =  articleService.adminWrite(0, 2, title, body);
+               System.out.printf("%d 번 게시물이 생성되었습니다.\n", adminAticleNum);
+               doAction("admin", "page");
+            } else if (deleteArticleNum == 2) {
+                if (!articleNumCheck.contains(deleteArticleNum)) {
+                    System.out.println("게시물 번호를 다시 한번 확인해 주세요");
+                    continue;
+                } else {
+                    articleService.delete(deleteArticleNum);
+                    System.out.println("게시물이 삭제되었습니다.");
+                }
+            } else if(deleteArticleNum == 0){
+                System.out.println("관리자 페이지로 되돌아가는 중...");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    // 스레드가 중단되었을 때 발생하는 예외 처리
+                    e.printStackTrace();
+                }
+
+                doAction("admin", "page");
+            }
+            else {
+                continue;
+            }
+            break;
+        }
 
     }
 
