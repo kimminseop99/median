@@ -47,7 +47,8 @@ CREATE TABLE `article` (
   `boardId` int(10) unsigned NOT NULL,
   `hit` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `boardId` (`boardId`)
+  KEY `boardId` (`boardId`),
+  CONSTRAINT `fk_boardId` FOREIGN KEY (`boardId`) REFERENCES `board` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `article` */
@@ -307,13 +308,20 @@ CREATE TABLE `reservation` (
   `regDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_doctor_id` (`doctor_id`),
+  KEY `fk_patient_id` (`patient_id`),
+  KEY `fk_dpt_id` (`dpt_id`),
+  CONSTRAINT `fk_dpt_id` FOREIGN KEY (`dpt_id`) REFERENCES `dpt` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reservation` */
 
 insert  into `reservation`(`patient_id`,`id`,`rh`,`doctor_id`,`name`,`dpt_id`,`doctor_time`,`regDate`) values 
-(6,4,'없음',1,'영서',1,'09:10:00','2024-04-18 17:03:14');
+(5,5,'기침, 어지러움',9,'이우주',5,'09:10:00','2024-04-18 17:48:09'),
+(4,6,'발목이 부어오름',4,'박지성',2,'13:10:00','2024-04-18 17:49:39'),
+(2,7,'기관지염',7,'홍길동',4,'09:10:00','2024-04-18 17:51:36'),
+(3,8,'기관지염',8,'박효신',4,'10:10:00','2024-04-19 00:40:27');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

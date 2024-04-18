@@ -208,9 +208,10 @@ CREATE TABLE reservation (
   `regDate` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_doctor_id` (`doctor_id`),
-  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE
+  CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE,
+  CONSTRAINT fk_patient_id FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE,
+  CONSTRAINT fk_dpt_id FOREIGN KEY (dpt_id) REFERENCES dpt(id) ON DELETE CASCADE
 );
-
 
 
 SELECT * FROM reservation;
@@ -228,8 +229,11 @@ title CHAR(100) NOT NULL,
 patient_id INT(10) UNSIGNED NOT NULL,
 boardId INT(10) UNSIGNED NOT NULL,
 INDEX boardId(`boardId`),
-hit INT(10) UNSIGNED NOT NULL
+hit INT(10) UNSIGNED NOT NULL,
+CONSTRAINT fk_boardId FOREIGN KEY (boardId) REFERENCES board(id) ON DELETE CASCADE
 );
+
+
 
 INSERT INTO article
 SET regDate = NOW(),
