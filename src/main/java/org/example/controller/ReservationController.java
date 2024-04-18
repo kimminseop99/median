@@ -197,7 +197,7 @@ public class ReservationController extends Controller {
             List<Time> AavailableTimes = reservationService.getUnavailableTimes(dpt_id, doctor_id);
 
             // 예약 가능한 시간대 출력
-            System.out.println("[예약 가능한 시간대]");
+            System.out.println("[진료 시간]");
             if (doctor_time.isEmpty()) {
                 System.out.println("예약 가능한 시간대가 없습니다.");
                 return; // 메서드 종료
