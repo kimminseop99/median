@@ -60,7 +60,7 @@ public class ArticleDao extends Dao {
         if ( row.isEmpty() ) {
             return null;
         }
-
+        dbConnection.update(String.format("UPDATE article SET hit = hit + 1 WHERE id = %d", id));
         return new Article(row);
     }
 

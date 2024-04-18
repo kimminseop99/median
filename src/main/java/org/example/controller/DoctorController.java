@@ -5,6 +5,7 @@ import org.example.container.Container;
 import org.example.dto.Doctor;
 import org.example.dto.Reservation;
 import org.example.resource.ChangeInfo;
+import org.example.resource.PrintInfo;
 import org.example.service.DoctorService;
 import org.example.service.MemberService;
 import org.example.service.ReservationService;
@@ -175,13 +176,7 @@ public class DoctorController extends Controller {
             boolean checkpoint = false;
 
             Doctor doctor = session.getLoginedDoctor();
-            String hiddenloginPw = "*".repeat(doctor.loginPw.length());
-            System.out.println("                       의사 정보                       ");
-            System.out.println("═════════════════════════════════════════════════════");
-            System.out.printf("                     1.이름 : %s        \n", doctor.name);
-            System.out.printf("                     2.의사 번호 : %d           (수정 불가)\n", doctor.id);
-            System.out.printf("                     3.비밀번호 : %s   \n", hiddenloginPw);
-            System.out.println("═════════════════════════════════════════════════════");
+            PrintInfo.doctor(doctor);
             String doctorIngochange = "";
             while (true) {
                 System.out.print("수정 하실 정보를 입력해주세요 : ");
@@ -216,7 +211,7 @@ public class DoctorController extends Controller {
                     break;
             }
             System.out.println("정보가 수정되었습니다.");
-
+            PrintInfo.doctor(doctor);
             while (true) {
                 System.out.print("더 바꾸실 정보가 있습니까?(네 or 아니요) : ");
                 String answer = sc.nextLine().trim();

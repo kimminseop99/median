@@ -134,12 +134,30 @@ public class MemberDao extends Dao {
         return memberList;
     }
 
-    public int deletePatient(int patientNum) {
+    public void deletePatient(int patientNum) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("DELETE FROM patient "));
         sb.append(String.format("WHERE id = %d ", patientNum));
 
-        return dbConnection.delete(sb.toString());
+        dbConnection.delete(sb.toString());
+    }
+
+    public void deleteArticle(int patientNum) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("DELETE FROM article "));
+        sb.append(String.format("WHERE patient_id = %d ", patientNum));
+
+        dbConnection.delete(sb.toString());
+    }
+
+    public void deleteReservation(int patientNum) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("DELETE FROM reservation "));
+        sb.append(String.format("WHERE patient_id = %d ", patientNum));
+
+        dbConnection.delete(sb.toString());
     }
 }

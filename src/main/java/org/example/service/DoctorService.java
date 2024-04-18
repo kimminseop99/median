@@ -59,6 +59,10 @@ public class DoctorService {
         DoctorDao.deleteDoctorTime(doctorNum);
     }
 
+    public static void deleteDoctorReservation(int doctorNum) {
+        DoctorDao.deleteDoctorReservation(doctorNum);
+    }
+
 
     public int doDoctor(String name, int dpt_id, String loginPw) {
         return  doctorDao.doDoctor(name, dpt_id, loginPw);

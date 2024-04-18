@@ -5,6 +5,7 @@ import org.example.container.Container;
 import org.example.dao.MemberDao;
 import org.example.dto.*;
 import org.example.resource.ChangeInfo;
+import org.example.resource.PrintInfo;
 import org.example.service.*;
 
 import java.text.SimpleDateFormat;
@@ -355,6 +356,7 @@ public class AdminController extends Controller {
                 for (Integer doctorId : doctorsId) {
 
                     if (doctorNum == doctorId) {
+                        DoctorService.deleteDoctorReservation(doctorNum);
                         DoctorService.deleteDoctorTime(doctorNum);
                         DoctorService.deleteDoctor(doctorNum);
                         System.out.println(doctorNum + "번 의사가 삭제되었습니다.");
@@ -459,8 +461,10 @@ public class AdminController extends Controller {
                 return;
             } else {
                 for (Member member : memberList) {
-                    if (member.id == patientNum) {
-                       MemberService.deletePatient(patientNum);
+                    if (member.id == patientNum) {// 회원의 게시판 삭제 예약 삭제
+                        MemberService.deleteArticle(patientNum);
+                        MemberService.deleteReservation(patientNum);
+                        MemberService.deletePatient(patientNum);
                         System.out.println(patientNum + "번 회원이 삭제되었습니다.");
                         checkPatientNum = true;
                     }
@@ -482,13 +486,7 @@ public class AdminController extends Controller {
             boolean checkpoint = false;
 
             Admin admin = session.getLoginedAdmin();
-            String hiddenloginPw = "*".repeat(admin.loginPw.length());
-            System.out.println("                       회원 정보                      ");
-            System.out.println("═════════════════════════════════════════════════════");
-            System.out.printf("               1.이름 : %s                           \n", admin.name);
-            System.out.printf("               2.아이디 : %s                          \n", admin.loginId);
-            System.out.printf("               3.비밀번호 : %s                        \n", hiddenloginPw);
-            System.out.println("═════════════════════════════════════════════════════");
+            PrintInfo.admin(admin);
             String adminInfoChange = "";
             while (true) {
                 System.out.print("수정 하실 정보를 입력해주세요 : ");
@@ -528,7 +526,7 @@ public class AdminController extends Controller {
                     break;
             }
             System.out.println("정보가 수정되었습니다.");
-
+            PrintInfo.admin(admin);
             while (true) {
                 System.out.print("더 바꾸실 정보가 있습니까?(네 or 아니요) : ");
                 String answer = sc.nextLine().trim();

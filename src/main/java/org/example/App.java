@@ -22,12 +22,12 @@ public class App {
         System.out.println("╔═══════════════════════════════════════════════════════════════════════════╗");
         System.out.println("║                             + 병원 예약 시스템 +                             ║");
         System.out.println("╟───────────────────────────────────────────────────────────────────────────╢");
-        System.out.println("║ 번호 │ 명령어                                                               ║");
+        System.out.println("║ 명령어                                                                     ║");
         System.out.println("╟───────────────────────────────────────────────────────────────────────────╢");
-        System.out.println("║  1  │ 회원 페이지 : member page                                             ║");
-        System.out.println("║  2  │ 의사 페이지 : doctor page                                             ║");
-        System.out.println("║  3  │ 예약 페이지 : reservation page                                        ║");
-        System.out.println("║  4  │ 게시판 페이지 : article page                                          ║");
+        System.out.println("║ 회원 페이지 : member page                                                   ║");
+        System.out.println("║ 의사 페이지 : doctor page                                                   ║");
+        System.out.println("║ 예약 페이지 : reservation page                                              ║");
+        System.out.println("║ 게시판 페이지 : article page                                                ║");
         System.out.println("╚═══════════════════════════════════════════════════════════════════════════");
 
 

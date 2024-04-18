@@ -196,6 +196,15 @@ public class DoctorDao extends Dao {
         dbConnection.delete(sb.toString());
     }
 
+    public static void deleteDoctorReservation(int doctorNum) {
+        StringBuilder sb = new StringBuilder();
+
+        // 해당 의사의 예약을 모두 삭제하는 쿼리 생성
+        sb.append("DELETE FROM reservation ");
+        sb.append(String.format("WHERE doctor_id = %d", doctorNum));
+
+        dbConnection.delete(sb.toString());
+    }
 
 
     public int doDoctor(String name, int dpt_id, String loginPw) {

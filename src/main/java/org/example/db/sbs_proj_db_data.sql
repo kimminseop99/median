@@ -31,7 +31,7 @@ CREATE TABLE `admin` (
 /*Data for the table `admin` */
 
 insert  into `admin`(`id`,`loginId`,`loginPw`,`name`) values 
-(0,'admin','admin','김관리');
+(0,'admin','admin','관리자');
 
 /*Table structure for table `article` */
 
@@ -48,16 +48,17 @@ CREATE TABLE `article` (
   `hit` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `boardId` (`boardId`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `article` */
 
 insert  into `article`(`id`,`regDate`,`updateDate`,`title`,`body`,`patient_id`,`boardId`,`hit`) values 
-(1,'2024-04-17 01:32:51','2024-04-17 01:32:51','제목1','내용1',1,1,1),
-(5,'2024-04-18 00:40:45','2024-04-18 00:40:45','공지 제목 1','공지 내용 1',0,2,0),
+(1,'2024-04-17 01:32:51','2024-04-18 14:38:53','고지혈증에 좋은 음식','아보카도, 곡물, 등푸른 생선, 마늘, 올리브 오일',1,1,1),
 (6,'2024-04-18 01:23:37','2024-04-18 01:23:37','칭찬합니다','의사선생님이 친절하게 설명해주셨습니다.',3,6,0),
 (7,'2024-04-18 01:27:57','2024-04-18 01:27:57','공지합니다','공지 페이지는 관리자만이 작성 수정 삭제 가능합니다',0,2,0),
-(8,'2024-04-18 01:29:52','2024-04-18 01:29:52','병원 위치가 어딘가요?','어디죠?',4,1,0);
+(9,'2024-04-18 14:36:39','2024-04-18 14:36:39','콜레스테롤 낮추는 음식','와인, 녹차, 아몬드, 연어, 브로콜리, 콩류',1,1,2),
+(10,'2024-04-18 14:42:13','2024-04-18 14:42:13','자원봉사자를 모집합니다.','병원 자원 봉사자를 희망하시는 분들은 042-1234-5678로 문의 주세요',0,2,0),
+(11,'2024-04-18 16:50:47','2024-04-18 16:52:34','눈에 좋은 음식','당근, 시금치, 생선, 계란, 오렌지, 아몬드',2,1,4);
 
 /*Table structure for table `articleReply` */
 
@@ -73,14 +74,14 @@ CREATE TABLE `articleReply` (
   PRIMARY KEY (`id`),
   KEY `articleId` (`articleId`),
   CONSTRAINT `articlereply_ibfk_1` FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `articleReply` */
 
 insert  into `articleReply`(`id`,`regDate`,`updateDate`,`body`,`patient_id`,`articleId`) values 
 (3,'2024-04-17 22:42:12','2024-04-17 22:42:12','댓글1',1,1),
 (5,'2024-04-18 01:22:33','2024-04-18 01:22:33','좋아요',3,1),
-(6,'2024-04-18 01:48:10','2024-04-18 01:48:10','서울 강서구 마곡동입니다~',1,8);
+(7,'2024-04-18 16:48:46','2024-04-18 16:48:46','좋아요',2,9);
 
 /*Table structure for table `board` */
 
@@ -280,7 +281,7 @@ CREATE TABLE `patient` (
   `loginPw` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `loginId` (`loginId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `patient` */
 
@@ -307,12 +308,12 @@ CREATE TABLE `reservation` (
   PRIMARY KEY (`id`),
   KEY `fk_doctor_id` (`doctor_id`),
   CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reservation` */
 
 insert  into `reservation`(`patient_id`,`id`,`rh`,`doctor_id`,`name`,`dpt_id`,`doctor_time`,`regDate`) values 
-(4,1,'발이 부어오름',3,'박지성',2,'09:10:00','2024-04-18 01:28:53');
+(6,4,'없음',1,'영서',1,'09:10:00','2024-04-18 17:03:14');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

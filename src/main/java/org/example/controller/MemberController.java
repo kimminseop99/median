@@ -1,10 +1,12 @@
 package org.example.controller;
 
 import org.example.App;
-import org.example.Main;
 import org.example.container.Container;
+import org.example.dto.Admin;
 import org.example.dto.Member;
 import org.example.resource.ChangeInfo;
+import org.example.resource.PrintInfo;
+import org.example.service.AdminService;
 import org.example.service.MemberService;
 
 import java.util.InputMismatchException;
@@ -95,21 +97,7 @@ public class MemberController extends Controller {
             boolean checkpoint = false;
 
             Member member = session.getLoginedMember();
-            String hiddenPhone = member.phone.substring(0, 8) + "-****";
-            String hiddenRrn = member.rrn.substring(0, 6) + "-******";
-            String hiddenloginPw = "*".repeat(member.loginPw.length());
-            System.out.println("                       회원 정보                      ");
-            System.out.println("═════════════════════════════════════════════════════");
-            System.out.printf("               1.이름 : %s                           \n", member.name);
-            System.out.printf("               2.나이 : %d                           \n", member.age);
-            System.out.printf("               3.전화번호 : %s                       \n", hiddenPhone);
-            System.out.printf("               4.주민번호 : %s       (변경 불가)        \n", hiddenRrn);
-            System.out.printf("               5.신장 : %.1f                         \n", member.height);
-            System.out.printf("               6.몸무게 : %.1f                        \n", member.weight);
-            System.out.printf("               7.기저질환 : %s                       \n", member.ud);
-            System.out.printf("               8.아이디 : %s                          \n", member.loginId);
-            System.out.printf("               9.비밀번호 : %s                        \n", hiddenloginPw);
-            System.out.println("═════════════════════════════════════════════════════");
+            PrintInfo.member(member);
             String memberInfoChange = "";
             while (true) {
                 System.out.print("수정 하실 정보를 입력해주세요 : ");
@@ -171,7 +159,7 @@ public class MemberController extends Controller {
                     break;
             }
             System.out.println("정보가 수정되었습니다.");
-
+            PrintInfo.member(member);
             while (true) {
                 System.out.print("더 바꾸실 정보가 있습니까?(네 or 아니요) : ");
                 String answer = sc.nextLine().trim();
