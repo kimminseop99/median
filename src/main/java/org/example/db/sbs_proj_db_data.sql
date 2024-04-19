@@ -21,17 +21,20 @@ USE `median`;
 DROP TABLE IF EXISTS `admin`;
 
 CREATE TABLE `admin` (
-  `id` int(10) unsigned NOT NULL,
-  `loginId` char(100) NOT NULL,
-  `loginPw` char(100) NOT NULL,
-  `name` char(100) NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `loginId` varchar(100) NOT NULL,
+  `loginPw` varchar(255) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `regDate` date NOT NULL DEFAULT curdate(),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `loginId` (`loginId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `admin` */
 
-insert  into `admin`(`id`,`loginId`,`loginPw`,`name`) values 
-(0,'admin','admin','관리자');
+insert  into `admin`(`id`,`loginId`,`loginPw`,`name`,`regDate`) values 
+(1,'admin','admin','관리자','2024-04-19'),
+(2,'admin2','admin2','부관리자','2024-04-19');
 
 /*Table structure for table `article` */
 
@@ -49,17 +52,17 @@ CREATE TABLE `article` (
   PRIMARY KEY (`id`),
   KEY `boardId` (`boardId`),
   CONSTRAINT `fk_boardId` FOREIGN KEY (`boardId`) REFERENCES `board` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `article` */
 
 insert  into `article`(`id`,`regDate`,`updateDate`,`title`,`body`,`patient_id`,`boardId`,`hit`) values 
-(1,'2024-04-17 01:32:51','2024-04-18 14:38:53','고지혈증에 좋은 음식','아보카도, 곡물, 등푸른 생선, 마늘, 올리브 오일',1,1,1),
-(6,'2024-04-18 01:23:37','2024-04-18 01:23:37','칭찬합니다','의사선생님이 친절하게 설명해주셨습니다.',3,6,0),
-(7,'2024-04-18 01:27:57','2024-04-18 01:27:57','공지합니다','공지 페이지는 관리자만이 작성 수정 삭제 가능합니다',0,2,0),
-(9,'2024-04-18 14:36:39','2024-04-18 14:36:39','콜레스테롤 낮추는 음식','와인, 녹차, 아몬드, 연어, 브로콜리, 콩류',1,1,2),
+(1,'2024-04-17 01:32:51','2024-04-18 14:38:53','고지혈증에 좋은 음식','아보카도, 곡물, 등푸른 생선, 마늘, 올리브 오일',1,1,9),
+(6,'2024-04-18 01:23:37','2024-04-18 01:23:37','칭찬합니다','의사선생님이 친절하게 설명해주셨습니다.',3,6,2),
+(9,'2024-04-18 14:36:39','2024-04-18 14:36:39','콜레스테롤 낮추는 음식','와인, 녹차, 아몬드, 연어, 브로콜리, 콩류',1,1,3),
 (10,'2024-04-18 14:42:13','2024-04-18 14:42:13','자원봉사자를 모집합니다.','병원 자원 봉사자를 희망하시는 분들은 042-1234-5678로 문의 주세요',0,2,0),
-(11,'2024-04-18 16:50:47','2024-04-18 16:52:34','눈에 좋은 음식','당근, 시금치, 생선, 계란, 오렌지, 아몬드',2,1,4);
+(11,'2024-04-18 16:50:47','2024-04-18 16:52:34','눈에 좋은 음식','당근, 시금치, 생선, 계란, 오렌지, 아몬드',2,1,10),
+(14,'2024-04-19 16:22:51','2024-04-19 16:22:51','개인정보처리방침 공고','변경 사항 : 개인정보보호법, 정보통신망법 개정',0,2,0);
 
 /*Table structure for table `articleReply` */
 
@@ -69,20 +72,31 @@ CREATE TABLE `articleReply` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `regDate` datetime NOT NULL,
   `updateDate` datetime NOT NULL,
-  `body` char(100) NOT NULL,
-  `patient_id` int(10) unsigned NOT NULL,
+  `body` text NOT NULL,
+  `patient_id` int(10) unsigned DEFAULT NULL,
+  `doctor_id` int(10) unsigned DEFAULT NULL,
+  `admin_id` int(10) unsigned DEFAULT NULL,
   `articleId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `articleId` (`articleId`),
-  CONSTRAINT `articlereply_ibfk_1` FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `patient_id` (`patient_id`),
+  KEY `doctor_id` (`doctor_id`),
+  KEY `admin_id` (`admin_id`),
+  CONSTRAINT `articlereply_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `articlereply_ibfk_2` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `articlereply_ibfk_3` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `articlereply_ibfk_4` FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `articleReply` */
 
-insert  into `articleReply`(`id`,`regDate`,`updateDate`,`body`,`patient_id`,`articleId`) values 
-(3,'2024-04-17 22:42:12','2024-04-17 22:42:12','댓글1',1,1),
-(5,'2024-04-18 01:22:33','2024-04-18 01:22:33','좋아요',3,1),
-(7,'2024-04-18 16:48:46','2024-04-18 16:48:46','좋아요',2,9);
+insert  into `articleReply`(`id`,`regDate`,`updateDate`,`body`,`patient_id`,`doctor_id`,`admin_id`,`articleId`) values 
+(2,'2024-04-19 16:36:42','2024-04-19 16:36:42','좋은 정보입니다.',NULL,NULL,1,1),
+(7,'2024-04-19 17:54:07','2024-04-19 17:54:07','정보 감사합니다.',NULL,NULL,1,1),
+(8,'2024-04-19 18:13:10','2024-04-19 18:13:10','아보카도 추가합니다',1,NULL,NULL,9),
+(9,'2024-04-19 18:15:49','2024-04-19 18:15:49','블루베리도 추천합니다',NULL,1,NULL,11),
+(10,'2024-04-19 18:28:03','2024-04-19 18:28:03','정보 감사합니다',1,NULL,NULL,11),
+(11,'2024-04-19 18:33:36','2024-04-19 18:33:36','좋은 글이네요^^',NULL,NULL,1,11);
 
 /*Table structure for table `board` */
 
@@ -118,6 +132,7 @@ CREATE TABLE `doctor` (
   `name` char(100) NOT NULL,
   `dpt_id` int(10) unsigned NOT NULL,
   `loginPw` char(100) NOT NULL,
+  `regDate` date NOT NULL DEFAULT curdate(),
   PRIMARY KEY (`id`),
   KEY `dpt_id` (`dpt_id`),
   CONSTRAINT `doctor_ibfk_1` FOREIGN KEY (`dpt_id`) REFERENCES `dpt` (`id`)
@@ -125,17 +140,17 @@ CREATE TABLE `doctor` (
 
 /*Data for the table `doctor` */
 
-insert  into `doctor`(`id`,`name`,`dpt_id`,`loginPw`) values 
-(1,'이익준',1,'jo'),
-(2,'장겨울',1,'jang'),
-(3,'채송화',2,'chae'),
-(4,'용석민',2,'yong'),
-(5,'양석형',3,'yang'),
-(6,'추민하',3,'choo'),
-(7,'김준완',4,'kim'),
-(8,'도재학',4,'do'),
-(9,'안정원',5,'ahn'),
-(10,'한현희',5,'han');
+insert  into `doctor`(`id`,`name`,`dpt_id`,`loginPw`,`regDate`) values 
+(1,'이익준',1,'jo','2024-04-19'),
+(2,'장겨울',1,'jang','2024-04-19'),
+(3,'채송화',2,'chae','2024-04-19'),
+(4,'용석민',2,'yong','2024-04-19'),
+(5,'양석형',3,'yang','2024-04-19'),
+(6,'추민하',3,'choo','2024-04-19'),
+(7,'김준완',4,'kim','2024-04-19'),
+(8,'도재학',4,'do','2024-04-19'),
+(9,'안정원',5,'ahn','2024-04-19'),
+(10,'한현희',5,'han','2024-04-19');
 
 /*Table structure for table `doctor_time` */
 
@@ -313,7 +328,7 @@ CREATE TABLE `reservation` (
   CONSTRAINT `fk_dpt_id` FOREIGN KEY (`dpt_id`) REFERENCES `dpt` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reservation` */
 
@@ -321,7 +336,7 @@ insert  into `reservation`(`patient_id`,`id`,`rh`,`doctor_id`,`name`,`dpt_id`,`d
 (5,5,'기침, 어지러움',9,'이우주',5,'09:10:00','2024-04-18 17:48:09'),
 (4,6,'발목이 부어오름',4,'박지성',2,'13:10:00','2024-04-18 17:49:39'),
 (2,7,'기관지염',7,'홍길동',4,'09:10:00','2024-04-18 17:51:36'),
-(3,8,'기관지염',8,'박효신',4,'10:10:00','2024-04-19 00:40:27');
+(1,9,'손가락 통증',3,'대한',2,'09:10:00','2024-04-19 18:10:42');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

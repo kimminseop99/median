@@ -43,6 +43,7 @@ CREATE TABLE doctor(
   `name` CHAR(100) NOT NULL,
   dpt_id INT(10) UNSIGNED NOT NULL,
   loginPw CHAR(100) NOT NULL,
+  regDate DATE NOT NULL,
   FOREIGN KEY(dpt_id) REFERENCES dpt(id)
 );
 
@@ -179,20 +180,24 @@ SELECT * FROM patient;
 
 
 CREATE TABLE `admin`(
-id INT(10) UNSIGNED NOT NULL,
-loginId CHAR(100) NOT NULL UNIQUE,
-loginPw CHAR(100) NOT NULL,
-`name` CHAR(100) NOT NULL
+    id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    loginId VARCHAR(100) NOT NULL UNIQUE,
+    loginPw VARCHAR(255) NOT NULL,
+    `name` varchar(100) not null,
+    regDate DATE NOT NULL
 );
 
+
+
 INSERT INTO `admin`
-SET id = 0,
+SET
 loginId = 'admin',
 loginPw = 'admin',
 `name` = '김관리';
 
 
 SELECT * FROM `admin`;
+
 
 
 
@@ -267,15 +272,21 @@ SELECT * FROM article;
 
 
 CREATE TABLE articleReply (
-id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-regDate DATETIME NOT NULL,
-updateDate DATETIME NOT NULL,
-`body` CHAR(100) NOT NULL,
-patient_id INT(10) UNSIGNED NOT NULL,
-articleId INT(10) UNSIGNED NOT NULL,
-INDEX articleId(`articleId`),
-FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE CASCADE
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    `body` TEXT NOT NULL,
+    patient_id INT(10) UNSIGNED ,
+    doctor_id INT(10) UNSIGNED ,
+    admin_id INT(10) UNSIGNED ,
+    articleId INT(10) UNSIGNED NOT NULL,
+    INDEX articleId(`articleId`),
+    FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`articleId`) REFERENCES `article` (`id`) ON DELETE CASCADE
 );
+
 
 INSERT INTO articleReply
 SET regDate = NOW(),
@@ -291,8 +302,12 @@ updateDate = NOW(),
 patient_id = 2,
 articleId = 3;
 
-
-
+INSERT INTO articleReply
+ SET regDate = NOW(),
+ updateDate = NOW(),
+ `body` = '좋은 정보입니다.',
+  admin_id = 1,
+  articleId = 1;
 
 SELECT * FROM articleReply;
 
@@ -354,5 +369,5 @@ SELECT * FROM doctor;
 SELECT * FROM patient;
 SELECT * FROM article;
 SELECT * FROM articleReply;
-SELECT * FROM `admin`;
+select * from `admin`;
 

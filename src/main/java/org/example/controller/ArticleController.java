@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static org.example.container.Container.adminService;
+import static org.example.container.Container.doctorService;
 
 public class ArticleController extends Controller {
     private Scanner sc;
@@ -54,10 +55,10 @@ public class ArticleController extends Controller {
                 }
                 switch (num) {
                     case 1:
-                        if(new OnlyMember().memberControl()) {
+                        if (new OnlyMember().memberControl()) {
                             doWrite();
                             break;
-                        }else {
+                        } else {
                             continue;
                         }
                     case 2:
@@ -71,17 +72,17 @@ public class ArticleController extends Controller {
                         showDetail();
                         break;
                     case 4:
-                        if(new OnlyMember().memberControl()) {
+                        if (new OnlyMember().memberControl()) {
                             doModify();
                             break;
-                        }else {
+                        } else {
                             continue;
                         }
                     case 5:
-                        if(new OnlyMember().memberControl()) {
+                        if (new OnlyMember().memberControl()) {
                             doDelete();
                             break;
-                        }else {
+                        } else {
                             continue;
                         }
                     case 6:
@@ -196,20 +197,23 @@ public class ArticleController extends Controller {
     }
 
     private boolean articleReplyAuthorityCheck() {
+
         System.out.println("1) 네 / 2) 아니오");
         System.out.printf("입력) ");
         String replyCheck = sc.nextLine();
 
         if (replyCheck.equals("1") || replyCheck.equals("네")) {
-            if (!session.isLogined()) {
+            if (session.isLogined() || session.isLoginedAdmin() || session.isLoginedDoctor()) {
+                return true;
+            } else {
                 System.out.println("로그인 후 이용 가능합니다.");
                 return false;
             }
+
         } else {
             return false;
         }
 
-        return true;
     }
 
     public void showDetail() {
@@ -240,9 +244,6 @@ public class ArticleController extends Controller {
         System.out.printf("== [%d번 게시물 댓글] ==\n", id);
         articleRepliesShowList(id);
 
-        if (Container.getSession().isLoginedDoctor() || Container.getSession().isLoginedAdmin()) {
-            doAction("article", "page");
-        }
         if (foundArticle != null) {
             System.out.println("댓글을 작성 하시겠습니까?");
             boolean replyCheck = articleReplyAuthorityCheck();
@@ -256,14 +257,18 @@ public class ArticleController extends Controller {
                 System.out.printf("입력) ");
                 String replyBody = sc.nextLine();
 
-                Board board = session.getCurrentBoard();
-
-                int patient_id = session.getLoginedMember().getId();
-                if (board.getName().equals("공지")) {
-                    articleService.replyWrite(0, patient_id, replyBody);
+                if (session.isLoginedDoctor()) {
+                    int doctor_id = session.getLoginedDoctor().getId();
+                    articleService.replyWrite(id, doctor_id, replyBody, "doctor_id");
+                } else if (session.isLoginedAdmin()) {
+                    int admin_id = session.getLoginedAdmin().getId();
+                    articleService.replyWrite(id, admin_id, replyBody, "admin_id");
                 } else {
-                    articleService.replyWrite(id, patient_id, replyBody);
+                    int patient_id = session.getLoginedMember().getId();
+                    articleService.replyWrite(id, patient_id, replyBody, "patient_id");
                 }
+
+
                 System.out.println("댓글이 작성되었습니다.");
 
                 articleRepliesShowList(id);
@@ -278,12 +283,20 @@ public class ArticleController extends Controller {
         List<ArticleReply> forPrintArticleReplies = articleService.getForPrintArticleReplies(articleId);
 
         System.out.printf("%d번 게시물 댓글\n", articleId);
-        System.out.println("번호 |   작성자 | 제목 ");
+        System.out.println("번호 |   작성자   | 제목 ");
         for (int i = forPrintArticleReplies.size() - 1; i >= 0; i--) {
             ArticleReply reply = forPrintArticleReplies.get(i);
-            Member replyMember = memberService.getMember(reply.patient_id);
 
-            System.out.printf("%3d | %5s | %s\n", reply.getId(), replyMember.name, reply.body);
+            if (reply.doctor_id != null) {
+                Doctor replyDoctor = doctorService.getDoctorByLoginId(reply.doctor_id);
+                System.out.printf("%3d | %2s(의사)   | %s\n", reply.getId(), replyDoctor.name, reply.body);
+            } else if (reply.admin_id != null) {
+                Admin replyAdmin = adminService.getAdmin(reply.admin_id);
+                System.out.printf("%3d | %1s(관리자) | %s\n", reply.getId(), replyAdmin.name, reply.body);
+            } else {
+                Member replyMember = memberService.getMember(reply.patient_id);
+                System.out.printf("%3d | %5s       | %s\n", reply.getId(), replyMember.name, reply.body);
+            }
         }
     }
 

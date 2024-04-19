@@ -25,4 +25,9 @@ public class AdminService {
     public Admin getAdmin(int patientId) {
         return adminDao.getAdmin(patientId);
     }
+
+    public int join(String name, String loginId, String loginPw) {
+        Admin admin = new Admin(name, loginId, loginPw);
+        return adminDao.join(admin);
+    }
 }

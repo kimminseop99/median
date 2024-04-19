@@ -29,7 +29,7 @@ public class DoctorDao extends Dao {
 
         for (Map<String, Object> row : rows) {
             // Doctor 객체 생성자를 통해 ID 값을 설정하여 객체 생성
-            Doctor doctor = new Doctor((int) row.get("id"),(String) row.get("name"), (int) row.get("dpt_id"), (String) row.get("loginPw"));
+            Doctor doctor = new Doctor((String) row.get("name"), (int) row.get("dpt_id"), (String) row.get("loginPw"));
             doctors.add(doctor);
         }
 
@@ -123,13 +123,14 @@ public class DoctorDao extends Dao {
         return dbConnection.delete(sb.toString());
     }
 
-    public static int join(String name, int dptId, String loginPw) {
+    public static int join(Doctor doctor) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("INSERT INTO doctor "));
-        sb.append(String.format("SET `name` = '%s', ", name));
-        sb.append(String.format("dpt_id = %d, ", dptId));
-        sb.append(String.format("loginPw = '%s' ", loginPw));
+        sb.append(String.format("SET `name` = '%s', ", doctor.name));
+        sb.append(String.format("dpt_id = %d, ", doctor.dpt_id));
+        sb.append(String.format("loginPw = '%s', ", doctor.loginPw));
+        sb.append(String.format("regDate = NOW() "));
 
         return dbConnection.insert(sb.toString());
     }
@@ -186,38 +187,25 @@ public class DoctorDao extends Dao {
 
     }
 
-    public static void deleteDoctorTime(int doctorNum) {
+    public static void deleteDoctorTime(int doctorNum) { // 해당 의사의 시간을 모두 삭제하는 쿼리 생성
         StringBuilder sb = new StringBuilder();
 
-        // 해당 의사의 시간을 모두 삭제하는 쿼리 생성
+
         sb.append("DELETE FROM doctor_time ");
         sb.append(String.format("WHERE doctor_id = %d", doctorNum));
 
         dbConnection.delete(sb.toString());
     }
 
-    public static void deleteDoctorReservation(int doctorNum) {
+    public static void deleteDoctorReservation(int doctorNum) { // 해당 의사의 예약을 모두 삭제하는 쿼리 생성
         StringBuilder sb = new StringBuilder();
 
-        // 해당 의사의 예약을 모두 삭제하는 쿼리 생성
+
         sb.append("DELETE FROM reservation ");
         sb.append(String.format("WHERE doctor_id = %d", doctorNum));
 
         dbConnection.delete(sb.toString());
     }
-
-
-    public int doDoctor(String name, int dpt_id, String loginPw) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("INSERT INTO doctor ");
-        sb.append(String.format("(`name`, `dpt_id`, `loginPw`) VALUES ('%s', '%d', '%s')",
-                name, dpt_id, loginPw));
-
-        return dbConnection.insert(sb.toString());
-    }
-
-
 
     public Doctor getDoctor(String name) {
         StringBuilder sb = new StringBuilder();
@@ -236,7 +224,7 @@ public class DoctorDao extends Dao {
     }
 
 
-    public Doctor getDoctorByLoginId(int id) {
+    public Doctor getDoctorByLoginId(int id) { // 특정 id를 가진 의사의 정보
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT * "));

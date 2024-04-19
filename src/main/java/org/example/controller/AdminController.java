@@ -21,7 +21,7 @@ public class AdminController extends Controller {
 
     private ArticleService articleService;
     private MemberService memberService;
-    private ReservationService reservationService;
+    private DoctorService doctorService;
 
     public AdminController() {
         sc = Container.getScanner();
@@ -29,22 +29,31 @@ public class AdminController extends Controller {
         adminService = Container.adminService;
         articleService = Container.articleService;
         memberService = Container.memberService;
-        reservationService = Container.reservaitonService;
+        doctorService = Container.doctorService;
     }
 
     public void doAction(String patientNum, String actionMethodName) {
+        if(!session.isLoginedAdmin()){
+        System.out.print("관리자 암호를 입력하세요 : ");
+        int AdminPw = sc.nextInt();
+        sc.nextLine();
+        if(!(AdminPw == 991835)){
+            System.out.println("번호가 올바르지 않습니다.");
+            return;
+        }}
         while (true) {
         if (actionMethodName.equals("page")) {
             System.out.println("                    관리자 페이지                      ");
             System.out.println("═════════════════════════════════════════════════════");
-            System.out.println("|                   1. 로그인                         |");
-            System.out.println("|                   2. 로그아웃                       |");
-            System.out.println("|                   3. 회원 관리                      |");
-            System.out.println("|                   4. 의사 관리                      |");
-            System.out.println("|                   5. 예약 관리                      |");
-            System.out.println("|                   6. 게시판 관리                     |");
-            System.out.println("|                   7. 관리자 정보 변경                |");
-            System.out.println("|                   8. 뒤로 가기                      |");
+            System.out.println("|                   1. 관리자 생성                     |");
+            System.out.println("|                   2. 로그인                         |");
+            System.out.println("|                   3. 로그아웃                       |");
+            System.out.println("|                   4. 회원 관리                      |");
+            System.out.println("|                   5. 의사 관리                      |");
+            System.out.println("|                   6. 예약 관리                      |");
+            System.out.println("|                   7. 게시판 관리                     |");
+            System.out.println("|                   8. 관리자 정보 변경                |");
+            System.out.println("|                   9. 뒤로 가기                      |");
             System.out.println("═════════════════════════════════════════════════════");
 
                 System.out.print("번호를 선택해 주세요: ");
@@ -63,51 +72,58 @@ public class AdminController extends Controller {
                             System.out.println("로그아웃 후 이용해주세요.");
                             continue;
                         }
-                        doLogin();
+                        doJoin();
                         break;
                     case 2:
+                        if (Container.getSession().isLoginedAdmin()) {
+                            System.out.println("로그아웃 후 이용해주세요.");
+                            continue;
+                        }
+                        doLogin();
+                        break;
+                    case 3:
                         if (!Container.getSession().isLoginedAdmin()) {
                             System.out.println("로그인 후 이용해주세요.");
                             continue;
                         }
                         doLogout();
                         break;
-                    case 3:
+                    case 4:
                         if (!Container.getSession().isLoginedAdmin()) {
                             System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         manageMember();
                         break;
-                    case 4:
+                    case 5:
                         if (!Container.getSession().isLoginedAdmin()) {
                             System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         manageDoctor();
                         break;
-                    case 5:
+                    case 6:
                         if (!Container.getSession().isLoginedAdmin()) {
                             System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         manageReservation();
                         break;
-                    case 6:
+                    case 7:
                         if (!Container.getSession().isLoginedAdmin()) {
                             System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         manageArticle();
                         break;
-                    case 7:
+                    case 8:
                         if (!Container.getSession().isLoginedAdmin()) {
                             System.out.println("관리자 로그인 후 이용해주세요.");
                             continue;
                         }
                         doUpdate();
                         break;
-                    case 8:
+                    case 9:
                         System.out.println("이전 메뉴로 돌아갑니다.");
                         App.start();
                     default:
@@ -120,6 +136,47 @@ public class AdminController extends Controller {
         }
         }
 
+    }
+
+    private void doJoin() {
+        String loginId = null;
+
+        while (true) {
+            System.out.print("사용하실 아이디 : ");
+            loginId = sc.nextLine();
+
+            if (!isJoinableAdminLoginId(loginId)) {
+                System.out.printf("%s(은)는 이미 사용중인 아이디 입니다.\n", loginId);
+                continue;
+            }
+
+            break;
+        }
+
+        String loginPw = null;
+        String loginPwConfirm = null;
+
+        while (true) {
+            System.out.print("사용하실 비밀번호 : ");
+            loginPw = sc.nextLine();
+            System.out.print("비밀번호 확인 : ");
+            loginPwConfirm = sc.nextLine();
+
+            if (!loginPw.equals(loginPwConfirm)) {
+                System.out.println("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+                continue;
+            }
+
+            break;
+        }
+        System.out.print("이름 : ");
+        String name = sc.nextLine();
+
+
+        adminService.join(name, loginId, loginPw);
+
+        System.out.printf("[%s]님! 회원가입이 완료되었습니다! 환영합니다^^~\n", name);
+        App.start();
     }
 
     private void manageArticle() {
@@ -410,7 +467,7 @@ public class AdminController extends Controller {
         int doctor_id = DoctorService.getJoinDoctorId();
         DoctorService.createDoctorTime(doctor_id);
 
-        System.out.printf("[%s]의사의 회원가입이 완료되었습니다!\n", name);
+        System.out.printf("[%s]의사의 생성이 완료되었습니다!\n", name);
         doAction("admin", "page");
     }
 
@@ -589,6 +646,14 @@ public class AdminController extends Controller {
         System.out.println("로그아웃 되었습니다.");
         App.start();
     }
+    private boolean isJoinableAdminLoginId(String loginId) {
+        Admin admin = adminService.getAdminByLoginId(loginId);
 
+        if (admin == null) {
+            return true;
+        }
+
+        return false;
+    }
 
 }

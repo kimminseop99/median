@@ -39,7 +39,8 @@ public class DoctorService {
     }
 
     public static int join(String name, int dptId, String loginPw) {
-        return DoctorDao.join(name, dptId, loginPw);
+        Doctor doctor = new Doctor(name, dptId, loginPw);
+        return DoctorDao.join(doctor);
 
     }
 
@@ -64,9 +65,7 @@ public class DoctorService {
     }
 
 
-    public int doDoctor(String name, int dpt_id, String loginPw) {
-        return  doctorDao.doDoctor(name, dpt_id, loginPw);
-    }
+
 
 
     public static List<Doctor> getForPrintDoctors(int dpt) {

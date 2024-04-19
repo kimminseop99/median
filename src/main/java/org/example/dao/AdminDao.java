@@ -16,6 +16,18 @@ public class AdminDao extends Dao {
     }
 
 
+    public int join(Admin admin) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(String.format("INSERT INTO `admin` "));
+        sb.append(String.format("SET `name` = '%s', ", admin.name));
+        sb.append(String.format("loginId = '%s', ", admin.loginId));
+        sb.append(String.format("loginPw = '%s', ", admin.loginPw));
+        sb.append(String.format("regDate = NOW() "));
+
+        return dbConnection.insert(sb.toString());
+    }
+
     public Admin getAdminByLoginId(String loginId) {
         StringBuilder sb = new StringBuilder();
 
@@ -58,4 +70,6 @@ public class AdminDao extends Dao {
 
         return new Admin(row);
     }
+
+
 }

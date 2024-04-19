@@ -177,18 +177,19 @@ public class ArticleDao extends Dao {
 
     // 댓글 =======================================
 
-    public int replyWrite(int articleId, int patient_id, String replyBody) {
+    public int replyWrite(int articleId, int id, String replyBody, String user) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("INSERT INTO articleReply "));
         sb.append(String.format("SET regDate = NOW(), "));
         sb.append(String.format("updateDate = NOW(), "));
         sb.append(String.format("`body` = '%s', ", replyBody));
-        sb.append(String.format("patient_id = %d, ", patient_id));
+        sb.append(String.format(user + " = %d, ", id));
         sb.append(String.format("articleId = %d ", articleId));
 
         return dbConnection.insert(sb.toString());
     }
+
 
     public List<ArticleReply> getForPrintArticleReplies(int articleId) {
         StringBuilder sb = new StringBuilder();
