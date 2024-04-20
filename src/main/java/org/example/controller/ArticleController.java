@@ -6,6 +6,7 @@ import org.example.dto.*;
 import org.example.resource.OnlyMember;
 import org.example.service.ArticleService;
 import org.example.service.MemberService;
+import org.example.util.PrintColor;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -32,17 +33,17 @@ public class ArticleController extends Controller {
         Board board = session.getCurrentBoard();
         while (true) {
             if (actionMethodName.equals("page")) {
-                System.out.println("                      게시판 페이지                      ");
-                System.out.println("═════════════════════════════════════════════════════");
-                System.out.println("|                   1. 게시물 작성                    |");
-                System.out.println("|                   2. 게시물 목록                    |");
-                System.out.println("|                   3. 게시물 댓글                    |");
-                System.out.println("|                   4. 게시물 수정                    |");
-                System.out.println("|                   5. 게시물 삭제                    |");
-                System.out.println("|                   6. 현재 게시판 확인                |");
-                System.out.println("|                   7. 게시판 변경                    |");
-                System.out.println("|                   8. 뒤로 가기                      |");
-                System.out.println("═════════════════════════════════════════════════════");
+                PrintColor.printArticle("                      게시판 페이지                      ");
+                PrintColor.printArticle("═════════════════════════════════════════════════════");
+                PrintColor.printArticle("                    1. 게시물 작성                    ");
+                PrintColor.printArticle("                    2. 게시물 목록                    ");
+                PrintColor.printArticle("                    3. 게시물 댓글                    ");
+                PrintColor.printArticle("                    4. 게시물 수정                    ");
+                PrintColor.printArticle("                    5. 게시물 삭제                    ");
+                PrintColor.printArticle("                    6. 현재 게시판 확인                ");
+                PrintColor.printArticle("                    7. 게시판 변경                    ");
+                PrintColor.printArticle("                    8. 뒤로 가기                      ");
+                PrintColor.printArticle("═════════════════════════════════════════════════════");
                 System.out.print("번호를 선택해 주세요: ");
                 int num = 0;
                 try {
@@ -105,17 +106,17 @@ public class ArticleController extends Controller {
     }
 
     private void doChangeBoard() {
-        System.out.println("                      게시판 목록                      ");
-        System.out.println("═════════════════════════════════════════════════════");
-        System.out.println("|   1. 자유 게시판                                    |");
-        System.out.println("|   2. 공지 게시판                                    |");
-        System.out.println("|   3. 간담췌외과                                     |");
-        System.out.println("|   4. 신경외과                                      |");
-        System.out.println("|   5. 산부인과                                      |");
-        System.out.println("|   6. 흉부외과                                      |");
-        System.out.println("|   7. 소아외과                                      |");
-        System.out.println("|   8. 뒤로 가기                                     |");
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printArticle("                      게시판 목록                      ");
+        PrintColor.printArticle("═════════════════════════════════════════════════════");
+        PrintColor.printArticle("                     1. 자유 게시판                    ");
+        PrintColor.printArticle("                     2. 공지 게시판                    ");
+        PrintColor.printArticle("                     3. 간담췌외과                     ");
+        PrintColor.printArticle("                     4. 신경외과                       ");
+        PrintColor.printArticle("                     5. 산부인과                       ");
+        PrintColor.printArticle("                     6. 흉부외과                       ");
+        PrintColor.printArticle("                     7. 소아외과                       ");
+        PrintColor.printArticle("                     8. 뒤로 가기                      ");
+        PrintColor.printArticle("═════════════════════════════════════════════════════");
         System.out.print("게시판 번호를 입력하세요) ");
 
         int boardId = checkScNum();
@@ -176,9 +177,9 @@ public class ArticleController extends Controller {
         System.out.printf("[%s 게시판]\n", boardName);
         if (boardName.equals("공지")) {
 
-            System.out.println("번호 |  작성자 | 조회 |  제목    | 내용 ");
+            PrintColor.printArticle("번호 |  작성자 | 조회 |  제목    | 내용 ");
         } else {
-            System.out.println("번호 |  작성자 | 조회 | 제목 ");
+            PrintColor.printArticle("번호 |  작성자 | 조회 | 제목 ");
         }
 
         for (int i = forPrintArticles.size() - 1; i >= 0; i--) {

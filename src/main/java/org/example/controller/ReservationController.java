@@ -6,6 +6,7 @@ import org.example.dto.Member;
 import org.example.dto.Reservation;
 import org.example.service.DoctorService;
 import org.example.service.ReservationService;
+import org.example.util.PrintColor;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -31,13 +32,13 @@ public class ReservationController extends Controller {
     public void doAction(String cmd, String actionMethodName) {
         while (true) {
         if (actionMethodName.equals("page")) {
-            System.out.println("                      예약 페이지                      ");
-            System.out.println("═════════════════════════════════════════════════════");
-            System.out.println("|                   1. 예약 정보 출력                  |");
-            System.out.println("|                   2. 병원 예약                      |");
-            System.out.println("|                   3. 예약 취소                      |");
-            System.out.println("|                   4. 뒤로 가기                      |");
-            System.out.println("═════════════════════════════════════════════════════");
+            PrintColor.printReservation("                      예약 페이지                      ");
+            PrintColor.printReservation("═════════════════════════════════════════════════════");
+            PrintColor.printReservation("                    1. 예약 정보 출력                  ");
+            PrintColor.printReservation("                    2. 병원 예약                      ");
+            PrintColor.printReservation("                    3. 예약 취소                      ");
+            PrintColor.printReservation("                    4. 뒤로 가기                      ");
+            PrintColor.printReservation("═════════════════════════════════════════════════════");
                 System.out.print("번호를 선택해 주세요: ");
                 int num = 0;
                 try {
@@ -87,9 +88,9 @@ public class ReservationController extends Controller {
     }
 
     public void showReservationPage() {
-        System.out.println("═════════════════════════════════════════════════════");
-        System.out.println("                    예약 정보 확인                     ");
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printReservation("═════════════════════════════════════════════════════");
+        PrintColor.printReservation("                    예약 정보 확인                     ");
+        PrintColor.printReservation("═════════════════════════════════════════════════════");
 
         // 현재 로그인한 회원 정보 확인
         Member loginedMember = session.getLoginedMember();
@@ -124,17 +125,17 @@ public class ReservationController extends Controller {
     public void createReservation() {
 
         while (true) {
-            System.out.println("╔═════════════════════════════════════════════════════╗");
-            System.out.println("║                     진료과 목록                       ║");
-            System.out.println("╠═════════════════════════════════════════════════════╣");
-            System.out.println("║      진료과명       |          전화번호(tel)           ║");
-            System.out.println("╟─────────────────────────────────────────────────────╢");
-            System.out.println("║    1.  간담췌외과     │          042-585-1402         ║");
-            System.out.println("║    2.  신경외과       │          042-586-7676         ║");
-            System.out.println("║    3.  산부인과       │          042-123-4567         ║");
-            System.out.println("║    4.  흉부외과       │          042-987-6543         ║");
-            System.out.println("║    5.  소아외과       │          042-111-2222         ║");
-            System.out.println("╚═════════════════════════════════════════════════════╝");
+            PrintColor.printReservation("╔═════════════════════════════════════════════════════╗");
+            PrintColor.printReservation("║                     진료과 목록                       ║");
+            PrintColor.printReservation("╠═════════════════════════════════════════════════════╣");
+            PrintColor.printReservation("║      진료과명       |          전화번호(tel)           ║");
+            PrintColor.printReservation("╟─────────────────────────────────────────────────────╢");
+            PrintColor.printReservation("║    1.  간담췌외과     │          042-585-1402         ║");
+            PrintColor.printReservation("║    2.  신경외과       │          042-586-7676         ║");
+            PrintColor.printReservation("║    3.  산부인과       │          042-123-4567         ║");
+            PrintColor.printReservation("║    4.  흉부외과       │          042-987-6543         ║");
+            PrintColor.printReservation("║    5.  소아외과       │          042-111-2222         ║");
+            PrintColor.printReservation("╚═════════════════════════════════════════════════════╝");
             // 세션에서 현재 로그인한 회원의 ID 가져오기
             int patient_id = session.getLoginedMember().getId();
             int dpt_id = 0;
@@ -265,9 +266,9 @@ public class ReservationController extends Controller {
     }
 
     public void deleteReservation() {
-        System.out.println("═════════════════════════════════════════════════════");
-        System.out.println("                    예약 정보 확인                     ");
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printReservation("═════════════════════════════════════════════════════");
+        PrintColor.printReservation("                    예약 정보 확인                     ");
+        PrintColor.printReservation("═════════════════════════════════════════════════════");
 
         // 현재 로그인한 회원 정보 확인
         Member loginedMember = session.getLoginedMember();
@@ -304,7 +305,7 @@ public class ReservationController extends Controller {
             }
             break;
         }
-        reservationService.cancelReservation(reservationNumber);
+        ReservationService.cancelReservation(reservationNumber);
         System.out.println("예약이 취소되었습니다.");
 
         System.out.println("예약 페이지로 되돌아가는 중...");
@@ -348,7 +349,7 @@ public class ReservationController extends Controller {
             }
         }
         // 예약 페이지 푸터 출력
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printReservation("═════════════════════════════════════════════════════");
     }
 
 }

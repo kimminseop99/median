@@ -2,12 +2,11 @@ package org.example.controller;
 
 import org.example.App;
 import org.example.container.Container;
-import org.example.dto.Admin;
 import org.example.dto.Member;
 import org.example.resource.ChangeInfo;
 import org.example.resource.PrintInfo;
-import org.example.service.AdminService;
 import org.example.service.MemberService;
+import org.example.util.PrintColor;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -26,14 +25,14 @@ public class MemberController extends Controller {
     public void doAction(String cmd, String actionMethodName) {
         while (true) {
         if (actionMethodName.equals("page")) {
-            System.out.println("                      회원 페이지                      ");
-            System.out.println("═════════════════════════════════════════════════════");
-            System.out.println("|                   1. 회원 가입                      |");
-            System.out.println("|                   2. 로그인                         |");
-            System.out.println("|                   3. 로그아웃                       |");
-            System.out.println("|                   4. 회원 정보 수정                  |");
-            System.out.println("|                   5. 뒤로 가기                      |");
-            System.out.println("═════════════════════════════════════════════════════");
+            PrintColor.printPatient("                      회원 페이지                      ");
+            PrintColor.printPatient("═════════════════════════════════════════════════════");
+            PrintColor.printPatient("                    1. 회원 가입                      ");
+            PrintColor.printPatient("                    2. 로그인                         ");
+            PrintColor.printPatient("                    3. 로그아웃                       ");
+            PrintColor.printPatient("                    4. 회원 정보 수정                  ");
+            PrintColor.printPatient("                    5. 뒤로 가기                      ");
+            PrintColor.printPatient("═════════════════════════════════════════════════════");
 
                 System.out.print("번호를 선택해 주세요: ");
                 int num = 0;

@@ -38,11 +38,11 @@ public class DoctorController extends Controller {
         if (actionMethodName.equals("page")) {
             System.out.println("                      의사 페이지                      ");
             System.out.println("═════════════════════════════════════════════════════");
-            System.out.println("|                   1. 로그인                         |");
-            System.out.println("|                   2. 로그아웃                       |");
-            System.out.println("|                   3. 의사 정보 수정                  |");
-            System.out.println("|                   4. 진료                          |");
-            System.out.println("|                   5. 뒤로 가기                      |");
+            System.out.println("                    1. 로그인                         ");
+            System.out.println("                    2. 로그아웃                       ");
+            System.out.println("                    3. 의사 정보 수정                  ");
+            System.out.println("                    4. 진료                          ");
+            System.out.println("                    5. 뒤로 가기                      ");
             System.out.println("═════════════════════════════════════════════════════");
                 System.out.print("번호를 선택해 주세요: ");
                 int num = 0;
@@ -124,7 +124,7 @@ public class DoctorController extends Controller {
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 String formattedTime = sdf.format(reservation.doctor_time);
                 String dptName = DoctorService.getDptName(doctor.dpt_id);
-                String patientName = memberService.getMemberName(reservation.patient_id);
+                String patientName = MemberService.getMemberName(reservation.patient_id);
 
                 System.out.println("** 예약 번호 : " + reservation.getId() + " **");
 
@@ -152,7 +152,7 @@ public class DoctorController extends Controller {
                     System.out.println("예약 번호를 다시 한번 확인해 주세요");
                     continue;
                 }else{
-                    reservationService.cancelReservation(completeConsultation);
+                    ReservationService.cancelReservation(completeConsultation);
                     System.out.println("진료가 완료되었습니다.");
                 }
             }

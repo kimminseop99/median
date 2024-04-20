@@ -2,11 +2,11 @@ package org.example.controller;
 
 import org.example.App;
 import org.example.container.Container;
-import org.example.dao.MemberDao;
 import org.example.dto.*;
 import org.example.resource.ChangeInfo;
 import org.example.resource.PrintInfo;
 import org.example.service.*;
+import org.example.util.PrintColor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,18 +43,18 @@ public class AdminController extends Controller {
         }}
         while (true) {
         if (actionMethodName.equals("page")) {
-            System.out.println("                    관리자 페이지                      ");
-            System.out.println("═════════════════════════════════════════════════════");
-            System.out.println("|                   1. 관리자 생성                     |");
-            System.out.println("|                   2. 로그인                         |");
-            System.out.println("|                   3. 로그아웃                       |");
-            System.out.println("|                   4. 회원 관리                      |");
-            System.out.println("|                   5. 의사 관리                      |");
-            System.out.println("|                   6. 예약 관리                      |");
-            System.out.println("|                   7. 게시판 관리                     |");
-            System.out.println("|                   8. 관리자 정보 변경                |");
-            System.out.println("|                   9. 뒤로 가기                      |");
-            System.out.println("═════════════════════════════════════════════════════");
+            PrintColor.printAdmin("                    관리자 페이지                      ");
+            PrintColor.printAdmin("═════════════════════════════════════════════════════");
+            PrintColor.printAdmin("                    1. 관리자 생성                     ");
+            PrintColor.printAdmin("                    2. 로그인                         ");
+            PrintColor.printAdmin("                    3. 로그아웃                       ");
+            PrintColor.printAdmin("                    4. 회원 관리                      ");
+            PrintColor.printAdmin("                    5. 의사 관리                      ");
+            PrintColor.printAdmin("                    6. 예약 관리                      ");
+            PrintColor.printAdmin("                    7. 게시판 관리                     ");
+            PrintColor.printAdmin("                    8. 관리자 정보 변경                ");
+            PrintColor.printAdmin("                    9. 뒤로 가기                      ");
+            PrintColor.printAdmin("═════════════════════════════════════════════════════");
 
                 System.out.print("번호를 선택해 주세요: ");
                 int num = 0;
@@ -182,9 +182,9 @@ public class AdminController extends Controller {
     private void manageArticle() {
         List<Article> articleList = articleService.getArticles();
 
-        System.out.println("═════════════════════════════════════════════════════");
-        System.out.println("                      모든 게시물                       ");
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("                      모든 게시물                       ");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
         if(articleList.isEmpty()){
             System.out.println("작성된 게시물이 없습니다.");
             System.out.println("관리자 페이지로 되돌아가는 중...");
@@ -268,9 +268,9 @@ public class AdminController extends Controller {
 
     private void manageReservation() {
         List<Reservation> reservationList = ReservationService.getReservations();
-        System.out.println("═════════════════════════════════════════════════════");
-        System.out.println("                    예약 내용 확인                     ");
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("                    예약 내용 확인                     ");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
 
         if (reservationList.isEmpty()) {
             System.out.println("예약된 정보가 없습니다.");
@@ -303,7 +303,7 @@ public class AdminController extends Controller {
             }
         }
         // 예약 페이지 푸터 출력
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
 
 
             List<Integer> reservationNumCheck = new ArrayList<>();
@@ -341,9 +341,9 @@ public class AdminController extends Controller {
     private void manageDoctor() {
         List<Doctor> doctorList = DoctorService.getAllDoctor();
         List<Integer> doctorsId = DoctorService.getAllDoctorId();
-        System.out.println("═════════════════════════════════════════════════════");
-        System.out.println("                    의사 정보 확인                     ");
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("                    의사 정보 확인                     ");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
         if (doctorList.isEmpty()) {
             System.out.println("등록 된 의사가 없습니다.");
             System.out.println("관리자 페이지로 되돌아가는 중...");
@@ -371,7 +371,7 @@ public class AdminController extends Controller {
             }
         }
         // 예약 페이지 푸터 출력
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
 
         while (true) {
             System.out.print("의사 추가는 1번 삭제는 2번을 입력해주세요(뒤로가기 0번) : ");
@@ -473,9 +473,9 @@ public class AdminController extends Controller {
 
     private void manageMember() {
         List<Member> memberList = MemberService.getAllMember();
-        System.out.println("═════════════════════════════════════════════════════");
-        System.out.println("                    회원 정보 확인                     ");
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("                    회원 정보 확인                     ");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
         if (memberList.isEmpty()) {
             System.out.println("등록 된 회원이 없습니다.");
             System.out.println("관리자 페이지로 되돌아가는 중...");
@@ -507,7 +507,7 @@ public class AdminController extends Controller {
             }
         }
         // 예약 페이지 푸터 출력
-        System.out.println("═════════════════════════════════════════════════════");
+        PrintColor.printAdmin("═════════════════════════════════════════════════════");
 
         boolean checkPatientNum = false;
         while (true) {

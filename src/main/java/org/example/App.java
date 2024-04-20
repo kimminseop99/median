@@ -3,7 +3,8 @@ package org.example;
 import org.example.container.Container;
 import org.example.controller.*;
 import org.example.db.DBConnection;
-import org.example.service.AdminService;
+import org.example.resource.PrintLogo;
+import org.example.util.PrintColor;
 
 public class App {
     public App() {
@@ -15,20 +16,21 @@ public class App {
         Container.getDBConnection().connect();
 
         Container.getSession().setCurrentBoard(Container.articleService.getBoard(1));
+        PrintLogo.mainLogo();
     }
 
     public static void start() {
 
-        System.out.println("╔═══════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("║                             + 병원 예약 시스템 +                             ║");
-        System.out.println("╟───────────────────────────────────────────────────────────────────────────╢");
-        System.out.println("║ 명령어                                                                     ║");
-        System.out.println("╟───────────────────────────────────────────────────────────────────────────╢");
-        System.out.println("║ 회원 페이지 : member page                                                   ║");
-        System.out.println("║ 의사 페이지 : doctor page                                                   ║");
-        System.out.println("║ 예약 페이지 : reservation page                                              ║");
-        System.out.println("║ 게시판 페이지 : article page(회원 전용)                                       ║");
-        System.out.println("╚═══════════════════════════════════════════════════════════════════════════");
+        System.out.println("═══════════════════════════════════════════════════════════════════════════");
+        System.out.println("                             + 병원 예약 시스템 +                             ");
+        System.out.println("───────────────────────────────────────────────────────────────────────────");
+        System.out.println("                                  명령어                                                                     ");
+        System.out.println("───────────────────────────────────────────────────────────────────────────");
+        System.out.println("                          회원 페이지 : member page                           ");
+        System.out.println("                          의사 페이지 : doctor page                           ");
+        System.out.println("                          예약 페이지 : reservation page                      ");
+        System.out.println("                          게시판 페이지 : article page(회원 전용)               ");
+        System.out.println("═══════════════════════════════════════════════════════════════════════════");
 
 
         MemberController memberController = new MemberController();
