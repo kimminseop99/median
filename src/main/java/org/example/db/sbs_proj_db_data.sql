@@ -136,7 +136,7 @@ CREATE TABLE `doctor` (
   PRIMARY KEY (`id`),
   KEY `dpt_id` (`dpt_id`),
   CONSTRAINT `doctor_ibfk_1` FOREIGN KEY (`dpt_id`) REFERENCES `dpt` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `doctor` */
 
@@ -163,7 +163,7 @@ CREATE TABLE `doctor_time` (
   PRIMARY KEY (`id`),
   KEY `doctor_id` (`doctor_id`),
   CONSTRAINT `doctor_time_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `doctor_time` */
 
@@ -321,6 +321,7 @@ CREATE TABLE `reservation` (
   `dpt_id` int(10) unsigned NOT NULL,
   `doctor_time` time DEFAULT NULL,
   `regDate` datetime NOT NULL,
+  `doctor_date` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_doctor_id` (`doctor_id`),
   KEY `fk_patient_id` (`patient_id`),
@@ -328,15 +329,15 @@ CREATE TABLE `reservation` (
   CONSTRAINT `fk_dpt_id` FOREIGN KEY (`dpt_id`) REFERENCES `dpt` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `reservation` */
 
-insert  into `reservation`(`patient_id`,`id`,`rh`,`doctor_id`,`name`,`dpt_id`,`doctor_time`,`regDate`) values 
-(5,5,'기침, 어지러움',9,'이우주',5,'09:10:00','2024-04-18 17:48:09'),
-(4,6,'발목이 부어오름',4,'박지성',2,'13:10:00','2024-04-18 17:49:39'),
-(2,7,'기관지염',7,'홍길동',4,'09:10:00','2024-04-18 17:51:36'),
-(1,9,'손가락 통증',3,'대한',2,'09:10:00','2024-04-19 18:10:42');
+insert  into `reservation`(`patient_id`,`id`,`rh`,`doctor_id`,`name`,`dpt_id`,`doctor_time`,`regDate`,`doctor_date`) values 
+(1,10,'흉부 통증',1,'대한',1,'09:10:00','2024-04-21 22:55:42','2024-04-20'),
+(2,11,'두통',3,'홍길동',2,'10:10:00','2024-04-21 22:55:42','2024-04-21'),
+(3,12,'발목이 아파요',5,'박효신',3,'11:10:00','2024-04-21 22:55:42','2024-04-22'),
+(4,13,'열이 나요',7,'박지성',4,'13:10:00','2024-04-21 22:55:42','2024-04-23');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

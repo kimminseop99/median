@@ -121,8 +121,10 @@ public class DoctorController extends Controller {
         } else {
             System.out.println("[예약 목록]");
             for (Reservation reservation : forPrintReservations) {
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                String formattedTime = sdf.format(reservation.doctor_time);
+                SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
+                String formattedTime = formatTime.format(reservation.doctor_time);
+                SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+                String formattedDate = formatDate.format(reservation.doctor_date);
                 String dptName = DoctorService.getDptName(doctor.dpt_id);
                 String patientName = MemberService.getMemberName(reservation.patient_id);
 
@@ -131,6 +133,7 @@ public class DoctorController extends Controller {
                 System.out.println("진료과: " + dptName);
                 System.out.println("의사 이름: " + doctor.name);
                 System.out.println("예약자 이름: " + patientName); //
+                System.out.println("예약 일: " + formattedDate);
                 System.out.println("예약 시간: " + formattedTime);
                 System.out.println("환자 증상: " + reservation.rh);
                 System.out.println();

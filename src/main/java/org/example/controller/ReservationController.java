@@ -9,11 +9,11 @@ import org.example.service.ReservationService;
 import org.example.util.PrintColor;
 
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ReservationController extends Controller {
 
@@ -125,21 +125,22 @@ public class ReservationController extends Controller {
     public void createReservation() {
 
         while (true) {
-            PrintColor.printReservation("╔═════════════════════════════════════════════════════╗");
-            PrintColor.printReservation("║                     진료과 목록                       ║");
-            PrintColor.printReservation("╠═════════════════════════════════════════════════════╣");
-            PrintColor.printReservation("║      진료과명       |          전화번호(tel)           ║");
-            PrintColor.printReservation("╟─────────────────────────────────────────────────────╢");
-            PrintColor.printReservation("║    1.  간담췌외과     │          042-585-1402         ║");
-            PrintColor.printReservation("║    2.  신경외과       │          042-586-7676         ║");
-            PrintColor.printReservation("║    3.  산부인과       │          042-123-4567         ║");
-            PrintColor.printReservation("║    4.  흉부외과       │          042-987-6543         ║");
-            PrintColor.printReservation("║    5.  소아외과       │          042-111-2222         ║");
-            PrintColor.printReservation("╚═════════════════════════════════════════════════════╝");
+            PrintColor.printReservation("═════════════════════════════════════════════════════");
+            PrintColor.printReservation("                     진료과 목록                       ");
+            PrintColor.printReservation("═════════════════════════════════════════════════════");
+            PrintColor.printReservation("        진료과명       |          전화번호(tel)          ");
+            PrintColor.printReservation("─────────────────────────────────────────────────────");
+            PrintColor.printReservation("    1.  간담췌외과     │          042-585-1402         ");
+            PrintColor.printReservation("    2.  신경외과       │          042-586-7676         ");
+            PrintColor.printReservation("    3.  산부인과       │          042-123-4567         ");
+            PrintColor.printReservation("    4.  흉부외과       │          042-987-6543         ");
+            PrintColor.printReservation("    5.  소아외과       │          042-111-2222         ");
+            PrintColor.printReservation("═════════════════════════════════════════════════════");
+
             // 세션에서 현재 로그인한 회원의 ID 가져오기
             int patient_id = session.getLoginedMember().getId();
             int dpt_id = 0;
-            boolean checkduplicate = false;
+
             while (true) {
                 System.out.print("진료과 번호를 선택하세요: ");
                 try {
@@ -148,23 +149,12 @@ public class ReservationController extends Controller {
                     System.out.println("다시 선택해 주세요");
                     continue;
                 }
-                sc.nextLine();
-                // 같은과에 중복으로 예약하는지 체크
-                List<Reservation> isDuplicateReservation = reservationService.getReservation(patient_id);
-                for (Reservation list : isDuplicateReservation) {
-                    if (list.dpt_id == dpt_id) {
-                        System.out.println("동일한 진료과에 중복으로 예약할 수 없습니다.");
-                        checkduplicate = true;
-                        break;
-                    }
 
+                if(dpt_id < 1 || dpt_id > 5){
+                    System.out.println("진료과 번호를 다시확인해 주세요.");
+                    continue;
                 }
-
-                if(!checkduplicate){
-                    break;
-                }
-
-                checkduplicate = false;
+                break;
 
             }
             // 의사 목록 가져오기
@@ -191,11 +181,45 @@ public class ReservationController extends Controller {
                 }
                 break;
             }
+
+            Date doctor_date = null;
+            String reservationDate = null;
+            // 날짜 형식 검증을 위한 정규 표현식
+            Pattern pattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+
+            // 날짜 형식 지정을 위한 SimpleDateFormat 객체 생성
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            while (true) {
+                System.out.print("예약일을 입력하세요 (YYYY-MM-DD): ");
+                String inputDate = sc.nextLine();
+
+                // 입력된 날짜 형식 검증
+                Matcher matcher = pattern.matcher(inputDate);
+
+                if (matcher.matches()) {
+                    try {
+                        // 올바른 형식인 경우 문자열을 Date 객체로 변환
+                        doctor_date = dateFormat.parse(inputDate);
+                        SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        reservationDate = outputDateFormat.format(doctor_date);
+                        System.out.println("올바른 형식의 예약일입니다: " + reservationDate);
+                        break; // 입력 반복 종료
+                    } catch (ParseException e) {
+                        // 날짜 파싱 중 오류가 발생한 경우
+                        System.out.println("예약일을 올바른 형식으로 입력해주세요 (YYYY-MM-DD)");
+                    }
+                } else {
+                    // 올바르지 않은 형식인 경우
+                    System.out.println("올바른 형식으로 입력해주세요 (YYYY-MM-DD)");
+                }
+            }
             // 선택한 의사의 시간대 목록 가져오기
             List<Time> doctor_time = reservationService.getDoctor_time(doctor_id);
 
             // 선택한 의사의 예약 불가능한 시간대 목록 가져오기
-            List<Time> AavailableTimes = reservationService.getUnavailableTimes(dpt_id, doctor_id);
+            List<Time> AavailableTimes = reservationService.getUnavailableTimes(reservationDate, doctor_id);
+
 
             // 예약 가능한 시간대 출력
             System.out.println("[진료 시간]");
@@ -220,6 +244,19 @@ public class ReservationController extends Controller {
                 // 선택한 시간대 번호가 유효한지 확인
                 if (selectedTimeIndex < 1 || selectedTimeIndex > doctor_time.size()) {
                     System.out.println("잘못된 번호입니다. 다시 입력해 주세요.");
+                    continue;
+                }
+                List<Reservation> duplicateTime = reservationService.getReservation(patient_id); // 특정환자의 중복 예약 시간 체크
+                boolean duplicateReservation = false;
+                for(Reservation list : duplicateTime){
+                    if(list.doctor_date.equals(doctor_date) && list.doctor_time.equals(doctor_time.get(selectedTimeIndex - 1))){
+                        System.out.println("선택하신 예약 시간은 이미 다른 예약이 잡혀있습니다.");
+                        duplicateReservation = true;
+                        break;
+                    }
+
+                }
+                if(duplicateReservation){
                     continue;
                 }
                 Time selectedTime = doctor_time.get(selectedTimeIndex - 1);
@@ -248,18 +285,12 @@ public class ReservationController extends Controller {
             String rh = sc.nextLine();
 
             // 예약 생성
-            int newReservation = reservationService.createReservation(patient_id, rh, name, doctor_id, dpt_id, selectedTime);
+            int newReservation = reservationService.createReservation(patient_id, rh, name, doctor_id, dpt_id, selectedTime, doctor_date);
 
             System.out.printf("%d번 예약이 성공적으로 생성되었습니다.\n", newReservation);
 
             showReservationPage();
 
-            try {
-                Thread.sleep(4000);
-            } catch (InterruptedException e) {
-                // 스레드가 중단되었을 때 발생하는 예외 처리
-                e.printStackTrace();
-            }
             System.out.println("예약 페이지로 되돌아가는 중...");
             doAction("reservation", "page");
         }
@@ -336,6 +367,8 @@ public class ReservationController extends Controller {
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 String formattedTime = sdf.format(reservation.doctor_time);
                 String doctorName = DoctorService.getDoctorName(reservation.doctor_id);
+                SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String formattedDoctorDate = outputDateFormat.format(reservation.doctor_date);
                 String dptName = DoctorService.getDptName(reservation.dpt_id);
 
                 System.out.println("** 예약 번호 : " + reservation.getId() + " **");
@@ -343,6 +376,7 @@ public class ReservationController extends Controller {
                 System.out.println("예약자 이름: " + loginedMember.getName());
                 System.out.println("의사 이름: " + doctorName);
                 System.out.println("진료과: " + dptName);
+                System.out.println("예약 일: " + formattedDoctorDate);
                 System.out.println("예약 시간: " + formattedTime);
                 System.out.println("환자 증상: " + reservation.rh);
                 System.out.println();

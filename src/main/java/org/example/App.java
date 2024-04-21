@@ -26,10 +26,10 @@ public class App {
         System.out.println("───────────────────────────────────────────────────────────────────────────");
         System.out.println("                                  명령어                                                                     ");
         System.out.println("───────────────────────────────────────────────────────────────────────────");
-        System.out.println("                          회원 페이지 : member page                           ");
-        System.out.println("                          의사 페이지 : doctor page                           ");
-        System.out.println("                          예약 페이지 : reservation page                      ");
-        System.out.println("                          게시판 페이지 : article page(회원 전용)               ");
+        System.out.println("회원 페이지 : member page                           ");
+        System.out.println("의사 페이지 : doctor page                           ");
+        System.out.println("예약 페이지 : reservation page                      ");
+        System.out.println("게시판 페이지 : article page(회원 전용)               ");
         System.out.println("═══════════════════════════════════════════════════════════════════════════");
 
 

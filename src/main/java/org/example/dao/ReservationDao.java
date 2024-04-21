@@ -6,6 +6,7 @@ import org.example.dto.Reservation;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,8 @@ public class ReservationDao extends Dao{
         sb.append(String.format("name = '%s', ", reservation.name));
         sb.append(String.format("doctor_id = %d, ", reservation.doctor_id));
         sb.append(String.format("dpt_id = %d, ", reservation.dpt_id));
-        sb.append(String.format("doctor_time = '%s' ", reservation.doctor_time));
+        sb.append(String.format("doctor_time = '%s', ", reservation.doctor_time));
+        sb.append(String.format("doctor_date = '%tF' ", reservation.doctor_date));
 
         return dbConnection.insert(sb.toString());
     }
@@ -134,12 +136,12 @@ public class ReservationDao extends Dao{
         return doctor_time;
     }
 
-    public List<Time> getUnavailableTimes(int dpt_id, int doctor_id) { // 특정 의사의 예약 불가능한 시간
+    public List<Time> getUnavailableTimes(String doctor_date, int doctor_id) { // 특정 의사의 예약 불가능한 시간
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format("SELECT doctor_time "));
         sb.append(String.format("FROM reservation "));
-        sb.append(String.format("WHERE dpt_id = %d ", dpt_id));
+        sb.append(String.format("WHERE doctor_date = '%s' ", doctor_date));
         sb.append(String.format("AND doctor_id = %d ", doctor_id));
 
         List<Time> unavailableTimes = new ArrayList<>();

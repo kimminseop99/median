@@ -5,6 +5,7 @@ import org.example.dao.ReservationDao;
 import org.example.dto.Reservation;
 
 import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 public class ReservationService {
@@ -39,13 +40,13 @@ public class ReservationService {
 
         return reservationDao.getDoctor_time(doctor_id);
     }
-    public int createReservation(int patient_id, String rh, String name, int doctor_id,int dpt_id, Time doctor_time) {
-        Reservation reservation = new Reservation(patient_id, rh, doctor_id, name, dpt_id, doctor_time);
+    public int createReservation(int patient_id, String rh, String name, int doctor_id, int dpt_id, Time doctor_time, Date doctor_date) {
+        Reservation reservation = new Reservation(patient_id, rh, doctor_id, name, dpt_id, doctor_time, doctor_date);
         return reservationDao.createReservation(reservation);
     }
 
-    public List<Time> getUnavailableTimes(int dpt_id, int doctor_id) {
-        return reservationDao.getUnavailableTimes(dpt_id,doctor_id);
+    public List<Time> getUnavailableTimes(String doctor_date, int doctor_id) {
+        return reservationDao.getUnavailableTimes(doctor_date,doctor_id);
     }
 
 

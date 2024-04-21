@@ -224,7 +224,7 @@ public class AdminController extends Controller {
             articleNumCheck.add(article.getId());
         }
         while (true) {
-            System.out.print("게시물 추가는 1번 삭제는 2번을 입력해주세요(뒤로가기 0번) : ");
+            System.out.print("공지 게시물 추가는 1번 삭제는 2번을 입력해주세요(뒤로가기 0번) : ");
             int checkNum = sc.nextInt();
             if (checkNum == 1) {
                 sc.nextLine();
@@ -291,12 +291,15 @@ public class AdminController extends Controller {
                 String dptName = DoctorService.getDptName(reservation.dpt_id);
                 String patientName = MemberService.getMemberName(reservation.patient_id);
                 String doctorName = DoctorService.getDoctorName(reservation.doctor_id);
+                SimpleDateFormat outputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String formattedDoctorDate = outputDateFormat.format(reservation.doctor_date);
 
                 System.out.println("** 예약 번호 : " + reservation.getId() + " **");
 
                 System.out.println("진료과: " + dptName);
                 System.out.println("의사 이름: " + doctorName);
                 System.out.println("예약자 이름: " + patientName);
+                System.out.println("예약 일: " + formattedDoctorDate);
                 System.out.println("예약 시간: " + formattedTime);
                 System.out.println("환자 증상: " + reservation.rh);
                 System.out.println();

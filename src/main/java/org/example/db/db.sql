@@ -164,15 +164,7 @@ height = 120.5, weight = 23.5,
 ud = '없음',
 loginId = 'lee', loginPw = 'woojoo';
 
-INSERT INTO patient
-SET `name` = '이우',
-regDate = NOW(),
-age = 5,
-phone = '010-8850-7610',
-rrn = '181213-1409635',
-height = 128.5, weight = 23.5,
-ud = '나리',
-loginId = 'leu', loginPw = 'woo';
+
 
 SELECT * FROM patient;
 
@@ -211,6 +203,7 @@ CREATE TABLE reservation (
   `dpt_id` INT(10) UNSIGNED NOT NULL,
   `doctor_time` TIME DEFAULT NULL,
   `regDate` DATETIME NOT NULL,
+  `doctor_date` DATE,
   PRIMARY KEY (`id`),
   KEY `fk_doctor_id` (`doctor_id`),
   CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`id`) ON DELETE CASCADE,
@@ -218,11 +211,16 @@ CREATE TABLE reservation (
   CONSTRAINT fk_dpt_id FOREIGN KEY (dpt_id) REFERENCES dpt(id) ON DELETE CASCADE
 );
 
+INSERT INTO reservation (patient_id, rh, doctor_id, `name`, dpt_id, doctor_time, regDate, doctor_date)
+VALUES
+(1, '흉부 통증', 1, '대한', 1, '09:10', NOW(), '2024-04-20'),
+(2, '두통', 3, '홍길동', 2, '10:10', NOW(), '2024-04-21'),
+(3, '발목이 아파요', 5, '박효신', 3, '11:10', NOW(), '2024-04-22'),
+(4, '열이 나요', 7, '박지성', 4, '13:10', NOW(), '2024-04-23');
+
 
 SELECT * FROM reservation;
 DROP TABLE article;
-
-
 
 
 CREATE TABLE article (

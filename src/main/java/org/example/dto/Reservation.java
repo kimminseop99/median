@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Time;
+import java.util.Date;
 import java.util.Map;
 
 @Getter
@@ -17,14 +18,16 @@ public class Reservation extends Dto {
     public String name;
     public int dpt_id;
     public Time doctor_time;
+    public Date doctor_date;
 
-    public Reservation(int patient_id, String rh, int doctor_id, String name, int dpt_id, Time doctor_time) {
+    public Reservation(int patient_id, String rh, int doctor_id, String name, int dpt_id, Time doctor_time, Date doctor_date) {
         this.patient_id = patient_id;
         this.rh = rh;
         this.doctor_id = doctor_id;
         this.name = name;
         this.dpt_id = dpt_id;
         this.doctor_time = doctor_time;
+        this.doctor_date = doctor_date;
     }
 
     public Reservation(Map<String, Object> row) {
@@ -45,6 +48,7 @@ public class Reservation extends Dto {
         this.dpt_id = (dptIdObj != null) ? dptIdObj.intValue() : 0;
 
         this.doctor_time = (Time) row.get("doctor_time");
+        this.doctor_date = (Date) row.get("doctor_date");
     }
 
 
