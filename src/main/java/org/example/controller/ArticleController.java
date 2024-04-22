@@ -177,7 +177,7 @@ public class ArticleController extends Controller {
         System.out.printf("[%s 게시판]\n", boardName);
         if (boardName.equals("공지")) {
 
-            PrintColor.printArticle("번호 |  작성자 | 조회 |  제목    | 내용 ");
+            PrintColor.printArticle("번호 |  작성자 |  제목         | 내용 ");
         } else {
             PrintColor.printArticle("번호 |  작성자 | 조회 | 제목 ");
         }
