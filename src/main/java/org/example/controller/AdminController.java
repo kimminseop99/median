@@ -239,6 +239,11 @@ public class AdminController extends Controller {
             } else if (checkNum == 2) {
                 System.out.print("삭제할 게시물의 번호를 입력해주세요 : ");
                 int deleteArticleNum = sc.nextInt();
+                System.out.print("정말 삭제 하시겠습니까?(네/아니요) : ");
+                String doubleCheck = sc.nextLine();
+                if(doubleCheck.equals("아니요")){
+                    continue;
+                }
                 if (!articleNumCheck.contains(deleteArticleNum)) {
                     System.out.println("게시물 번호를 다시 한번 확인해 주세요");
                     continue;
@@ -317,6 +322,11 @@ public class AdminController extends Controller {
             while (true){
                 System.out.print("삭제 할 예약 번호를 입력해주세요(뒤로가기 0번) : ");
                 int reservationNum = sc.nextInt();
+                System.out.print("정말 삭제 하시겠습니까?(네/아니요) : ");
+                String doubleCheck = sc.nextLine();
+                if(doubleCheck.equals("아니요")){
+                    continue;
+                }
                 if(!(reservationNum == 0)){
                     if(!reservationNumCheck.contains(reservationNum)){
                         System.out.println("예약 번호를 다시 한번 확인해 주세요");
@@ -382,6 +392,7 @@ public class AdminController extends Controller {
             if (checkCmd == 1) {
                 doCreateDoctor();
             } else if (checkCmd == 2) {
+
                 doDeleteDoctor();
             } else if(checkCmd == 0){
                 System.out.println("관리자 페이지로 되돌아가는 중...");
@@ -407,6 +418,11 @@ public class AdminController extends Controller {
         while (true) {
             System.out.print("삭제 할 의사의 번호를 입력해주세요(뒤로가기 0번) : ");
             int doctorNum = sc.nextInt();
+            System.out.print("정말 삭제 하시겠습니까?(네/아니요) : ");
+            String doubleCheck = sc.nextLine();
+            if(doubleCheck.equals("아니요")){
+                continue;
+            }
             if (doctorNum == 0) {
                 doAction("admin", "page");
                 return;
@@ -516,6 +532,11 @@ public class AdminController extends Controller {
         while (true) {
             System.out.print("삭제 할 회원의 번호를 입력해주세요(뒤로가기 0번) : ");
             int patientNum = sc.nextInt();
+            System.out.print("정말 삭제 하시겠습니까?(네/아니요) : ");
+            String doubleCheck = sc.nextLine();
+            if(doubleCheck.equals("아니요")){
+                continue;
+            }
             if (patientNum == 0) {
                 doAction("admin", "page");
                 return;
