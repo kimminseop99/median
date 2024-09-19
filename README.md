@@ -1,5 +1,5 @@
 <p align="center">
-   <img src="https://github.com/user-attachments/assets/20fbcf40-f860-44d5-bdee-c29ab3f00720" alt="로고" width="500"/>
+   <img src="src/main/java/org/example/images/median logo.png" alt="로고" width="500"/>
 </p>
 
 # 병원 예약 프로그램
@@ -65,126 +65,13 @@
 
 # 🗃️ ER 다이어그램
 
-![ER Diagram](src/main/resources/static/images/functionImage/ARTAUCTION-ER-DIAGRAM.png)
+![ER Diagram](src/main/java/org/example/images/ERD.png)
 
 # 🗂️ 프로젝트 구조
 
 ```
 
 ```
-
-
-# 👤 주요 기능
-<details>
-   <summary>🖼️ 경매 기능</summary>
-   <br/>
-
-   ### 1. 작가가 자신의 작품을 경매에 내놓기 위해 관리자에게 경매 신청을 합니다.
-   ![경매 기능 스크린샷 1](src/main/resources/static/images/functionImage/artauction-artistProductSummit.png)
-   <br><br>
-
-   ### 2. 관리자는 신청된 작품을 보고 검수합니다.
-   ![경매 기능 스크린샷 2](src/main/resources/static/images/functionImage/artauction-adminProductSummitManage.png)
-   <br><br>
-
-   ### 3. 검토가 완료되면 관리자는 해당 제품을 경매에 내놓습니다.
-   ![경매 기능 스크린샷 3](src/main/resources/static/images/functionImage/artauction-adminAddAuction.png)
-   <br><br>
-
-   ### 4. 사용자는 경매 페이지에서 진행 중인 경매 작품들을 확인할 수 있습니다.
-   ![경매 기능 스크린샷 4](src/main/resources/static/images/functionImage/artauction-auctionPage.png)
-   <br><br>
-
-   ### 5. 경매 응찰을 하기 전 (다른 사용자가 이미 입찰 금액을 제시한 상황)
-   ![경매 기능 스크린샷 5](src/main/resources/static/images/functionImage/artauction-beforeBid.png)
-   <br><br>
-
-   ### 6. 경매 응찰을 하고 난 후
-   ![경매 기능 스크린샷 6](src/main/resources/static/images/functionImage/artauction-afterBid.png)
-   <br><br>
-
-   ### 7. 사용자의 마이페이지에서 경매 입찰 목록을 확인할 수 있습니다.
-   ![경매 기능 스크린샷 7](src/main/resources/static/images/functionImage/artauction-myPagebeforeBidList.png)
-   <br><br>
-
-   ### 8. 경매가 종료되고 낙찰자로 선정이 되면 낙찰 목록에서 확인할 수 있습니다.
-   ![경매 기능 스크린샷 8](src/main/resources/static/images/functionImage/artauction-myPageBidList.png)
-   <br><br>
-
-</details>
-
-
-
-<details>
-   <summary>🔔 알림 기능</summary>
-   <br/>
-
-  -  <details>
-      <summary>📨 경매 관련 알림 설정 및 시작 알림</summary>
-      <br/>
-
-      ### 1. 사용자는 예정된 경매의 상세 페이지에서 알림 설정을 할 수 있습니다.
-      ![알림 기능 스크린샷 1](src/main/resources/static/images/functionImage/artauction-mailBefore1hour.png)
-      <br><br>
-
-      ### 2. 사용자의 개인 메일로 경매 시작 1시간 전 경매 시작 알림 메일이 발송됩니다.
-      ![알림 기능 스크린샷 2](src/main/resources/static/images/functionImage/artauction-1hourNotificationMail.png)
-      <br><br>
-      
-     </details>
-
- -   <details>
-      <summary>🎉 경매 결과 알림</summary>
-      <br/>
-
-      ### 1. 해당 작품의 작가에게 축하 메일이 발송됩니다.
-      ![알림 기능 스크린샷 3](src/main/resources/static/images/functionImage/artauction-auctionProductArtist.png)
-      <br><br>
-
-      ### 2. 해당 작품을 낙찰한 낙찰자에게 축하 메일이 발송됩니다.
-      ![알림 기능 스크린샷 4](src/main/resources/static/images/functionImage/artauction-auctionWinningMail.png)
-      <br><br>
-
-      ### 3. 낙찰하지 못했지만 해당 작품의 경매에 참여한 참여자들에게 결과 알림 메일이 발송됩니다.
-      ![알림 기능 스크린샷 5](src/main/resources/static/images/functionImage/artauction-auctionFailMail.png)
-      <br><br>
-   </details>
-
-</details>
-
-<details>
-   <summary>👩‍🎨 작가 권한 부여</summary>
-   <br/>
-    
-   ### 1. 사용자는 작가의 권한을 받기 위해 작가 신청을 할 수 있습니다.(이용약관 동의 및 증빙 자료 제출은 필수!!)
-   ![경매 기능 스크린샷 1](src/main/resources/static/images/functionImage/artauction-artistRequestSummitPage.png)
-   <br><br>
-
-   ### 2. 신청을 완료하면 관리자의 승인을 기다립니다.
-   ![경매 기능 스크린샷 2](src/main/resources/static/images/functionImage/artauction-artistRequestPage.png)
-   <br><br>
-
-   ### 3. 관리자는 작가 신청 내역에서 증빙 자료를 확인하고 작가 승인을 허가해 줄 수 있습니다.
-   ![경매 기능 스크린샷 3](src/main/resources/static/images/functionImage/artauction-adminArtistRequestList.png)
-   <br><br>
-
-   ### 4. 이 후 관리자는 회원 권한 설정 페이지에서 해당 회원에 작가의 권한을 부여해줄 수 있습니다.
-   ![경매 기능 스크린샷 4](src/main/resources/static/images/functionImage/artauction-adminMemberAuthorityPage.png)
-   <br><br>
-
-   ### 5. 작가권한을 받은 사용자는 작가 프로필을 생성할 수 있습니다.
-   ![경매 기능 스크린샷 5](src/main/resources/static/images/functionImage/artauction-artistProfileCreate.png)
-   <br><br>
-
-   ### 6. 작가 프로필을 생성하고나면 작가 개인 페이지가 생성됩니다.
-   ![경매 기능 스크린샷 6](src/main/resources/static/images/functionImage/artauction-artistProfileForm.png)
-   <br><br>
-
-   ### 7. 작가는 자신의 작품을 등록할 수 있습니다.(작가 프로필을 생성 후 작품 등록 가능!!)
-   ![경매 기능 스크린샷 7](src/main/resources/static/images/functionImage/artauction-productCreatePage.png)
-   <br><br>
-
-</details>
 
 # ⚙️ 페이지별 기능
 <details>
@@ -199,7 +86,7 @@
 
 | 회원가입 |
 |----------|
-| <img width="1273" alt="artauction-joinPage" src="https://github.com/user-attachments/assets/a9648ba7-facc-468e-ae58-75d8a7513761"> |
+| <img width="1273" alt="artauction-joinPage" src="src/main/java/org/example/images/ERD.png"> |
 <br>
 
 </details>
@@ -222,7 +109,7 @@
 
 | 로그인 |
 |----------|
-| <img width="1274" alt="artauction-loginPage" src="https://github.com/user-attachments/assets/13419e4e-a4ad-4b7f-8e9c-4e96c07f8f42"> |
+| <img width="1274" alt="artauction-loginPage" src="src/main/java/org/example/images/ERD.png"> |
 <br>
 
 </details>
@@ -244,9 +131,9 @@
  - 카테고리를 확인 및 클릭하면 경매 제목별로 작품을 정렬화해 볼 수 있습니다. 
 
 
-| 경매 페이지 |
+| 회원 페이지 |
 |----------|
-| <img width="1274" alt="artauction-auctionPage" src="https://github.com/user-attachments/assets/1c680d00-615c-4ad1-a496-5569cad2a46a"> |
+| <img width="1274" alt="artauction-auctionPage" src="src/main/java/org/example/images/ERD.png"> |
 <br>
 
 </details>
@@ -260,9 +147,9 @@
  - month, week, day별로 경매를 확인 할 수 있으며 today 버튼으로 현재 날짜를 확인 할 수 있습니다.
  - 경매바를 통해 예정된 경매의 시작시간을 확인할 수 있으며 경매 바 클릭시에 경애의 상세 페이지로 이동할 수 있습니다.
 
-| 캘린더 페이지 |
+| 의료진 페이지 |
 |----------|
-| <img width="1271" alt="artauction-calendarPage" src="https://github.com/user-attachments/assets/ac3427de-ceac-4ca0-87f5-8df64f9bd6d9"> |
+| <img width="1271" alt="artauction-calendarPage" src="src/main/java/org/example/images/ERD.png"> |
 <br>
 
 </details>
@@ -285,9 +172,9 @@
  - 찜 한 작품은 마이페이지의 찜 메뉴에서 확인 가능합니다. 
 
 
-| 작품 페이지 |
+| 관리자 페이지 |
 |----------|
-| <img width="1274" alt="artauction-productPage" src="https://github.com/user-attachments/assets/9cdd5842-9038-4fc9-b561-a3cbd3f9ab77"> |
+| <img width="1274" alt="artauction-productPage" src="src/main/java/org/example/images/ERD.png"> |
 <br>
 
 </details>
@@ -305,9 +192,9 @@
  - 경매 신청 작품에는 작품 올리기 버튼이 보이지 않습니다.  
 
 
-| 작가 페이지 |
+| 예약 페이지 |
 |----------|
-| <img width="1271" alt="artauction-artistPage" src="https://github.com/user-attachments/assets/f9fa27f3-77ae-4332-a0b4-0cf068a3d116"> |
+| <img width="1271" alt="artauction-artistPage" src="src/main/java/org/example/images/ERD.png"> |
 <br>
 
 </details>
@@ -356,25 +243,25 @@
    <br/>
    
 ## 🚨 이슈
-Calendar API를 사용하여 데이터를 화면에 표시하려고 했지만, 데이터는 정상적으로 보이지만 캘린더 뷰가 제대로 나타나지 않았습니다. 결과적으로 검은 화면에 데이터만 나타나는 문제가 발생했습니다. <br> <br>
+ <br> <br>
 
 ## 🛑 원인
-api/calendar에서 전달된 데이터 포맷과 캘린더 뷰를 나타내는 매핑이 혼합되어 있었기 때문에 페이지 URL에 접속했을 때 검은 화면에 데이터만 표시되었습니다. <br> <br>
+ <br> <br>
 
 ## 🚥 해결
-데이터와 캘린더 뷰를 명확히 구분하여 각각 별도의 매핑을 통해 문제를 해결했습니다. 데이터 처리와 뷰 렌더링을 독립적으로 관리하여 정상적으로 캘린더 뷰가 표시되도록 조정하였습니다.
+
 </br></br>
 </details>   
 
 # 🌱 개선 목표
-## 1. 관리자 회원권한 설정
-**문제점**: 회원의 활성/비활성 기능이 작동하지 않으며, 권한 설정 후 페이지 새로고침 시 접근 권한 오류가 발생하고, 권한 설정한 계정으로 자동 로그인되는 오류와 작품 페이지 접근 오류가 발생합니다.</br>
+## 1. 초기에 구체적인 계획 수립
+**문제점**: 여러 병원에서 진료 예약이 가능한 시스템을 구상했지만, 한 병원의 데이터를 처리하는 것 만으로도 예상보다 많은 데이터가 필요했습니다.</br>
 
-**개선 사항**: 회원 권한 설정 기능을 수정하여 활성/비활성 상태가 제대로 작동하도록 하고, 페이지 새로고침 후 접근 권한 오류를 해결합니다. 또한, 자동 로그인 문제를 방지하고, 작품 페이지 접근 오류를 수정하여 안정적인 사용자 권한 관리를 구현합니다.
+**개선 사항**: 현실적인 범위 내에서 개발 목표를 설정하고, 세부적인 요소에 집중해 효율성을 높이는 방향으로 나아갈 계획을 세우는 것이 중요할 것같습니다.
 </br></br>
 
 # 👍 프로젝트 후기
 
 ### 🕴️ 김민섭
-주제 선정과 기획부터 어려움이 있어 무사히 프로젝트를 끝낼 수 있을까 걱정도 많이 되었고 이전에 다뤄보지 않았던 새로운 시스템들을 구현해낼 수 있을까하는 우려도 적지 않았던 것 같습니다. 프로젝트 진행 중에도 시스템에 관한 변수나 예외가 지속적으로 발생했고 처리 능력이 부족하다보니 제가 맡은 부분에만 집중하게 되었고 때문에 팀원들에게 도움을 주지 못했던 것 같습니다. 그럼에도 팀원들이 각자 맡은 역활을 충분히 해 주었고 제가 부족한 부분도 팀원들이 채워주어 프로젝트를 무사히 끝낼 수 있었다고 생각합니다. 이번 프로젝트로 디자인이나 유용한 기능들을 많이 알아가는 것 같아 뜻 깊은 시간이 되었고 또 꼭 한번 쯤은 만들어보고 싶었던 사이트를 구현해 낸 것에서 의미 있는 시간이 되었습니다.    
+초급 프로젝트 단계라 설레이기도 하면서 떨리는 마음이 컷던것 같습니다. 첫인상을 보여주는 프로젝트라고 생각하며 개발에 몰두했고 걱정보다 괜찮은 프로그램이 만들어진것 같아 뿌듯했습니다. 하지만 아직 수정할 부분도 많고 내세우기엔 많이 부족한 프로그램이란점도 알고 있기에 이번 프로젝트를 뼈대로 삼아 더욱 가치있는 개발을 할 수 있도록 노력하겠습니다.   
    
