@@ -21,12 +21,14 @@ public class DBConnection {
         String driverName = "com.mysql.cj.jdbc.Driver";
 
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            // 1. 드라이버 클래스 로드
             Class.forName(driverName);
-        } catch (SQLException e) {
-            System.err.printf("[SQL 예외] : %s\n", e.getMessage());
+            // 2. 데이터베이스 연결
+            connection = DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException e) {
             System.err.printf("[드라이버 클래스 로딩 예외] : %s\n", e.getMessage());
+        } catch (SQLException e) {
+            System.err.printf("[SQL 예외] : %s\n", e.getMessage());
         }
     }
 
@@ -70,7 +72,7 @@ public class DBConnection {
         List<Map<String, Object>> rows = selectRows(sql);
 
         if (rows.size() == 0) {
-            return new HashMap<String, Object>();
+            return new HashMap<>();
         }
 
         return rows.get(0);
@@ -78,6 +80,11 @@ public class DBConnection {
 
     public List<Map<String, Object>> selectRows(String sql) {
         List<Map<String, Object>> rows = new ArrayList<>();
+
+        if (connection == null) {
+            System.err.println("[연결 오류] : 데이터베이스 연결이 없습니다.");
+            return rows;
+        }
 
         try {
             Statement stmt = connection.createStatement();
@@ -117,9 +124,13 @@ public class DBConnection {
     public int delete(String sql) {
         int affectedRows = 0;
 
-        Statement stmt;
+        if (connection == null) {
+            System.err.println("[연결 오류] : 데이터베이스 연결이 없습니다.");
+            return affectedRows;
+        }
+
         try {
-            stmt = connection.createStatement();
+            Statement stmt = connection.createStatement();
             affectedRows = stmt.executeUpdate(sql);
         } catch (SQLException e) {
             System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
@@ -131,9 +142,13 @@ public class DBConnection {
     public int update(String sql) {
         int affectedRows = 0;
 
-        Statement stmt;
+        if (connection == null) {
+            System.err.println("[연결 오류] : 데이터베이스 연결이 없습니다.");
+            return affectedRows;
+        }
+
         try {
-            stmt = connection.createStatement();
+            Statement stmt = connection.createStatement();
             affectedRows = stmt.executeUpdate(sql);
         } catch (SQLException e) {
             System.err.printf("[SQL 예외, SQL : %s] : %s\n", sql, e.getMessage());
@@ -144,6 +159,11 @@ public class DBConnection {
 
     public int insert(String sql) {
         int id = -1;
+
+        if (connection == null) {
+            System.err.println("[연결 오류] : 데이터베이스 연결이 없습니다.");
+            return id;
+        }
 
         try {
             Statement stmt = connection.createStatement();
@@ -170,6 +190,4 @@ public class DBConnection {
             }
         }
     }
-
-
 }

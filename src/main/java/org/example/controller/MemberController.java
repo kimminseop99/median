@@ -321,10 +321,6 @@ public class MemberController extends Controller {
     private boolean isJoinableLoginId(String loginId) {
         Member member = memberService.getMemberByLoginId(loginId);
 
-        if (member == null) {
-            return true;
-        }
-
-        return false;
+        return member == null;
     }
 }
