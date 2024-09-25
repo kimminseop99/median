@@ -82,7 +82,6 @@ public class DBConnection {
         List<Map<String, Object>> rows = new ArrayList<>();
 
         if (connection == null) {
-            System.err.println("[연결 오류] : 데이터베이스 연결이 없습니다.");
             return rows;
         }
 
