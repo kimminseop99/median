@@ -53,15 +53,15 @@
   - 의료진 페이지
   - 관리자 페이지
 + 기능
-  - 회원가입(아이디, 비밀번호, 나이, 번호, 주민 번호, 신장, 체중, 기저 질환, 이름을 입력하면 가입 가능)
-  - 예약 (진료 과와 의사 그리고 진료 시간을 선택 후 증상을 입력하면 예약이 완료)
-  - 예약 취소 (취소를 희망하는 예약 번호를 입력하면 취소가 가능)
-  - 진료 (의료진은 자신에게 예약한 환자의 정보를 확인하고 진료가능 진료가 완료된다면 예약 번호를 입력해 진료완료)
-  - 게시글 생성 (회원은 공지 게시판을 제외한 모든 게시판에 게시물 생성 가능 그리고 공지 게시판은 오직 관리자만이 게시물 생성이 가능)
-  - 게시 글 수정, 삭제 (게시물을 작성한 작성자만이 수정과 삭제가 가능)
-  - 게시 글 댓글 (회원, 의사, 관리자 모두 게시 글에 댓글 입력 가능)
-  - 관리자 암호 (관리자 페이지를 확인 하기 위해서는 관리자 암호를 입력)
-  - 관리자 관리 (모든 회원, 의료진, 예약, 공자 게시물의 정보를 확인 할 수 있으며 삭제 가능)
+  - 회원가입
+  - 예약 
+  - 예약 취소 
+  - 진료 
+  - 게시글 생성
+  - 게시 글 수정, 삭제
+  - 게시 글 댓글
+  - 관리자 암호
+  - 관리자 관리
 
 # 🗃️ ER 다이어그램
 
@@ -70,188 +70,130 @@
 # 🗂️ 프로젝트 구조
 
 ```
+   └─src
+    └─main
+        └─java
+            └─org
+                └─example
+                    │  App.java
+                    │  Main.java
+                    │
+                    ├─container
+                    │      Container.java
+                    │
+                    ├─controller
+                    │      AdminController.java
+                    │      ArticleController.java
+                    │      Controller.java
+                    │      DoctorController.java
+                    │      MemberController.java
+                    │      ReservationController.java
+                    │      Session.java
+                    │
+                    ├─dao
+                    │      AdminDao.java
+                    │      ArticleDao.java
+                    │      Dao.java
+                    │      DoctorDao.java
+                    │      MemberDao.java
+                    │      ReservationDao.java
+                    │
+                    ├─db
+                    │      db.sql
+                    │      DBConnection.java
+                    │      sbs_proj_db_data.sql
+                    │
+                    ├─dto
+                    │      Admin.java
+                    │      Article.java
+                    │      ArticleReply.java
+                    │      Board.java
+                    │      Doctor.java
+                    │      Dto.java
+                    │      Member.java
+                    │      Reservation.java
+                    │
+                    ├─images
+                    │      adminPage.png
+                    │      articlePage.png
+                    │      doctorPage.png
+                    │      ERD.png
+                    │      median logo.png
+                    │      memberPage.png
+                    │      reservationPage.png
+                    │
+                    ├─resource
+                    │      ChangeInfo.java
+                    │      OnlyMember.java
+                    │      PrintInfo.java
+                    │      PrintLogo.java
+                    │
+                    ├─service
+                    │      AdminService.java
+                    │      ArticleService.java
+                    │      DoctorService.java
+                    │      MemberService.java
+                    │      ReservationService.java
+                    │
+                    └─util
+                            PrintColor.java
+                            Util.java
 
 ```
 
-# ⚙️ 페이지별 기능
+# ⚙️ 권한별 기능
 <details>
-   <summary>회원 가입</summary>
+   <summary>회원</summary>
    <br/>
 
-#### 1. 회원가입
-- 아이디, 닉네임, 비밀번호, 비밀번호 확인, 전화번호, 이메일, 주소를 모두 작성하면 회원가입기능 버튼이 활성화됩니다.
-- 비밀번호와 비밀번호 확인란의 문자열이 같지 않을 시에 회원가입이 불가능합니다.
-- 아이디와 닉네임은 중복확인이 필요하며 이메일인증은 필수 입니다.
-- 주소는 KaKao Api를 사용하여 쉽게 찾아볼 수 있습니다.
+#### 회원 기능
+- 회원가입 (아이디, 비밀번호, 나이, 번호, 주민 번호, 신장, 체중, 기저 질환, 이름을 입력하면 가입 가능)
+- 로그인
+- 진료 예약 (진료 과와 의사 그리고 진료 시간을 선택 후 증상을 입력하면 예약이 완료)
+- 예약 취소 (취소를 희망하는 예약 번호를 입력하면 취소가 가능)
+- 회원정보 수정 (단, 주민번호는 수정이 불가)
+- 게시물 작성 (공지 게시판 제외 모든 게시판에 게시물을 올릴 수 있으며 자신의 게시물만 수정 삭제가 가능)
 
-| 회원가입 |
+| 회원(https://www.youtube.com/watch?v=jIW5nQqkWJo) |
 |----------|
-| <img width="1273" alt="artauction-joinPage" src="src/main/java/org/example/images/ERD.png"> |
+| [![Watch the video](https://github.com/user-attachments/assets/81eebe4e-fb87-4de5-b6ef-15475adead0e)](https://www.youtube.com/watch?v=jIW5nQqkWJo) |
 <br>
 
 </details>
 
 <details>
-   <summary>로그인</summary>
+   <summary>의료진</summary>
    <br/>
 
-#### 1. 로그인
- - 아이디와 비밀번호 입력시 해당 유저가 가입되어있으면 로그인 됩니다.
- - 아이디 저장을 체크하고 로그인을 하면 자동으로 아이디 정보가 저장됩니다.
+#### 의료진
+- 의료진 로그인 가능 (정해진 의사번호와 로그인 비밀번호를 입력시에 로그인 가능)
+- 예약 정보 확인 가능 (의료진은 자신에게 예약한 환자의 정보를 확인하고 진료가능 진료가 완료된다면 예약 번호를 입력해 진료완료)
+- 게시물 댓글 작성
 
-#### 2. 아이디 및 비밀번호 찾기
- - 아이디와 비밀번호가 일치하지 않을때 일부 정보를 입력해서 찾기가 가능합니다.
- - 아이디 찾기는 계정의 메일 정보를 입력하면 해당 메일로 아이디 정보가 발송됩니다.
- - 비밀번호 찾기는 계정의 아이디와 메일 정보를 입력하면 해당 메일로 임시 비밀번호가 발송됩니다.
-
-#### 3. 소셜 로그인
- - 카카오, 네이버, 구글로 소셜로그인이 가능합니다.
-
-| 로그인 |
+| 의료진(https://www.youtube.com/watch?v=iObhd7lv5MU) |
 |----------|
-| <img width="1274" alt="artauction-loginPage" src="src/main/java/org/example/images/ERD.png"> |
+| [![Watch the video](https://github.com/user-attachments/assets/40d571c7-e8db-43a9-a350-0c16fbbb9b29)](https://www.youtube.com/watch?v=iObhd7lv5MU) |
 <br>
 
 </details>
 
 <details>
-   <summary>경매 페이지</summary>
+   <summary>관리자</summary>
    <br/>
 
-#### 1. 진행중인 경매 리스팅
- - 경매 페이지에서는 현재 진행중인 경매 작품의 목록을 확인 할 수 있습니다.
- - 작품의 작가이름, 작품명, 크기, 사용재료, 현재가를 확인할 수 있습니다.
- - 예정된 경매가 활성화 되거나 진행중이였던 경매가 종료되면 경매 페이지에서 자동으로 사라집니다.
- - 작품의 상세보기를 클릭하면 각각의 작품의 상세정보가 포함되어 있으며 경매를 할 수 있는 페이지로 이동하게 됩니다.
- - 페이징 기능이 구현되어어 있어 16개 이상이 되면 자동으로 페이지가 추가됩니다.
+#### 관리자
+- 관리자 페이지 접속 가능 (관리자 암호를 입력하고 관리자 페이지에 접속)
+- 회원 관리 (모든 회원의 정보를 확인할 수 있으며 삭제 가능)
+- 의료진 관라 (모든 의료진의 정보를 확인할 수 있으며 추가/삭제 가능)
+- 예약 관리 (모든 예약 정보를 확인 할 수 있으며 삭제 가능)
+- 게시판 관리 (모든 게시물을 확인 할 수 있으며 공지 게시물 추가 삭제 가능)
 
-#### 2. 정렬 및 검색
- - 올라온 작품들을 최신순, 가격이 높은순과 낮은순으로 확인할 수 있습니다.
- - 작품명을 검색하여 원하는 작품을 간편하게 찾을 수 있습니다.
- - 카테고리를 확인 및 클릭하면 경매 제목별로 작품을 정렬화해 볼 수 있습니다. 
-
-
-| 회원 페이지 |
+| 관리자(https://www.youtube.com/watch?v=Ljm7xVXiyWM) |
 |----------|
-| <img width="1274" alt="artauction-auctionPage" src="src/main/java/org/example/images/ERD.png"> |
+| [![Watch the video](https://github.com/user-attachments/assets/a3e76af2-c4eb-4df3-891a-a17a5b33203a)](https://www.youtube.com/watch?v=Ljm7xVXiyWM) |
 <br>
 
-</details>
-
-<details>
-   <summary>캘린더 페이지</summary>
-   <br/>
-
-#### 1. 예정된 경매 목록
- - 캘린더 페이지에서는 예정된 경매 목록을 확인 할 수 있습니다.
- - month, week, day별로 경매를 확인 할 수 있으며 today 버튼으로 현재 날짜를 확인 할 수 있습니다.
- - 경매바를 통해 예정된 경매의 시작시간을 확인할 수 있으며 경매 바 클릭시에 경애의 상세 페이지로 이동할 수 있습니다.
-
-| 의료진 페이지 |
-|----------|
-| <img width="1271" alt="artauction-calendarPage" src="src/main/java/org/example/images/ERD.png"> |
-<br>
-
-</details>
-
-<details>
-   <summary>작품 페이지</summary>
-   <br/>
-
-#### 1. 작품 목록
- - 모든 작품을 확인할 수 있으며 작품을 클릭하면 작품 상세 페이지로 이동됩니다.
- - 작품의 작가이름, 작품명, 크기, 사용재료, 현재가를 확인할 수 있습니다.
- - 페이징 기능이 구현되어 있어 16개 이상이 되면 자동으로 페이지가 추가됩니다. 
-
-#### 2. 정렬 및 검색
- - 올라온 작품들을 최신순, 가격이 높은순과 낮은순으로 확인할 수 있습니다.
- - 작품명과 작가이름을 검색하여 원하는 작품을 간편하게 찾을 수 있습니다.
-
-#### 3. 찜 기능
- - 원하는 작품의 하트 버튼을 누르면 찜 기능이 활성화됩니다.
- - 찜 한 작품은 마이페이지의 찜 메뉴에서 확인 가능합니다. 
-
-
-| 관리자 페이지 |
-|----------|
-| <img width="1274" alt="artauction-productPage" src="src/main/java/org/example/images/ERD.png"> |
-<br>
-
-</details>
-
-<details>
-   <summary>작가 페이지</summary>
-   <br/>
-
-#### 1. 작가 정보
- - 작가 페이지에서 작가의 정보(이름, 생년월일, 소개, 전화번호, 메일, 작가 작품 정보)를 확인 할 수 있습니다.
- - 작가 본인의 프로필 페이질 경우 소개와 작품 정보를 수정 할 수 있으며 작가 개인 프로필폼을 삭제 할 수 있습니다.
-
-#### 2. 경매 작품 신청
- - 작가 본인의 계정일 경우 작가 프로필의 개인 작품 페이지에서 자신의 작품을 경매에 올릴 수 있습니다.
- - 경매 신청 작품에는 작품 올리기 버튼이 보이지 않습니다.  
-
-
-| 예약 페이지 |
-|----------|
-| <img width="1271" alt="artauction-artistPage" src="src/main/java/org/example/images/ERD.png"> |
-<br>
-
-</details>
-
-<details>
-   <summary>마이 페이지</summary>
-   <br/>
-
-#### 1. 정보 수정
- - 회원의 정보를 확인 하고 수정(닉네임, 비밀번호, 메일, 프로필 이미지, 배송주소) 할 수 있습니다.
- - 본인의 충전 금액을 확인 할 수 있습니다.
-   
-
-#### 2. 찜 메뉴
- - 작품 페이지에서 찜 하트를 누르면 찜 메뉴에서 확인할 수 있습니다.
- - 찜 메뉴에서 작품 보기를 누르면 해당 작품의 상세 페이지로 이동 할 수 있습니다.
- - 찜 작품의 정보를 확인 할 수 있습니다.
-
-#### 3. 입찰 내역 메뉴
- - 현재 계정이 입찰중인 작품의 정보를 확인 할 수 있습니다.
- - 입찰 내역에 올라온 작품의 이미지를 클릭하면 입찰중인 작품의 상세 페이지로 이동됩니다.
-
-#### 4. 낙찰 내역
- - 현재 계정이 낙찰한 작품의 정보를 확인 할 수 있습니다.
- - 낙찰된 날짜와 낙찰가를 확인 할 수 있습니다.
- - 주문 상세 페이지로 이동할 수 있습니다.
- - 주문 상세 페이지에서는 주문 정보와 낙찰자의 정보를 확인 할 수 있으며 배송 페이지로 이동가능합니다.
- - 배송 페이지에서는 현재 작품의 배송 정보를 확인 할 수 있습니다.
-
-#### 5. 문의 내역
- - 자신이 문의한 문의 내역을 확인 할 수 있습니다.
- - 문의의 상태는 관리자가 답변을 작성해주지 않았을 경우 "처리 전" 답변을 작성 해주었을 경우 "처리 완료"가 됩니다.
-
-
-| 마이 페이지 |
-|----------|
-| <img width="1273" alt="artauction-myPage" src="https://github.com/user-attachments/assets/85018117-6cfb-41e8-a697-dace0678e2d8"> |
-<br>
-
-</details>
-
-
-# 🔥 트러블 슈팅
-<details>
-   <summary>김민섭</summary>
-   <br/>
-   
-## 🚨 이슈
- <br> <br>
-
-## 🛑 원인
- <br> <br>
-
-## 🚥 해결
-
-</br></br>
-</details>   
+</details>  
 
 # 🌱 개선 목표
 ## 1. 초기에 구체적인 계획 수립
